@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-login, .form-register, .form-user {
+    width: 40%;
+    height: 50%;
+    text-align: center;
+    border: 1px solid black;
+    color: white;
+    border-radius: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(32, 45, 56, 0.959);
+}
+
+.form-register {
+    height: 60% !important;
+}
+
+.title-form {
+    padding-bottom: 20px;
+}
+
+
+.form-login a, .form-register a, .form-user a {
+    color: rgb(182, 71, 184);
+}
+
+.btn.btn-primary {
+    width: 205px !important;
+}
+
+.form-group input {
+    border: 2px solid black;
+}
+
+.title-form {
+    border-bottom: 2px solid rgb(202, 195, 195);
+    width: 100%;
+    border-radius: 5%;
+}
+
+#send-register {
+    margin-bottom: 20px;
+}

@@ -1,0 +1,40 @@
+<div class="video-bg" id="index">
+    <div class="container-index">
+        <div class="content-index">
+            <section class="slider">
+                <h1>Cartas destacadas</h1>
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        @for (card of popularCardsRepeated; track $index) {
+                        <div class="swiper-slide card">
+                            <img [src]="card.imageUrl" [alt]="card.name" /> 
+                        </div>
+                        }
+                    </div>
+                </div>
+            </section>
+
+            <div class="category-logo">
+                <div type="button" class="btn btn-outline-primary shadow">
+                    <i class="bi bi-arrow-down"></i>
+                    <span>Ver colección</span>
+                    <i class="bi bi-arrow-down"></i>
+                </div>
+                <i class="bi bi-caret-down-fill"></i>
+            </div>
+        </div>
+
+        <div class="content-category">
+            <h2>Colección</h2>
+            @for (card of cards; track $index) {
+            <div class="card-category">
+                <img [src]="card.imageUrl" [alt]="card.name">
+                <p>{{ card.name }}</p>
+                <p>Rareza: {{ card.rarity }}</p>
+                <p>Precio: ${{ card.price }}</p>
+            </div>
+            }
+        </div>
+    </div>
+
+</div>

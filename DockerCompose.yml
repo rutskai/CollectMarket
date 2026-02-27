@@ -1,0 +1,87 @@
+version: '3.9'  # Versión de Docker Compose
+
+services:
+
+  # SERVICIO: Base de Datos MySQL
+  db:
+    image: mysql:8.0  # Usar imagen oficial de MySQL 8.0
+    restart: always   # Reiniciar automáticamente si falla
+    container_name: collectmarket_db  # Nombre del contenedor
+    
+    # Variables de entorno para MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678  # Contraseña del root
+      MYSQL_DATABASE: CollectMarket  # BD a crear automáticamente
+      MYSQL_USER: root               # Usuario
+      MYSQL_PASSWORD: 12345678       # Contraseña del usuario
+    
+    # Puerto: HOST:CONTENEDOR
+    ports:
+      - "3306:3306"  # Accesible en localhost:3306
+    
+    # Persistencia de datos (volumen)
+    volumes:
+      - db_data:/var/lib/mysql  
+    
+    # Verificar que BD está lista antes de iniciar backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]  # Comando de verificación
+      timeout: 20s 
+      retries: 10    
+
+
+  # SERVICIO: Backend (C#)
+  backend:
+    build: ./Backend  # Construir desde Dockerfile en carpeta Backend
+    container_name: collectmarket_backend  # Nombre del contenedor
+    
+    # Esperar a que BD esté healthy antes de iniciar
+    depends_on:
+      db:
+        condition: service_healthy
+    
+    # Variables de entorno para la app C#
+    environment:
+      # Connection string para MySQL
+      - DB_CONNECTION=server=mysql;database=CollectMarket;user=root;password=12345678;
+      # Entorno de desarrollo
+      - ASPNETCORE_ENVIRONMENT=Development
+      # URL en la que escucha
+      - ASPNETCORE_URLS=http://+:5000
+    
+    # Puerto: HOST:CONTENEDOR
+    ports:
+      - "5000:5000"  
+    # Red interna para comunicación con otros contenedores
+    networks:
+      - collectmarket_network
+
+  # SERVICIO: Frontend (Angular + Nginx)
+
+  frontend:
+    build: ./Frontend  # Construir desde Dockerfile en carpeta Frontend
+    container_name: collectmarket_frontend  # Nombre del contenedor
+    
+    # Puerto: HOST:CONTENEDOR
+    ports:
+      - "80:80"  # Frontend accesible en localhost
+    
+    # Esperar a que backend esté listo
+    depends_on:
+      - backend
+    
+    # Red interna para comunicación
+    networks:
+      - collectmarket_network
+
+
+# VOLÚMENES (Persistencia de datos)
+volumes:
+  db_data:  # Volumen para datos de MySQL
+
+# ============================================
+# REDES (Comunicación entre contenedores)
+# ============================================
+networks:
+  collectmarket_network:
+    driver: bridge  # Driver por defecto (permite comunicación)

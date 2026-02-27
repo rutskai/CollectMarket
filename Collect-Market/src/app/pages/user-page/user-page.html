@@ -1,0 +1,23 @@
+<div id="user" class="video-bg">
+
+  <div class="form-user p-4">
+    <div class="profile-picture">
+      <img src="user/Sprigatito.png" alt="Profile picture">
+      {{ user?.name }}
+    </div>
+    <div class="profile-content">
+      {{ user?.email }}
+    </div>
+
+    <form >
+      <div class="mb-3">
+        <label for="username"></label>
+        <input type="text" id="username" name="username" placeholder="Nuevo nombre" />
+      </div>
+      <input type="file" />
+      <button type="submit">Guardar cambios</button>
+      <button type="button" (click)="logout()">Cerrar sesión</button>
+    </form>
+  </div>
+
+</div>
