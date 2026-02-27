@@ -8,8 +8,8 @@ import { User } from '../../models/user';
 })
 export class AuthService {
 
-  private loginUrl = 'http://localhost:5000/api/login';
-  private registerUrl = 'http://localhost:5000/api/register';
+  private loginUrl = '/api/api/login';
+  private registerUrl = '/api/api/register';
 
   private userSubject = new BehaviorSubject<User | null>(this.getStoredUser());
   public user$ = this.userSubject.asObservable();

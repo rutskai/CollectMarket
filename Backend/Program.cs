@@ -10,11 +10,11 @@ var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION")
 
 // Agregar Entity Framework con MySQL
 builder.Services.AddDbContext<AppDb>(options =>
-    options.UseMySql(
-        connectionString,
-        ServerVersion.AutoDetect(connectionString)
-    )
-);
+   options.UseMySql(
+    connectionString,
+    new MySqlServerVersion(new Version(8, 0, 45)),
+    mysqlOptions => mysqlOptions.EnableRetryOnFailure()
+));
 
 // Registrar servicio de importación
 builder.Services.AddScoped<CardImportService>();
@@ -41,6 +41,9 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDb>();
     db.Database.Migrate();
+
+    var importService = scope.ServiceProvider.GetRequiredService<CardImportService>();
+    await importService.ImportCardsFromPokemonAPI();
 }
 
 // ENDPOINTS: Cartas
@@ -52,9 +55,5 @@ Auth.AuthEndpoints(app);
 // Health check
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
- CardImportService importService= new CardImportService(builder.Configuration);
- await importService.ImportCardsFromPokemonAPI();
-
-
 // EJECUTAR
-app.Run("http://localhost:5000");
+app.Run();
