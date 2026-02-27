@@ -28,7 +28,11 @@ Esto hará:
 
 - Red interna para que frontend y backend se comuniquen
 
-### Accede a la aplicación:
+El proceso puede tardar un poco, una vez se haga la primera vez, ya se guarda en el caché y tarda mucho menos.
 
-Frontend Angular: http://localhost:4200
-Backend C# API: http://localhost:5000
+### Accede a la aplicación:
+Una vez en la aplicación de docker salga todo en verde
+<img width="1624" height="218" alt="image" src="https://github.com/user-attachments/assets/7d767408-1c2a-4267-819b-0e4a8c67cb11" />
+Se tiene que clickar aquí (Frontend)  y ya se puede ver la aplicación!
+<img width="846" height="69" alt="image" src="https://github.com/user-attachments/assets/e04bd070-65eb-4e7d-814a-f9c03bf8a42b" />
+
