@@ -12,7 +12,7 @@ Antes de empezar, asegúrate de tener instalado:
 
 ## Inicialización con Docker Compose
 
-Abre la terminal en la raíz del proyecto (donde está docker-compose.yml).
+Clona el repositorio y abre la terminal en la raíz del proyecto (donde está docker-compose.yml).
 
 Levanta los contenedores:
 ```
