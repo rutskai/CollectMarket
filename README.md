@@ -2,9 +2,11 @@
 
 Antes de empezar, asegúrate de tener instalado:
 
-- Docker
+- Docker: https://www.docker.com/get-started/
  (20.x+)
 - Docker Compose
+- Node.js + Angular CLI (solo si quieres correr frontend localmente)
+-.NET SDK (solo si quieres correr backend localmente)
 
 ---
 
