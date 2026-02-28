@@ -27,7 +27,7 @@ class AppDb : DbContext
         .IsRequired()
         .HasMaxLength(255);
 
-    entity.Property(u => u.PasswordHash)
+    entity.Property(u => u.Password)
         .IsRequired()
         .HasMaxLength(255);
 

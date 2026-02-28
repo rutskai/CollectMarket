@@ -116,11 +116,11 @@ namespace Backend.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("name");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("password_hash");
+                        .HasColumnName("password");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)")

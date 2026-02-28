@@ -14,8 +14,8 @@ namespace Models
         [Column("email")]
         public string Email { get; set; } = "";
 
-        [Column("password_hash")]
-        public string PasswordHash { get; set; } = string.Empty;
+        [Column("password")]    
+        public string Password { get; set; } = string.Empty;
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;

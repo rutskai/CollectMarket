@@ -13,7 +13,7 @@ namespace Api
                 var user = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
                 if (user == null) return Results.Unauthorized();
 
-                bool validPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
+                bool validPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.Password);
                 if (!validPassword) return Results.Unauthorized();
 
                 return Results.Ok(new
@@ -37,7 +37,7 @@ namespace Api
                 {
                     Name = request.Name,
                     Email = request.Email,
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                    Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };

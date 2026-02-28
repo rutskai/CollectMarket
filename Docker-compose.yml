@@ -25,7 +25,7 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]  # Comando de verificación
       timeout: 20s 
       retries: 10    
-      
+
     networks:
     - collectmarket_network
 
@@ -43,7 +43,7 @@ services:
     # Variables de entorno para la app C#
     environment:
       # Connection string para MySQL
-      DB_CONNECTION: "server=db;port=3306;database=CollectMarket;user=root;password=12345678;"
+      DB_CONNECTION: "server=collectmarket_db;port=3306;database=CollectMarket;user=root;password=12345678;"
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5000
     
