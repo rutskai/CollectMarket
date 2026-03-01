@@ -26,7 +26,20 @@
     margin-bottom: 100px;
     margin-top: 150px;
     background-color: rgba(32, 45, 56, 0.796);
+   
 }
+
+.content-index{
+    height: 400px;
+}
+
+.content-index h1, .content-category h2{
+border-radius: 10px;
+height: 100px;
+
+
+}
+
 .content-category {
     margin-top: 100px;
     max-height: 650px;
@@ -83,7 +96,7 @@
     border-bottom: 1px solid black;
     margin-bottom: 20px;
     padding: 20px;
-    height: 89px;
+    height: 100px;
     position: sticky;
     top: 0;
     background-color: rgb(32, 45, 56);
@@ -101,6 +114,7 @@
     background-color: rgb(32, 45, 56);
     text-shadow: 2px 2px 3px rgba(0,0,0,0.7), 4px 4px 6px rgba(0,0,0,0.5), 6px 6px 10px rgba(0,0,0,0.3);
     font-size: 35px;
+    color: #ffcc00;;
 }
 .swiper.mySwiper {
     width: 100%;
