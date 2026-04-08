@@ -1,40 +1,244 @@
-<div class="video-bg" id="index">
-    <div class="container-index">
-        <div class="content-index">
-            <section class="slider">
-                <h1>Cartas destacadas</h1>
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
-                        @for (card of popularCardsRepeated; track $index) {
-                        <div class="swiper-slide card">
-                            <img [src]="card.imageUrl" [alt]="card.name" /> 
-                        </div>
-                        }
-                    </div>
-                </div>
-            </section>
+<div class="cm-wrap" id="home" data-vide-bg="/video/poke-center">
 
-            <div class="category-logo">
-                <div type="button" class="btn btn-outline-primary shadow">
-                    <i class="bi bi-arrow-down"></i>
-                    <span>Ver colección</span>
-                    <i class="bi bi-arrow-down"></i>
-                </div>
-                <i class="bi bi-caret-down-fill"></i>
-            </div>
+  <section class="cm-hero">
+
+    <div class="cm-hero-content">
+      <!-- Texto -->
+      <div class="cm-hero-text">
+        <div class="cm-badge">
+          <div class="cm-badge-dot"></div>
+          Nuevo stock disponible
         </div>
 
-        <div class="content-category">
-            <h2>Colección</h2>
-            @for (card of cards; track $index) {
-            <div class="card-category">
-                <img [src]="card.imageUrl" [alt]="card.name">
-                <p>{{ card.name }}</p>
-                <p>Rareza: {{ card.rarity }}</p>
-                <p>Precio: ${{ card.price }}</p>
-            </div>
-            }
+        <h1 class="cm-hero-title">
+          El mercado de cartas<br>
+          <span class="gold">Pokémon</span> que buscabas
+        </h1>
+
+        <p class="cm-hero-sub">
+          Compra, vende y colecciona las cartas más exclusivas.
+          Desde comunes hasta holográficas de edición limitada.
+        </p>
+
+        <div class="cm-hero-btns">
+          <button class="cm-btn-primary" routerLink="/tienda">Explorar tienda</button>
+          <button class="cm-btn-secondary" routerLink="/novedades">Ver novedades</button>
         </div>
+
+        <div class="cm-hero-stats">
+          <div class="cm-stat">
+            <div class="cm-stat-val">12.4K</div>
+            <div class="cm-stat-lbl">Cartas disponibles</div>
+          </div>
+          <div class="cm-stat">
+            <div class="cm-stat-val">8.9K</div>
+            <div class="cm-stat-lbl">Usuarios activos</div>
+          </div>
+          <div class="cm-stat">
+            <div class="cm-stat-val">98%</div>
+            <div class="cm-stat-lbl">Satisfacción</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards flotantes -->
+      <div class="cm-cards-scene">
+        <div class="cm-poke-card cm-card1">
+          <div class="cm-card-shine"></div>
+          <div class="cm-card-type water-type">💧</div>
+          <div class="cm-card-hp">HP 120</div>
+          <div class="cm-card-icon">🌊</div>
+          <div class="cm-card-name">Vaporeon</div>
+          <div class="cm-card-rarity">★★★ Rara</div>
+        </div>
+
+        <div class="cm-poke-card cm-card2">
+          <div class="cm-card-shine"></div>
+          <div class="cm-card-type fire-type">⚡</div>
+          <div class="cm-card-hp">HP 240</div>
+          <div class="cm-card-icon">⚡</div>
+          <div class="cm-card-name">Charizard ex</div>
+          <div class="cm-card-rarity">✦ Ultra Rara</div>
+        </div>
+
+        <div class="cm-poke-card cm-card3">
+          <div class="cm-card-shine"></div>
+          <div class="cm-card-type grass-type">🌿</div>
+          <div class="cm-card-hp">HP 90</div>
+          <div class="cm-card-icon">🌿</div>
+          <div class="cm-card-name">Bulbasaur</div>
+          <div class="cm-card-rarity">★ Común</div>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <!-- ─── ÚLTIMAS ADQUISICIONES ─── -->
+  <section class="cm-section">
+    <div class="cm-section-inner">
+      <div class="cm-section-label">Recién llegadas</div>
+      <h2 class="cm-section-title">Últimas adquisiciones</h2>
+      <p class="cm-section-sub">Las cartas más recientes añadidas a nuestro catálogo</p>
+
+      <div class="cm-acq-grid">
+
+        <div class="cm-acq-card">
+          <div class="cm-acq-img img-electric">
+            <span class="cm-acq-badge cm-badge-ultra">Ultra Rara</span>
+            ⚡
+          </div>
+          <div class="cm-acq-info">
+            <div class="cm-acq-name">Pikachu VMAX</div>
+            <div class="cm-acq-set">Brilliant Stars · #44</div>
+            <div class="cm-acq-footer">
+              <div class="cm-acq-price">€42.99</div>
+              <button class="cm-acq-btn">+ Añadir</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cm-acq-card">
+          <div class="cm-acq-img img-psychic">
+            <span class="cm-acq-badge cm-badge-secret">Secreta</span>
+            🔮
+          </div>
+          <div class="cm-acq-info">
+            <div class="cm-acq-name">Mewtwo EX</div>
+            <div class="cm-acq-set">Base Set · #10</div>
+            <div class="cm-acq-footer">
+              <div class="cm-acq-price">€189.00</div>
+              <button class="cm-acq-btn">+ Añadir</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cm-acq-card">
+          <div class="cm-acq-img img-grass">
+            <span class="cm-acq-badge cm-badge-rare">Rara</span>
+            🌿
+          </div>
+          <div class="cm-acq-info">
+            <div class="cm-acq-name">Venusaur</div>
+            <div class="cm-acq-set">Scarlet & Violet · #3</div>
+            <div class="cm-acq-footer">
+              <div class="cm-acq-price">€18.50</div>
+              <button class="cm-acq-btn">+ Añadir</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cm-acq-card">
+          <div class="cm-acq-img img-fire">
+            <span class="cm-acq-badge cm-badge-ultra">Ultra Rara</span>
+            🔥
+          </div>
+          <div class="cm-acq-info">
+            <div class="cm-acq-name">Charizard ex</div>
+            <div class="cm-acq-set">Obsidian Flames · #125</div>
+            <div class="cm-acq-footer">
+              <div class="cm-acq-price">€215.00</div>
+              <button class="cm-acq-btn">+ Añadir</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cm-acq-card">
+          <div class="cm-acq-img img-water">
+            <span class="cm-acq-badge cm-badge-common">Común</span>
+            💧
+          </div>
+          <div class="cm-acq-info">
+            <div class="cm-acq-name">Squirtle</div>
+            <div class="cm-acq-set">Classic Collection · #7</div>
+            <div class="cm-acq-footer">
+              <div class="cm-acq-price">€3.99</div>
+              <button class="cm-acq-btn">+ Añadir</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cm-acq-card">
+          <div class="cm-acq-img img-dark">
+            <span class="cm-acq-badge cm-badge-secret">Secreta</span>
+            ✨
+          </div>
+          <div class="cm-acq-info">
+            <div class="cm-acq-name">Umbreon Gold</div>
+            <div class="cm-acq-set">Evolving Skies · #215</div>
+            <div class="cm-acq-footer">
+              <div class="cm-acq-price">€320.00</div>
+              <button class="cm-acq-btn">+ Añadir</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIOS ─── -->
+  <section class="cm-section cm-reviews">
+    <div class="cm-section-inner">
+      <div class="cm-divider"></div>
+      <div class="cm-section-label">Comunidad</div>
+      <h2 class="cm-section-title">Lo que dicen nuestros coleccionistas</h2>
+      <p class="cm-section-sub">Más de 8.000 coleccionistas confían en CollectMarket</p>
+
+      <div class="cm-reviews-grid">
+
+        <div class="cm-review-card">
+          <div class="cm-stars">★★★★★</div>
+          <p class="cm-review-text">
+            "Encontré mi Charizard de primera edición a un precio increíble.
+            El proceso de compra fue rapidísimo y la carta llegó perfectamente protegida."
+          </p>
+          <div class="cm-reviewer">
+            <div class="cm-reviewer-avatar avatar-orange">JM</div>
+            <div>
+              <div class="cm-reviewer-name">Javier M.</div>
+              <div class="cm-reviewer-sub">Coleccionista · Madrid</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-stars">★★★★★</div>
+          <p class="cm-review-text">
+            "La mejor plataforma para comprar cartas en España.
+            El catálogo es enorme y los vendedores son de confianza. ¡100% recomendado!"
+          </p>
+          <div class="cm-reviewer">
+            <div class="cm-reviewer-avatar avatar-purple">SR</div>
+            <div>
+              <div class="cm-reviewer-name">Sara R.</div>
+              <div class="cm-reviewer-sub">Jugadora competitiva · Barcelona</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-stars">★★★★☆</div>
+          <p class="cm-review-text">
+            "Llevo años buscando completar mi colección Base Set y aquí por fin lo conseguí.
+            Atención al cliente impecable cuando tuve una duda."
+          </p>
+          <div class="cm-reviewer">
+            <div class="cm-reviewer-avatar avatar-green">AP</div>
+            <div>
+              <div class="cm-reviewer-name">Andrés P.</div>
+              <div class="cm-reviewer-sub">Coleccionista vintage · Valencia</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="cm-footer">
+    <div class="cm-footer-logo">Collect<span>Market</span></div>
+    <p class="cm-footer-sub">© 2025 CollectMarket · Tu mercado de cartas Pokémon</p>
+  </footer>
 
 </div>
