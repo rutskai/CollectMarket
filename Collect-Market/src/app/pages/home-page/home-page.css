@@ -100,6 +100,7 @@
   position: relative;
   overflow: hidden;
   padding: 80px 40px 40px;
+  margin-top: 80px;
 }
 
 /* Orbes de fondo */
@@ -149,6 +150,8 @@
   gap: 60px;
   position: relative;
   z-index: 2;
+  margin-bottom: 100px;
+  
 }
 
 .cm-hero-text {
@@ -405,6 +408,7 @@
   padding: 80px 40px;
   position: relative;
   z-index: 1;
+   background: linear-gradient(135deg, #1e2b3a7c 0%, #0f192377 60%, #1a25358f 100%);
 }
 
 .cm-section-inner {
@@ -540,6 +544,7 @@
   background: rgba(255, 255, 255, 0.02);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+   background: linear-gradient(135deg, #1e2b3a7c 0%, #0f192377 60%, #1a25358f 100%);
 }
 
 .cm-reviews-grid {
