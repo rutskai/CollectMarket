@@ -39,56 +39,90 @@ namespace Services
 
                 using var client = new HttpClient();
                 client.Timeout = TimeSpan.FromSeconds(200);
+                client.DefaultRequestHeaders.Add("User-Agent", "TCGdexImporter/1.0");
 
                 foreach (var setId in sets.Keys)
                 {
+                    // Paso 1: Obtener lista básica de cartas
+                    var listUrl = $"https://api.tcgdex.net/v2/en/cards?set={setId}";
+                    var listResponse = await client.GetAsync(listUrl);
 
-
-                    var url = $"https://api.tcgdex.net/v2/en/cards?set={setId}";
-                    var response = await client.GetAsync(url);
-
-                    if (!response.IsSuccessStatusCode)
+                    if (!listResponse.IsSuccessStatusCode)
                     {
-                        return (false, $"Error al llamar a la API TCGdex: {response.StatusCode} - {response.ReasonPhrase}", totalInserted);
+                        return (false, $"Error al llamar a la API TCGdex: {listResponse.StatusCode} - {listResponse.ReasonPhrase}", totalInserted);
                     }
 
-                    var json = await response.Content.ReadAsStringAsync();
-                    var cards = JsonSerializer.Deserialize<List<TCGdexCard>>(json, new JsonSerializerOptions
+                    var listJson = await listResponse.Content.ReadAsStringAsync();
+                    var basicCards = JsonSerializer.Deserialize<List<TCGdexBasicInfo>>(listJson, new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
                     });
 
-                    if (cards == null || cards.Count == 0) continue;
+                    if (basicCards == null || basicCards.Count == 0) continue;
 
-                    foreach (var card in cards)
+                    Console.WriteLine($"Procesando {basicCards.Count} cartas del set {setId}...");
+
+                    foreach (var basicCard in basicCards)
                     {
-
-
-                        // Construimos la descripción combinando ataques + flavor text
-                        string description = card.Description ?? "";
-
-                        if (card.Attacks != null)
+                        try
                         {
-                            foreach (var atk in card.Attacks)
+                            // Paso 2: Obtener detalles completos de cada carta
+                            var detailUrl = $"https://api.tcgdex.net/v2/en/cards/{basicCard.Id}";
+                            var detailResponse = await client.GetAsync(detailUrl);
+
+                            if (!detailResponse.IsSuccessStatusCode)
                             {
-                                description = string.Join("\n", card.Attacks.Select(atk => $"{atk.Name} - {atk.Effect}"));
+                                Console.WriteLine($"⚠ No se pudo obtener detalle de {basicCard.Id}: {detailResponse.StatusCode}");
+                                continue;
                             }
-                        }
-                        description = description.Trim();
 
-                        totalInserted += await connection.ExecuteAsync(sql, new
+                            var detailJson = await detailResponse.Content.ReadAsStringAsync();
+                            var fullCard = JsonSerializer.Deserialize<TCGdexCard>(detailJson, new JsonSerializerOptions
+                            {
+                                PropertyNameCaseInsensitive = true
+                            });
+
+                            if (fullCard == null) continue;
+
+                            // Construir descripción
+                            string description = fullCard.Description ?? "";
+                            if (string.IsNullOrWhiteSpace(description) && fullCard.Attacks != null && fullCard.Attacks.Length > 0)
+                            {
+                                description = string.Join("\n", fullCard.Attacks.Select(atk => 
+                                {
+                                    var effect = atk.Effect ?? "";
+                                    var damage = atk.Damage != null ? $" ({atk.Damage})" : "";
+                                    return $"{atk.Name}{damage} - {effect}";
+                                }));
+                            }
+                            description = description.Trim();
+
+                            // Determinar rareza (ahora viene del detalle)
+                            string rarity = fullCard.Rarity ?? "Common";
+
+                            await connection.ExecuteAsync(sql, new
+                            {
+                                Name = fullCard.Name,
+                                SetName = sets.GetValueOrDefault(setId, "Unknown"),
+                                Rarity = rarity,
+                                Type = fullCard.Types != null ? string.Join(", ", fullCard.Types) : "Sin tipo",
+                                ImageUrl = fullCard.Image ?? basicCard.Image,
+                                Description = description,
+                                Price = GeneratePrice(rarity),
+                                Stock = GenerateStock(rarity)
+                            });
+
+                            totalInserted++;
+                            
+                            // Pequeña pausa para no sobrecargar la API
+                            await Task.Delay(50);
+                        }
+                        catch (Exception ex)
                         {
-                            Name = card.Name,
-                            SetName = sets.GetValueOrDefault(setId, "Unknown"),
-                            Rarity = card.Rarity ?? "Common",
-                            Type = card.Types != null ? string.Join(", ", card.Types) : "Sin tipo",
-                            ImageUrl = card.Image,
-                            Description = description.Trim(),
-                            Price = GeneratePrice(card.Rarity ?? "Common"),
-                            Stock = GenerateStock(card.Rarity ?? "Common")
-                        });
+                            Console.WriteLine($"❌ Error procesando carta {basicCard.Id}: {ex.Message}");
+                        }
                     }
-                    Console.WriteLine($"{setId} → {cards.Count} cartas");
+                    Console.WriteLine($"✅ {setId} → {basicCards.Count} cartas procesadas");
                 }
 
                 await connection.CloseAsync();
@@ -127,5 +161,4 @@ namespace Services
             };
         }
     }
-
 }
