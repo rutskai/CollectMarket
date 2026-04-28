@@ -33,6 +33,45 @@ namespace Api
                     .ToListAsync();
                 return Results.Ok(cards);
             });
+
+            app.MapGet("/api/cards/filter", async (
+                HttpContext http,
+                AppDb db) =>
+            {
+                var query = db.Cards.AsQueryable();
+
+                var rarities = http.Request.Query["rarity"].ToArray();
+                var types = http.Request.Query["type"].ToArray();
+                var setNames = http.Request.Query["setName"].ToArray();
+                var minPrice = http.Request.Query["minPrice"].FirstOrDefault();
+                var maxPrice = http.Request.Query["maxPrice"].FirstOrDefault();
+
+                if (rarities.Length > 0)
+                    query = query.Where(c => rarities.Contains(c.Rarity));
+
+                if (types.Length > 0)
+                    query = query.Where(c => types.Contains(c.Type));
+
+                if (setNames.Length > 0)
+                    query = query.Where(c => setNames.Contains(c.SetName));
+
+                if (decimal.TryParse(minPrice, out var min))
+                    query = query.Where(c => c.Price >= min);
+
+                if (decimal.TryParse(maxPrice, out var max))
+                    query = query.Where(c => c.Price <= max);
+
+                return Results.Ok(await query.ToListAsync());
+            });
+
+            app.MapGet("/api/cards/types", async (AppDb db) =>
+                Results.Ok(await db.Cards.Select(c => c.Type).Distinct().ToListAsync()));
+
+            app.MapGet("/api/cards/rarities", async (AppDb db) =>
+                Results.Ok(await db.Cards.Select(c => c.Rarity).Distinct().ToListAsync()));
+
+            app.MapGet("/api/cards/expansions", async (AppDb db) =>
+                Results.Ok(await db.Cards.Select(c => c.SetName).Distinct().ToListAsync()));
         }
     }
 }
