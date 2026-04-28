@@ -20,7 +20,6 @@ public class TCGdexCard
     [JsonPropertyName("types")]
     public string[]? Types { get; set; }
 
-    // Esto es la descripción real de la carta
     [JsonPropertyName("description")]
     public string? Description { get; set; }
 
@@ -37,8 +36,29 @@ public class Attack
     public string[]? Cost { get; set; }
 
     [JsonPropertyName("damage")]
-    public string? Damage { get; set; }
+    public object? Damage { get; set; } 
 
     [JsonPropertyName("effect")]
     public string? Effect { get; set; }
+    
+    // Método helper para obtener el daño como string
+    public string GetDamageString()
+    {
+        return Damage?.ToString() ?? "";
+    }
+}
+
+public class TCGdexBasicInfo
+{
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = "";
+
+    [JsonPropertyName("localId")]
+    public string LocalId { get; set; } = "";
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+
+    [JsonPropertyName("image")]
+    public string? Image { get; set; }
 }
