@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service';
-import { User } from '../../models/user';
+import { ModelUser } from '../../models/user';
 import { Router } from '@angular/router';
 declare var $: any;
 
@@ -11,7 +11,7 @@ declare var $: any;
   styleUrl: './user-page.css',
 })
 export class UserPage {
-   user: User | null = null;
+   user: ModelUser | null = null;
 
   constructor(private authService: AuthService, private router: Router) {}
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service';
 import { UserService } from '../../services/user/user-service';
-import { User } from '../../models/user';
+import { ModelUser } from '../../models/user';
 import { RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 export class Header {
 
 
-  public user:User | null = null;
+  public user:ModelUser | null = null;
 
   constructor(private authService: AuthService, private userService: UserService){}
 

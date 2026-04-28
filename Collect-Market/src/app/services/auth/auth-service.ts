@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { User } from '../../models/user';
+import { ModelUser } from '../../models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +11,12 @@ export class AuthService {
   private loginUrl = '/api/login';
   private registerUrl = '/api/register';
 
-  private userSubject = new BehaviorSubject<User | null>(this.getStoredUser());
+  private userSubject = new BehaviorSubject<ModelUser | null>(this.getStoredUser());
   public user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  private getStoredUser(): User | null {
+  private getStoredUser(): ModelUser | null {
     try {
       const user = localStorage.getItem('currentUser');
       if (!user || user === 'undefined') return null;
@@ -36,7 +36,7 @@ export class AuthService {
     return this.http.post(this.loginUrl, { email, password });
   }
 
-  setUser(user: User): void {
+  setUser(user: ModelUser): void {
     localStorage.setItem('currentUser', JSON.stringify(user));
     this.userSubject.next(user);
   }

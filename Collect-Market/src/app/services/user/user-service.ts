@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from '../../models/user';
+import { ModelUser } from '../../models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,8 @@ export class UserService {
    * Obtiene la lista de todos los usuarios
    * @returns Observable con array de usuarios
    */
-    getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+    getUsers(): Observable<ModelUser[]> {
+    return this.http.get<ModelUser[]>(this.apiUrl);
   }
 
    /**
@@ -29,8 +29,8 @@ export class UserService {
    * @param id - ID del usuario a buscar
    * @returns Observable con los datos del usuario
    */
-    getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${id}`);
+    getUserById(id: number): Observable<ModelUser> {
+    return this.http.get<ModelUser>(`${this.apiUrl}/${id}`);
   }
 
  
