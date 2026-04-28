@@ -1,0 +1,150 @@
+<div class="shop-wrap">
+
+
+  <!-- ══════════════════════════════════
+       TABS
+  ══════════════════════════════════ -->
+  <div class="tabs-bar">
+    <button class="tab-btn" [class.active]="activeTab === 'new'" (click)="changeTab('new')">
+      🆕 New <span class="tab-count">{{ newCards.length }}</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'cards'" (click)="changeTab('cards')">
+      🃏 Individual cards <span class="tab-count">{{ allCards.length }}</span>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════
+       MAIN LAYOUT
+  ══════════════════════════════════ -->
+  <div class="shop-main">
+
+    <!-- ── SIDEBAR FILTERS ── -->
+    <aside class="filters-sidebar">
+
+      <div class="filter-block">
+        <div class="filter-title">⚡ Type</div>
+        <div class="filter-options">
+          @for (filter of typeFilters; track filter.name) {
+            <div class="filter-opt" [class.active]="filter.active" (click)="toggleType(filter)">
+              <div class="fo-check">{{ filter.active ? '✓' : '' }}</div>
+              <div class="fo-dot" [style.background]="filter.color"></div>
+              {{ filter.name }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-title">★ Rarity</div>
+        <div class="filter-options">
+          @for (filter of rarityFilters; track filter.name) {
+            <div class="filter-opt" [class.active]="filter.active" (click)="toggleRarity(filter)">
+              <div class="fo-check">{{ filter.active ? '✓' : '' }}</div>
+              {{ filter.name }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-title">📅 Expansion</div>
+        <div class="filter-options">
+          @for (filter of expansionFilters; track filter.name) {
+            <div class="filter-opt" [class.active]="filter.active" (click)="toggleExpansion(filter)">
+              <div class="fo-check">{{ filter.active ? '✓' : '' }}</div>
+              {{ filter.name }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-title">💶 Price</div>
+        <div class="price-range">
+          <input class="price-input" type="number" placeholder="Min €" [(ngModel)]="minPrice" />
+          <input class="price-input" type="number" placeholder="Max €" [(ngModel)]="maxPrice" />
+        </div>
+        <button class="apply-filter-btn" (click)="applyFilters()">Apply filters</button>
+      </div>
+
+    </aside>
+
+    <!-- ── PRODUCTS AREA ── -->
+    <div class="products-area">
+
+      <!-- Banner novedades -->
+      <div class="new-banner">
+        <span class="new-banner-icon">🆕</span>
+        <div>
+          <strong>New cards every Monday</strong>
+          — Fresh cards added to the catalogue every week. Don't miss them!
+        </div>
+      </div>
+
+      <!-- Topbar -->
+      <div class="products-topbar">
+        <div class="results-count">
+          Showing <strong>{{ activeTab === 'new' ? newCards.length : allCards.length }}</strong> results
+        </div>
+        <div class="topbar-right">
+          <select class="sort-select">
+            <option value="recent">Most recent</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="popular">Most popular</option>
+            <option value="rarity">Rarity</option>
+          </select>
+          <div class="grid-toggle">
+            <div class="gt-btn active" title="Grid view">⊞</div>
+            <div class="gt-btn" title="List view">☰</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ TAB: NEW ════ -->
+      @if (activeTab === 'new') {
+        <div class="cards-grid">
+          @for (card of newCards; track card.id) {
+            <app-card
+              [card]="card"
+              [isFavorite]="favoritesIds.has(card.id)"
+              (addToCart)="onAddToCart($event)"
+              (toggleFavorite)="onToggleFavorite($event)">
+            </app-card>
+          }
+        </div>
+      }
+
+      <!-- ════ TAB: INDIVIDUAL CARDS ════ -->
+      @if (activeTab === 'cards') {
+        <div class="cards-grid">
+          @for (card of displayCards; track card.id) {
+            <app-card
+              [card]="card"
+              [isFavorite]="favoritesIds.has(card.id)"
+              (addToCart)="onAddToCart($event)"
+              (toggleFavorite)="onToggleFavorite($event)">
+            </app-card>
+          }
+        </div>
+
+        @if (totalPages > 1) {
+          <div class="pagination">
+            <button class="page-btn arrow" (click)="prevPage()" [disabled]="currentPage === 1">‹</button>
+            @for (page of getVisiblePages(); track page) {
+              <button class="page-btn" [class.active]="page === currentPage" (click)="changePage(page)">
+                {{ page }}
+              </button>
+            }
+            <button class="page-btn arrow" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
+          </div>
+
+          <div class="pagination-info">
+            Page {{ currentPage }} of {{ totalPages }} &nbsp;·&nbsp; {{ allCards.length }} cards
+          </div>
+        }
+      }
+
+    </div>
+  </div>
+</div>
