@@ -8,6 +8,7 @@ class AppDb : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Card> Cards => Set<Card>();
+    public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -77,5 +78,25 @@ class AppDb : DbContext
      entity.HasIndex(c => c.Rarity);
      entity.HasIndex(c => c.SetName);
  });
+
+        modelBuilder.Entity<UserFavorite>(entity =>
+       {
+           entity.ToTable("UserFavorite");
+           entity.HasKey(f => f.Id);
+
+           entity.HasIndex(f => new { f.UserId, f.CardId }).IsUnique();
+
+           entity.Property(f => f.CreatedAt);
+
+           entity.HasOne(f => f.User)
+               .WithMany()
+               .HasForeignKey(f => f.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+           entity.HasOne(f => f.Card)
+               .WithMany()
+               .HasForeignKey(f => f.CardId)
+               .OnDelete(DeleteBehavior.Cascade);
+       });
     }
 }
