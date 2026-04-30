@@ -1,0 +1,31 @@
+<div class="fav-wrap">
+
+
+
+  <!-- ══════════════════════════════════
+       CONTENIDO
+  ══════════════════════════════════ -->
+  <div class="fav-content">
+
+    @if (favCards.length === 0) {
+      <div class="fav-empty">
+        <div class="fav-empty-icon">♡</div>
+        <div class="fav-empty-title">Aún no hay favoritos</div>
+        <div class="fav-empty-sub">Empieza añadiendo cartas desde la tienda, aparecerán aquí.</div>
+        <a class="fav-empty-btn" routerLink="/shop">Ir a la tienda →</a>
+      </div>
+    } @else {
+      <div class="fav-grid">
+        @for (card of favCards; track card.id) {
+          <app-card
+            [card]="card"
+            [isFavorite]="true"
+            (addToCart)="onAddToCart($event)"
+            (toggleFavorite)="onToggleFavorite($event)">
+          </app-card>
+        }
+      </div>
+    }
+
+  </div>
+</div>

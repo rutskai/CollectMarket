@@ -105,14 +105,12 @@ export class ShopPage implements OnInit {
     this.cdr.detectChanges();
   }
 
- changePage(page: number): void {
-  console.log('changePage llamado con:', page, '| totalPages:', this.totalPages);
-  if (page < 1 || page > this.totalPages) return;
-  this.currentPage = page;
-  this.updateDisplayCards();
-  console.log('displayCards tras update:', this.displayCards.length, '| currentPage:', this.currentPage);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.updateDisplayCards();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   nextPage(): void { this.changePage(this.currentPage + 1); }
   prevPage(): void { this.changePage(this.currentPage - 1); }

@@ -4,6 +4,7 @@ import { LoginPage } from './pages/login-page/login-page';
 import { RegisterPage } from './pages/register-page/register-page';
 import { UserPage } from './pages/user-page/user-page';
 import { ShopPage } from './pages/shop-page/shop-page';
+import { FavoritePage } from './pages/favorite-page/favorite-page';
 
 export const routes: Routes = [
     {path:"", component: HomePage},
@@ -11,7 +12,8 @@ export const routes: Routes = [
     {path:"auth/login", component: LoginPage},
     {path:"auth/register", component: RegisterPage},
     {path:"user", component: UserPage},
-    {path:"shop", component: ShopPage}
+    {path:"shop", component: ShopPage},
+    {path:"favorite", component: FavoritePage},
     
 
 ];

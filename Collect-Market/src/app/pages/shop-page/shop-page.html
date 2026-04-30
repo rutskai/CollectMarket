@@ -22,7 +22,7 @@
     <aside class="filters-sidebar">
 
       <div class="filter-block">
-        <div class="filter-title">⚡ Type</div>
+        <div class="filter-title"> Tipo</div>
         <div class="filter-options">
           @for (filter of typeFilters; track filter.name) {
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleType(filter)">
@@ -35,7 +35,7 @@
       </div>
 
       <div class="filter-block">
-        <div class="filter-title">★ Rarity</div>
+        <div class="filter-title">★ Rareza</div>
         <div class="filter-options">
           @for (filter of rarityFilters; track filter.name) {
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleRarity(filter)">
@@ -47,7 +47,7 @@
       </div>
 
       <div class="filter-block">
-        <div class="filter-title">📅 Expansion</div>
+        <div class="filter-title">📅 Expansión</div>
         <div class="filter-options">
           @for (filter of expansionFilters; track filter.name) {
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleExpansion(filter)">
@@ -59,7 +59,7 @@
       </div>
 
       <div class="filter-block">
-        <div class="filter-title">💶 Price</div>
+        <div class="filter-title">💶 Precio</div>
         <div class="price-range">
           <input class="price-input" type="number" placeholder="Min €" [(ngModel)]="minPrice" />
           <input class="price-input" type="number" placeholder="Max €" [(ngModel)]="maxPrice" />
@@ -74,10 +74,10 @@
 
       <!-- Banner novedades -->
       <div class="new-banner">
-        <span class="new-banner-icon">🆕</span>
+        <span class="new-banner-icon">🔴 ⚈ᆺ⚈ 🔴</span>
         <div>
-          <strong>New cards every Monday</strong>
-          — Fresh cards added to the catalogue every week. Don't miss them!
+          <strong>Nuevas cartas cada Lunes</strong>
+          — Nuevas cartas añadidas al catálogo cada semana. No te lo pierdas!
         </div>
       </div>
 
