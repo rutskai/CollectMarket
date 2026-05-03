@@ -73,6 +73,10 @@ export class AuthService {
     localStorage.setItem('token', token);
   }
 
+  getCurrentUser(): ModelUser | null {
+  return this.userSubject.value;
+}
+
   /**
  * Registra un nuevo usuario
  * @param name - Nombre del usuario
