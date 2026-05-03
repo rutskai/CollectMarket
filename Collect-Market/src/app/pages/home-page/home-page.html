@@ -21,7 +21,7 @@
         </p>
 
         <div class="cm-hero-btns">
-          <button class="cm-btn-primary" routerLink="/tienda">Explorar tienda</button>
+          <button class="cm-btn-primary" routerLink="/shop">Explorar tienda</button>
           <button class="cm-btn-secondary" routerLink="/novedades">Ver novedades</button>
         </div>
 
@@ -41,35 +41,14 @@
         </div>
       </div>
 
-      <!-- Cards flotantes -->
-      <div class="cm-cards-scene">
-        <div class="cm-poke-card cm-card1">
-          <div class="cm-card-shine"></div>
-          <div class="cm-card-type water-type">💧</div>
-          <div class="cm-card-hp">HP 120</div>
-          <div class="cm-card-icon">🌊</div>
-          <div class="cm-card-name">Vaporeon</div>
-          <div class="cm-card-rarity">★★★ Rara</div>
-        </div>
-
-        <div class="cm-poke-card cm-card2">
-          <div class="cm-card-shine"></div>
-          <div class="cm-card-type fire-type">⚡</div>
-          <div class="cm-card-hp">HP 240</div>
-          <div class="cm-card-icon">⚡</div>
-          <div class="cm-card-name">Charizard ex</div>
-          <div class="cm-card-rarity">✦ Ultra Rara</div>
-        </div>
-
-        <div class="cm-poke-card cm-card3">
-          <div class="cm-card-shine"></div>
-          <div class="cm-card-type grass-type">🌿</div>
-          <div class="cm-card-hp">HP 90</div>
-          <div class="cm-card-icon">🌿</div>
-          <div class="cm-card-name">Bulbasaur</div>
-          <div class="cm-card-rarity">★ Común</div>
-        </div>
-      </div>
+   <div class="cm-cards-scene">
+  @for (card of cards; track card.id; let i = $index) {
+    <div class="cm-poke-card" [ngClass]="'cm-card' + (i + 1)">
+      <div class="cm-card-shine"></div>
+      <img [src]="getImageUrl(card)" [alt]="card.name" />
+    </div>
+  }
+</div>
     </div>
   </section>
 
