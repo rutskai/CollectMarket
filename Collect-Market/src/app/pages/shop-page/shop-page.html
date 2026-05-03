@@ -64,7 +64,7 @@
           <input class="price-input" type="number" placeholder="Min €" [(ngModel)]="minPrice" />
           <input class="price-input" type="number" placeholder="Max €" [(ngModel)]="maxPrice" />
         </div>
-        <button class="apply-filter-btn" (click)="applyFilters()">Apply filters</button>
+        <button class="apply-filter-btn" (click)="applyFilters()">Aplicar filtros</button>
       </div>
 
     </aside>
@@ -84,7 +84,7 @@
       <!-- Topbar -->
       <div class="products-topbar">
         <div class="results-count">
-          Showing <strong>{{ activeTab === 'new' ? newCards.length : allCards.length }}</strong> results
+          Mostrando <strong>{{ activeTab === 'new' ? newCards.length : allCards.length }}</strong> cartas
         </div>
         <div class="topbar-right">
           <select class="sort-select">

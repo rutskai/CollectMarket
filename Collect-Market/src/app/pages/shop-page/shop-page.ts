@@ -5,6 +5,7 @@ import { ModelCard } from '../../models/card';
 import { Card } from '../../components/card/card';
 import { FavoritesService } from '../../services/favorites-service';
 import { CardsService } from '../../services/cards/cards-service';
+import { AuthService } from '../../services/auth/auth-service';
 import { Filter, ModelFilteredCards } from '../../models/filter';
 import { PaginationHelper } from '../../helpers/pagination-helper';
 
@@ -23,12 +24,12 @@ export class ShopPage implements OnInit {
   minPrice = 0;
   maxPrice = 500;
 
-  userId = 1;
+  userId: number | null = null; // ← ya no hardcodeado
   favoritesIds = new Set<number>();
 
-  allSourceCards: ModelCard[] = [];  // Fuente de verdad inmutable
-  allCards: ModelCard[] = [];        // Cartas tras aplicar filtros
-  displayCards: ModelCard[] = [];    // Cartas de la página actual
+  allSourceCards: ModelCard[] = [];
+  allCards: ModelCard[] = [];
+  displayCards: ModelCard[] = [];
   newCards: ModelCard[] = [];
 
   currentPage = 1;
@@ -42,13 +43,22 @@ export class ShopPage implements OnInit {
   constructor(
     private favoritesService: FavoritesService,
     private cardsService: CardsService,
+    private authService: AuthService, // ← agregado
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.loadCards();
-    this.loadFavorites();
     this.loadFilterOptions();
+
+    // Solo carga favoritos si hay sesión iniciada
+    if (this.authService.isLoggedIn()) {
+      const user = this.authService.getCurrentUser();
+      if (user) {
+        this.userId = user.id;
+        this.loadFavorites();
+      }
+    }
   }
 
   // ─── Carga inicial ────────────────────────────────────────────────────────
@@ -66,6 +76,7 @@ export class ShopPage implements OnInit {
   }
 
   loadFavorites(): void {
+    if (this.userId === null) return;
     this.favoritesService.getFavorites(this.userId).subscribe(favCards => {
       this.favoritesIds = new Set(favCards.map(c => c.id));
       this.cdr.detectChanges();
@@ -152,8 +163,8 @@ export class ShopPage implements OnInit {
       rarities: activeRarities,
       types: activeTypes,
       setNames: activeSets,
-      minPrice: this.minPrice > 0    ? this.minPrice : undefined,
-      maxPrice: this.maxPrice < 500  ? this.maxPrice : undefined,
+      minPrice: this.minPrice > 0   ? this.minPrice : undefined,
+      maxPrice: this.maxPrice < 500 ? this.maxPrice : undefined,
     };
 
     this.cardsService.getFilteredCards(filters).subscribe({
@@ -168,6 +179,11 @@ export class ShopPage implements OnInit {
   // ─── Favoritos ────────────────────────────────────────────────────────────
 
   onToggleFavorite(card: ModelCard): void {
+    if (!this.authService.isLoggedIn() || this.userId === null) {
+      alert('Debes iniciar sesión para agregar a favoritos.');
+      return;
+    }
+
     if (this.favoritesIds.has(card.id)) {
       this.favoritesService.removeFavorite(this.userId, card.id).subscribe(() => {
         this.favoritesIds.delete(card.id);
