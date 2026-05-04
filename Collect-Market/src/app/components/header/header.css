@@ -6,6 +6,21 @@
     box-sizing: border-box;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
+#fav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffd700;
+  text-decoration: none;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  margin-left: 8px;
+}
+
+#fav-button:hover {
+  transform: translateY(-2px);
+  color: #ffa500;
+}
 
   .header {
     position: fixed;
