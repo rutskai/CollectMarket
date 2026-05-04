@@ -52,4 +52,8 @@ export class FavoritePage {
     console.log('Added to cart:', card);
   }
 
+  getTotalValue(): number {
+  return this.favCards.reduce((acc, card) => acc + card.price, 0);
+}
+
 }

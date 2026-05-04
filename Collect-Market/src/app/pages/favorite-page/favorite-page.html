@@ -1,17 +1,24 @@
 <div class="fav-wrap">
 
+  @if (favCards.length > 0) {
+  <div class="fav-top">
+    <div class="fav-top-left">
+      <h1 class="fav-title">Mis Favoritos</h1>
+      <p class="fav-sub">{{ favCards.length }} cartas guardadas</p>
+    </div>
+    <div class="fav-valor">
+      <span class="fav-valor-lbl">Valor total</span>
+      <span class="fav-valor-num">{{ getTotalValue() | currency:'EUR':'symbol':'1.2-2' }}</span>
+    </div>
+  </div>
+}
 
-
-  <!-- ══════════════════════════════════
-       CONTENIDO
-  ══════════════════════════════════ -->
   <div class="fav-content">
-
     @if (favCards.length === 0) {
       <div class="fav-empty">
         <div class="fav-empty-icon">♡</div>
         <div class="fav-empty-title">Aún no hay favoritos</div>
-        <div class="fav-empty-sub">Empieza añadiendo cartas desde la tienda, aparecerán aquí.</div>
+        <div class="fav-empty-sub">Empieza añadiendo cartas desde la tienda.</div>
         <a class="fav-empty-btn" routerLink="/shop">Ir a la tienda →</a>
       </div>
     } @else {
@@ -26,6 +33,6 @@
         }
       </div>
     }
-
   </div>
+
 </div>
