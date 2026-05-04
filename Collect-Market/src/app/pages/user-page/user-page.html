@@ -1,23 +1,32 @@
 <div id="user" class="video-bg">
 
-  <div class="form-user p-4">
-    <div class="profile-picture">
-      <img src="user/Sprigatito.png" alt="Profile picture">
-      {{ user?.name }}
-    </div>
-    <div class="profile-content">
-      {{ user?.email }}
+  <div class="user-card">
+
+    <!-- Avatar -->
+    <div class="user-avatar-section">
+      <div class="user-avatar-ring">
+        <img src="user/Sprigatito.png" alt="Profile picture" />
+      </div>
+      <h2 class="user-name">{{ user?.name }}</h2>
+      <span class="user-email">{{ user?.email }}</span>
     </div>
 
-    <form >
-      <div class="mb-3">
-        <label for="username"></label>
-        <input type="text" id="username" name="username" placeholder="Nuevo nombre" />
+    <!-- Formulario -->
+    <div class="user-form">
+      <div class="user-field">
+        <label>Nuevo nombre</label>
+        <input type="text" placeholder="Escribe tu nuevo nombre..." />
       </div>
-      <input type="file" />
-      <button type="submit">Guardar cambios</button>
-      <button type="button" (click)="logout()">Cerrar sesión</button>
-    </form>
+
+      <div class="user-field">
+        <label>Foto de perfil</label>
+        <input type="file" />
+      </div>
+
+      <button class="user-btn-primary" type="submit">Guardar cambios</button>
+      <button class="user-btn-secondary" type="button" (click)="logout()">Cerrar sesión</button>
+    </div>
+
   </div>
 
 </div>
