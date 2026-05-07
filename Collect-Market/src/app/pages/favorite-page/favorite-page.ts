@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service';
 import { FavoritesService } from '../../services/favorites-service';
+import { CartService } from '../../services/cart/cart-service';
 import { ModelCard } from '../../models/card';
 import { ModelUser } from '../../models/user';
 import { CommonModule } from '@angular/common';
@@ -13,13 +14,15 @@ import { RouterLink } from '@angular/router';
   templateUrl: './favorite-page.html',
   styleUrl: './favorite-page.css',
 })
-export class FavoritePage {
+export class FavoritePage implements OnInit {
 
-    favCards: ModelCard[] = [];
+  favCards: ModelCard[] = [];
+  cartIds = new Set<number>();
   user: ModelUser | null = null;
 
   constructor(
     private favoritesService: FavoritesService,
+    private cartService: CartService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -29,6 +32,7 @@ export class FavoritePage {
       this.user = user;
       if (user) {
         this.loadFavorites(user.id);
+        this.loadCart(user.id);
       }
     });
   }
@@ -36,6 +40,13 @@ export class FavoritePage {
   loadFavorites(userId: number): void {
     this.favoritesService.getFavorites(userId).subscribe(cards => {
       this.favCards = cards;
+      this.cdr.detectChanges();
+    });
+  }
+
+  loadCart(userId: number): void {
+    this.cartService.getCart(userId).subscribe(items => {
+      this.cartIds = new Set(items.map(i => i.cardId));
       this.cdr.detectChanges();
     });
   }
@@ -49,11 +60,15 @@ export class FavoritePage {
   }
 
   onAddToCart(card: ModelCard): void {
-    console.log('Added to cart:', card);
+    if (!this.user) return;
+    if (this.cartIds.has(card.id)) return;
+    this.cartService.addToCart(this.user.id, card.id).subscribe(() => {
+      this.cartIds.add(card.id);
+      this.cdr.detectChanges();
+    });
   }
 
   getTotalValue(): number {
-  return this.favCards.reduce((acc, card) => acc + card.price, 0);
-}
-
+    return this.favCards.reduce((acc, card) => acc + card.price, 0);
+  }
 }

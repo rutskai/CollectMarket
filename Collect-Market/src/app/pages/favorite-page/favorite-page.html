@@ -1,17 +1,18 @@
 <div class="fav-wrap">
-
   @if (favCards.length > 0) {
-  <div class="fav-top">
-    <div class="fav-top-left">
-      <h1 class="fav-title">Mis Favoritos</h1>
-      <p class="fav-sub">{{ favCards.length }} cartas guardadas</p>
+    <div class="fav-top">
+      <div class="fav-top-left">
+        <h1 class="fav-title">Mis Favoritos</h1>
+        <p class="fav-sub">{{ favCards.length }} cartas guardadas</p>
+      </div>
+      <div class="fav-valor">
+        <span class="fav-valor-lbl">Valor total</span>
+        <span class="fav-valor-num">{{
+          getTotalValue() | currency: 'EUR' : 'symbol' : '1.2-2'
+        }}</span>
+      </div>
     </div>
-    <div class="fav-valor">
-      <span class="fav-valor-lbl">Valor total</span>
-      <span class="fav-valor-num">{{ getTotalValue() | currency:'EUR':'symbol':'1.2-2' }}</span>
-    </div>
-  </div>
-}
+  }
 
   <div class="fav-content">
     @if (favCards.length === 0) {
@@ -27,12 +28,13 @@
           <app-card
             [card]="card"
             [isFavorite]="true"
+            [isInCart]="cartIds.has(card.id)"
             (addToCart)="onAddToCart($event)"
-            (toggleFavorite)="onToggleFavorite($event)">
+            (toggleFavorite)="onToggleFavorite($event)"
+          >
           </app-card>
         }
       </div>
     }
   </div>
-
 </div>
