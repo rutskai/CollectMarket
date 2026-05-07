@@ -5,6 +5,7 @@ import { RegisterPage } from './pages/register-page/register-page';
 import { UserPage } from './pages/user-page/user-page';
 import { ShopPage } from './pages/shop-page/shop-page';
 import { FavoritePage } from './pages/favorite-page/favorite-page';
+import { ShoppingCartPage } from './pages/shopping-cart-page/shopping-cart-page';
 
 export const routes: Routes = [
     {path:"", component: HomePage},
@@ -14,6 +15,7 @@ export const routes: Routes = [
     {path:"user", component: UserPage},
     {path:"shop", component: ShopPage},
     {path:"favorite", component: FavoritePage},
+    {path: "shopping-cart", component:ShoppingCartPage},
     
 
 ];
