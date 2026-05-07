@@ -1,0 +1,63 @@
+<div class="cart-wrap">
+
+
+
+  <div class="cart-content">
+
+    @if (cartItems.length === 0) {
+      <div class="cart-empty">
+        <div class="cart-empty-icon">🛒</div>
+        <div class="cart-empty-title">Tu carrito está vacío</div>
+        <div class="cart-empty-sub">Añade cartas de la tienda y aparecerán aquí.</div>
+        <a class="cart-empty-btn" routerLink="/shop">Ir a la tienda</a>
+      </div>
+    } @else {
+      <div class="cart-layout">
+
+        <!-- Lista de cartas -->
+        <div class="cart-items">
+          @for (item of cartItems; track item.id) {
+            <div class="cart-item">
+              <img class="cart-item-img" [src]="item.card.imageUrl" [alt]="item.card.name" />
+              <div class="cart-item-info">
+                <div class="cart-item-name">{{ item.card.name }}</div>
+                <div class="cart-item-set">{{ item.card.setName }}</div>
+                <div class="cart-item-rarity">{{ item.card.rarity }}</div>
+              </div>
+              <div class="cart-item-controls">
+                <div class="cart-qty">
+                  <button class="qty-btn" (click)="onUpdateQuantity(item, item.quantity - 1)">−</button>
+                  <span class="qty-value">{{ item.quantity }}</span>
+                  <button class="qty-btn" (click)="onUpdateQuantity(item, item.quantity + 1)">+</button>
+                </div>
+                <div class="cart-item-price">{{ formatPrice(item.card.price * item.quantity) }}</div>
+                <button class="cart-remove-btn" (click)="onRemoveItem(item)">✕</button>
+              </div>
+            </div>
+          }
+        </div>
+
+      
+        <div class="cart-summary">
+          <div class="summary-title">Order summary</div>
+          <div class="summary-row">
+            <span>Items ({{ getTotalItems() }})</span>
+            <span>{{ formatPrice(getTotalPrice()) }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span class="summary-free">Gratis</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-row summary-total">
+            <span>Total</span>
+            <span>{{ formatPrice(getTotalPrice()) }}</span>
+          </div>
+          <button class="summary-checkout-btn">Checkout →</button>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</div>
