@@ -16,6 +16,7 @@ export class Card {
 
   @Input() card!: ModelCard;
   @Input() isFavorite: boolean = false;
+  @Input() isInCart: boolean = false;
   @Output() addToCart = new EventEmitter<ModelCard>();
   @Output() toggleFavorite = new EventEmitter<ModelCard>();
 
