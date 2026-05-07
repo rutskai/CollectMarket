@@ -59,11 +59,16 @@ using (var scope = app.Services.CreateScope())
 }
 
 // ENDPOINTS: Cartas
-Cards.CardsEndpoints(app);
+app.CardsEndpoints();
 // ENDPOINTS: Usuarios
-Users.UsersEndpoints(app);
+app.UsersEndpoints();
+// ENDPOINTS: Favoritos
+app.FavoritesEndpoints();
+// ENDPOINTS: Autentificación
+app.AuthEndpoints();
+// ENDPOINTS: Carrito de la compra
+app.CartEndpoints();
 
-Auth.AuthEndpoints(app);
 // Health check
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
