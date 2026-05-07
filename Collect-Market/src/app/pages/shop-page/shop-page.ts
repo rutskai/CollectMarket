@@ -6,6 +6,7 @@ import { Card } from '../../components/card/card';
 import { FavoritesService } from '../../services/favorites-service';
 import { CardsService } from '../../services/cards/cards-service';
 import { AuthService } from '../../services/auth/auth-service';
+import { CartService } from '../../services/cart/cart-service';
 import { Filter, ModelFilteredCards } from '../../models/filter';
 import { PaginationHelper } from '../../helpers/pagination-helper';
 
@@ -24,8 +25,9 @@ export class ShopPage implements OnInit {
   minPrice = 0;
   maxPrice = 500;
 
-  userId: number | null = null; // ← ya no hardcodeado
+  userId: number | null = null;
   favoritesIds = new Set<number>();
+  cartIds = new Set<number>();
 
   allSourceCards: ModelCard[] = [];
   allCards: ModelCard[] = [];
@@ -43,7 +45,8 @@ export class ShopPage implements OnInit {
   constructor(
     private favoritesService: FavoritesService,
     private cardsService: CardsService,
-    private authService: AuthService, // ← agregado
+    private authService: AuthService,
+    private cartService: CartService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -51,17 +54,17 @@ export class ShopPage implements OnInit {
     this.loadCards();
     this.loadFilterOptions();
 
-    // Solo carga favoritos si hay sesión iniciada
     if (this.authService.isLoggedIn()) {
       const user = this.authService.getCurrentUser();
       if (user) {
         this.userId = user.id;
         this.loadFavorites();
+        this.loadCart();
       }
     }
   }
 
-  // ─── Carga inicial ────────────────────────────────────────────────────────
+ 
 
   loadCards(): void {
     this.cardsService.getCards().subscribe({
@@ -79,6 +82,14 @@ export class ShopPage implements OnInit {
     if (this.userId === null) return;
     this.favoritesService.getFavorites(this.userId).subscribe(favCards => {
       this.favoritesIds = new Set(favCards.map(c => c.id));
+      this.cdr.detectChanges();
+    });
+  }
+
+  loadCart(): void {
+    if (this.userId === null) return;
+    this.cartService.getCart(this.userId).subscribe(items => {
+      this.cartIds = new Set(items.map(i => i.cardId));
       this.cdr.detectChanges();
     });
   }
@@ -106,7 +117,7 @@ export class ShopPage implements OnInit {
     });
   }
 
-  // ─── Paginación ───────────────────────────────────────────────────────────
+  // Paginación
 
   updateDisplayCards(): void {
     const pagination = PaginationHelper.paginate(this.allCards, this.currentPage, this.itemsPerPage);
@@ -135,7 +146,7 @@ export class ShopPage implements OnInit {
     this.updateDisplayCards();
   }
 
-  // ─── Filtros ──────────────────────────────────────────────────────────────
+  // Filtros
 
   toggleType(filter: Filter): void      { filter.active = !filter.active; this.applyFilters(); }
   toggleRarity(filter: Filter): void    { filter.active = !filter.active; this.applyFilters(); }
@@ -176,7 +187,7 @@ export class ShopPage implements OnInit {
     });
   }
 
-  // ─── Favoritos ────────────────────────────────────────────────────────────
+  // Favoritos
 
   onToggleFavorite(card: ModelCard): void {
     if (!this.authService.isLoggedIn() || this.userId === null) {
@@ -197,20 +208,29 @@ export class ShopPage implements OnInit {
     }
   }
 
-  // ─── Carrito ──────────────────────────────────────────────────────────────
+  // Carrito
 
   onAddToCart(card: ModelCard): void {
-    console.log('Added to cart:', card);
+    if (!this.authService.isLoggedIn() || this.userId === null) {
+      alert('Debes iniciar sesión para añadir al carrito.');
+      return;
+    }
+    if (this.cartIds.has(card.id)) return;
+
+    this.cartService.addToCart(this.userId, card.id).subscribe(() => {
+      this.cartIds.add(card.id);
+      this.cdr.detectChanges();
+    });
   }
 
-  // ─── Tabs ─────────────────────────────────────────────────────────────────
+ 
 
   changeTab(tab: TabType): void {
     this.activeTab = tab;
     this.cdr.detectChanges();
   }
 
-  // ─── Helpers de vista ────────────────────────────────────────────────────
+  // Helpers 
 
   typeColor(type: string): string {
     const colors: Record<string, string> = {
