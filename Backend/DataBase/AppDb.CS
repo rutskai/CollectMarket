@@ -9,6 +9,7 @@ class AppDb : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Card> Cards => Set<Card>();
     public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
+    public DbSet<CartItem> CartItems => Set<CartItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,5 +99,26 @@ class AppDb : DbContext
                .HasForeignKey(f => f.CardId)
                .OnDelete(DeleteBehavior.Cascade);
        });
+
+        modelBuilder.Entity<CartItem>(entity =>
+ {
+     entity.ToTable("CartItem");
+     entity.HasKey(c => c.Id);
+
+     entity.Property(c => c.Quantity)
+         .HasDefaultValue(1);
+
+     entity.Property(c => c.AddedAt);
+
+     entity.HasOne(c => c.User)
+         .WithMany()
+         .HasForeignKey(c => c.UserId)
+         .OnDelete(DeleteBehavior.Cascade);
+
+     entity.HasOne(c => c.Card)
+         .WithMany()
+         .HasForeignKey(c => c.CardId)
+         .OnDelete(DeleteBehavior.Cascade);
+ });
     }
 }
