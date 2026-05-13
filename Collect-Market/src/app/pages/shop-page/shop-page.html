@@ -5,10 +5,10 @@
   ══════════════════════════════════ -->
   <div class="tabs-bar">
     <button class="tab-btn" [class.active]="activeTab === 'new'" (click)="changeTab('new')">
-      🆕 New <span class="tab-count">{{ newCards.length }}</span>
+      🆕 Packs <span class="tab-count">{{ newCards.length }}</span>
     </button>
     <button class="tab-btn" [class.active]="activeTab === 'cards'" (click)="changeTab('cards')">
-      🃏 Individual cards <span class="tab-count">{{ allCards.length }}</span>
+      🃏 Cartas individuales <span class="tab-count">{{ allCards.length }}</span>
     </button>
   </div>
 
@@ -21,7 +21,7 @@
     <aside class="filters-sidebar">
 
       <div class="filter-block">
-        <div class="filter-title">⚡ Tipo</div>
+        <div class="filter-title">Tipo</div>
         <div class="filter-options">
           @for (filter of typeFilters; track filter.name) {
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleType(filter)">
@@ -34,7 +34,7 @@
       </div>
 
       <div class="filter-block">
-        <div class="filter-title">★ Rareza</div>
+        <div class="filter-title">Rareza</div>
         <div class="filter-options">
           @for (filter of rarityFilters; track filter.name) {
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleRarity(filter)">
@@ -46,7 +46,7 @@
       </div>
 
       <div class="filter-block">
-        <div class="filter-title">📅 Expansión</div>
+        <div class="filter-title">Expansión</div>
         <div class="filter-options">
           @for (filter of expansionFilters; track filter.name) {
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleExpansion(filter)">
@@ -58,7 +58,7 @@
       </div>
 
       <div class="filter-block">
-        <div class="filter-title">💶 Precio</div>
+        <div class="filter-title">Precio</div>
         <div class="price-range">
           <input class="price-input" type="number" placeholder="Min €" [(ngModel)]="minPrice" />
           <input class="price-input" type="number" placeholder="Max €" [(ngModel)]="maxPrice" />
@@ -73,7 +73,7 @@
 
       <!-- Banner novedades -->
       <div class="new-banner">
-        <span class="new-banner-icon">🔴 ⚈ᆺ⚈ 🔴</span>
+         <img src="pixel-art/pikachu.png" alt="Logo" class="banner-icon">
         <div>
           <strong>Nuevas cartas cada Lunes</strong>
           — Nuevas cartas añadidas al catálogo cada semana. No te lo pierdas!
@@ -140,9 +140,7 @@
             <button class="page-btn arrow" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
           </div>
 
-          <div class="pagination-info">
-            Page {{ currentPage }} of {{ totalPages }} &nbsp;·&nbsp; {{ allCards.length }} cards
-          </div>
+          
         }
       }
 
