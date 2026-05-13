@@ -7,7 +7,7 @@
   background: #0f1923;
   color: white;
   font-family: 'Inter', system-ui, sans-serif;
-  padding: 110px 40px 80px;
+  padding: 40px 40px 80px;
   position: relative;
 
   &::after {
