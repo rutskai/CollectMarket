@@ -181,7 +181,7 @@
 .cart-item-price {
   font-family: 'Syne', sans-serif;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 400;
   color: var(--gold);
   min-width: 70px;
   text-align: right;
@@ -248,7 +248,7 @@
 
 .summary-total {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--text);
   margin-bottom: 20px;
 }
@@ -257,7 +257,7 @@
   color: var(--gold);
   font-family: 'Syne', sans-serif;
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 400;
 }
 
 .summary-checkout-btn {

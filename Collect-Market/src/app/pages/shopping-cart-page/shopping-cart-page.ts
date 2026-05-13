@@ -5,6 +5,7 @@ import { ModelUser } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ModelCartItem } from '../../models/cart';
+import { ImageHelper } from '../../helpers/image-helper';
 
 @Component({
   selector: 'app-shopping-cart-page',
@@ -16,8 +17,10 @@ export class ShoppingCartPage implements OnInit {
 
   cartItems: ModelCartItem[] = [];
   user: ModelUser | null = null;
+  ImageHelper = ImageHelper;
 
   constructor(
+    
     private cartService: CartService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef
@@ -32,12 +35,16 @@ export class ShoppingCartPage implements OnInit {
     });
   }
 
-  loadCart(userId: number): void {
-    this.cartService.getCart(userId).subscribe(items => {
-      this.cartItems = items;
-      this.cdr.detectChanges();
-    });
-  }
+
+
+loadCart(userId: number): void {
+  this.cartService.getCart(userId).subscribe(items => {
+    this.cartItems = items;
+    console.log('imageUrl raw:', items[0]?.card?.imageUrl);
+    console.log('imageUrl final:', ImageHelper.getImageUrl(items[0]?.card?.imageUrl));
+    this.cdr.detectChanges();
+  });
+}
 
   onUpdateQuantity(item: ModelCartItem, quantity: number): void {
     if (!this.user) return;

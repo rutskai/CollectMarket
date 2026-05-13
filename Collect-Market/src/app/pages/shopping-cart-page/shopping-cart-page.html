@@ -18,7 +18,9 @@
         <div class="cart-items">
           @for (item of cartItems; track item.id) {
             <div class="cart-item">
-              <img class="cart-item-img" [src]="item.card.imageUrl" [alt]="item.card.name" />
+              <img class="cart-item-img" 
+     [src]="ImageHelper.getImageUrl(item.card.imageUrl)" 
+     [alt]="item.card.name" />
               <div class="cart-item-info">
                 <div class="cart-item-name">{{ item.card.name }}</div>
                 <div class="cart-item-set">{{ item.card.setName }}</div>
