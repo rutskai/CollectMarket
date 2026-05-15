@@ -1,0 +1,164 @@
+<div class="support-wrap">
+
+  <!-- ══════════════════════════════════
+       TABS DE SOPORTE
+  ══════════════════════════════════ -->
+  <div class="tabs-bar">
+    <button class="tab-btn" [class.active]="activeTab === 'faq'" (click)="changeTab('faq')">
+      ❓ Preguntas frecuentes
+      <span class="tab-count">{{ filteredFAQs.length }}</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'contact'" (click)="changeTab('contact')">
+       Contacto directo
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════ -->
+  <div class="support-main">
+
+    <!-- ── SIDEBAR CATEGORÍAS ── -->
+    <aside class="categories-sidebar">
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Buscar preguntas..." [(ngModel)]="searchQuery">
+      </div>
+
+      <div class="category-block">
+        <div class="category-title">📂 Categorías</div>
+        <div class="category-options">
+          @for (cat of categories; track cat.name) {
+            <div class="category-opt" [class.active]="selectedCategory === cat.name" (click)="selectCategory(cat.name)">
+              <div class="co-icon">{{ cat.icon }}</div>
+              {{ cat.name }}
+              <span class="cat-count">{{ cat.count }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-card-title">💬 ¿No encuentras lo que buscas?</div>
+        <div class="contact-card-text">Nuestro equipo está disponible para ayudarte</div>
+        <button class="contact-support-btn" (click)="changeTab('contact')">
+          Contactar soporte →
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── CONTENIDO PRINCIPAL ── -->
+    <div class="support-content">
+
+      <!-- ════ TAB: FAQ ════ -->
+      @if (activeTab === 'faq') {
+        <div class="faq-section">
+          @if (searchQuery && filteredFAQs.length === 0) {
+            <div class="no-results">
+              <i class="fa-solid fa-face-sad-tear"></i>
+              <p>No se encontraron resultados para "{{ searchQuery }}"</p>
+              <button (click)="clearSearch()">Limpiar búsqueda</button>
+            </div>
+          }
+
+          @for (faq of filteredFAQs; track faq.id) {
+            <div class="faq-item" [class.open]="openFAQ === faq.id" (click)="toggleFAQ(faq.id)">
+              <div class="faq-question">
+                <span class="faq-icon">{{ openFAQ === faq.id ? '▼' : '▶' }}</span>
+                <strong>{{ faq.question }}</strong>
+              </div>
+              <div class="faq-answer" [class.show]="openFAQ === faq.id">
+                <p>{{ faq.answer }}</p>
+                @if (faq.link) {
+                  <a href="#" class="faq-link">Leer más →</a>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- ════ TAB: CONTACTO ════ -->
+      @if (activeTab === 'contact') {
+        <div class="contact-section">
+          <div class="contact-grid">
+            <div class="contact-form-card">
+              <div class="form-title">📧 Envíanos un mensaje</div>
+              
+              <div class="form-group">
+                <label>Nombre completo</label>
+                <input type="text" [(ngModel)]="contactForm.name" placeholder="Tu nombre">
+              </div>
+
+              <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" [(ngModel)]="contactForm.email" placeholder="tu@email.com">
+              </div>
+
+              <div class="form-group">
+                <label>Asunto</label>
+                <select [(ngModel)]="contactForm.subject">
+                  <option value="">Selecciona un asunto</option>
+                  <option>Problema con mi pedido</option>
+                  <option>Problema con una carta</option>
+                  <option>Cuenta y perfil</option>
+                  <option>Vender en CollectMarket</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Mensaje</label>
+                <textarea rows="5" [(ngModel)]="contactForm.message" placeholder="Describe tu problema o consulta..."></textarea>
+              </div>
+
+              <button class="submit-btn" (click)="submitContact()" [disabled]="!isFormValid()">
+                Enviar mensaje
+              </button>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="info-title"> Otras formas de contacto</div>
+              
+              <div class="info-item">
+                <i class="fa-regular fa-envelope"></i>
+                <div>
+                  <strong>Email</strong>
+                  <p>soporte&#64;collectmarket.com</p>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <i class="fa-brands fa-whatsapp"></i>
+                <div>
+                  <strong>WhatsApp</strong>
+                  <p>+34 600 123 456</p>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <i class="fa-regular fa-clock"></i>
+                <div>
+                  <strong>Horario de atención</strong>
+                  <p>Lunes a Viernes: 9:00 - 20:00</p>
+                  <p>Sábados: 10:00 - 14:00</p>
+                </div>
+              </div>
+
+              <div class="social-links">
+                <div class="social-title">Síguenos en:</div>
+                <div class="social-icons">
+                  <i class="fa-brands fa-discord"></i>
+                  <i class="fa-brands fa-twitter"></i>
+                  <i class="fa-brands fa-instagram"></i>
+                  <i class="fa-brands fa-telegram"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
