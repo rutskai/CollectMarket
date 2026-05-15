@@ -6,13 +6,13 @@ export class PaginationHelper {
    * Pagina un array de cartas
    * @param cards - Array de cartas a paginar
    * @param currentPage - Página actual (empieza en 1)
-   * @param itemsPerPage - Cantidad de cartas por página (default: 12)
+   * @param itemsPerPage - Cantidad de cartas por página (default: 14)
    * @returns Objeto ModelPagination con los datos paginados
    */
   static paginate(
     cards: ModelCard[],
     currentPage: number,
-    itemsPerPage: number = 12
+    itemsPerPage: number = 14
   ): ModelPagination {
     const totalItems = cards.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);

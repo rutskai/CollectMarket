@@ -35,7 +35,7 @@ export class ShopPage implements OnInit {
   newCards: ModelCard[] = [];
 
   currentPage = 1;
-  itemsPerPage = 12;
+  itemsPerPage = 14;
   totalPages = 1;
 
   typeFilters: Filter[] = [];
