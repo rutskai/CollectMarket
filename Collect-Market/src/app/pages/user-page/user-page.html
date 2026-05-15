@@ -1,5 +1,4 @@
 <div id="user" class="video-bg">
-
   <div class="user-card">
 
     <!-- Avatar -->
@@ -11,22 +10,33 @@
       <span class="user-email">{{ user?.email }}</span>
     </div>
 
-    <!-- Formulario -->
-    <div class="user-form">
-      <div class="user-field">
-        <label>Nuevo nombre</label>
-        <input type="text" placeholder="Escribe tu nuevo nombre..." />
-      </div>
+    <!-- Menú -->
+    <div class="user-menu">
+      <a class="user-menu-item" routerLink="/sell">
+        <div class="user-menu-info">
+          <span class="user-menu-title">Vender cartas</span>
+          <span class="user-menu-sub">Pon tus cartas a la venta</span>
+        </div>
+        <span class="user-menu-arrow">›</span>
+      </a>
 
-      <div class="user-field">
-        <label>Foto de perfil</label>
-        <input type="file" />
-      </div>
+      <a class="user-menu-item" routerLink="/settings">
+        <div class="user-menu-info">
+          <span class="user-menu-title">Personalización</span>
+          <span class="user-menu-sub">Cambia tu nombre y avatar</span>
+        </div>
+        <span class="user-menu-arrow">›</span>
+      </a>
 
-      <button class="user-btn-primary" type="submit">Guardar cambios</button>
-      <button class="user-btn-secondary" type="button" (click)="logout()">Cerrar sesión</button>
+      <button class="user-menu-item user-menu-danger" (click)="logout()">
+      
+        <div class="user-menu-info">
+          <span class="user-menu-title">Cerrar sesión</span>
+          <span class="user-menu-sub">Hasta pronto</span>
+        </div>
+        <span class="user-menu-arrow">›</span>
+      </button>
     </div>
 
   </div>
-
 </div>
