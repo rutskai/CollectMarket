@@ -55,6 +55,31 @@ namespace Api
                 });
             });
 
+            // PUT - Cambiar contraseña
+        app.MapPut("/api/users/{id}/password", async (int id, ChangePasswordRequest request, AppDb db) =>
+        {
+            var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) return Results.NotFound();
+
+            // Verificar contraseña actual
+            bool validPassword = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password);
+            if (!validPassword) return Results.BadRequest("La contraseña actual no es correcta.");
+
+            // Verificar que las nuevas coinciden
+            if (request.NewPassword != request.ConfirmPassword)
+                return Results.BadRequest("Las contraseñas nuevas no coinciden.");
+
+            // Validar longitud mínima
+            if (request.NewPassword.Length < 6)
+                return Results.BadRequest("La contraseña debe tener al menos 6 carácteres.");
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+            user.UpdatedAt = DateTime.Now;
+            await db.SaveChangesAsync();
+
+            return Results.Ok(new { message = "Contraseña actualizada correctamente." });
+        });
+
         }
     }
 }
