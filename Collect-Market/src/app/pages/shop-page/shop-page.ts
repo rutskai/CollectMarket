@@ -210,18 +210,32 @@ export class ShopPage implements OnInit {
 
   // Carrito
 
-  onAddToCart(card: ModelCard): void {
-    if (!this.authService.isLoggedIn() || this.userId === null) {
-      alert('Debes iniciar sesión para añadir al carrito.');
-      return;
-    }
-    if (this.cartIds.has(card.id)) return;
+onAddToCart(card: ModelCard): void {
+  if (!this.authService.isLoggedIn() || this.userId === null) {
+    alert('Debes iniciar sesión para añadir al carrito.');
+    return;
+  }
 
-    this.cartService.addToCart(this.userId, card.id).subscribe(() => {
-      this.cartIds.add(card.id);
-      this.cdr.detectChanges();
+  // Si ya está en el carrito, lo eliminamos
+  if (this.cartIds.has(card.id)) {
+    this.cartService.removeFromCart(this.userId, card.id).subscribe({
+      next: () => {
+        this.cartIds.delete(card.id);
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error al eliminar del carrito:', err)
+    });
+  } else {
+    // Si no está, lo añadimos
+    this.cartService.addToCart(this.userId, card.id).subscribe({
+      next: () => {
+        this.cartIds.add(card.id);
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error al añadir al carrito:', err)
     });
   }
+}
 
  
 
