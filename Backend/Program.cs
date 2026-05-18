@@ -1,8 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Services;
 using Api;
+using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Cloudinary
+var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
+var cloudinary = new Cloudinary(new Account(
+    cloudinaryConfig["CloudName"],
+    cloudinaryConfig["ApiKey"],
+    cloudinaryConfig["ApiSecret"]
+));
+builder.Services.AddSingleton(cloudinary);
 
 // CONFIGURAR SERVICIOS
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -21,6 +31,7 @@ builder.Services.AddScoped<CardImportService>();
 // CORS para Angular
 builder.Services.AddCors(options =>
 {
+   
     options.AddPolicy("AllowAngular", policy =>
     {
         policy.WithOrigins("http://localhost","http://localhost:4200", "http://localhost:4201", "http://localhost:3000")
@@ -34,6 +45,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 app.UseCors("AllowAngular");
+
 
 // Docker Migraciones Database
 using (var scope = app.Services.CreateScope())
