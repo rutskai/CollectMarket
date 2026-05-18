@@ -202,3 +202,14 @@
   border-color: rgba(255, 80, 80, 0.25);
   color: #ff8a8a;
 }
+
+.pers-avatar-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pers-file-save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
