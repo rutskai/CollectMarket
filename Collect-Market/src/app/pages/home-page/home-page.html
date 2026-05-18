@@ -52,108 +52,26 @@
     </div>
   </section>
 
-  <!-- ─── ÚLTIMAS ADQUISICIONES ─── -->
-  <section class="cm-section">
-    <div class="cm-section-inner">
-      <div class="cm-section-label">Recién llegadas</div>
-      <h2 class="cm-section-title">Últimas adquisiciones</h2>
-      <p class="cm-section-sub">Las cartas más recientes añadidas a nuestro catálogo</p>
+<!-- ─── ÚLTIMAS ADQUISICIONES ─── -->
+<section class="cm-section">
+  <div class="cm-section-inner">
+    <div class="cm-section-label">Recién llegadas</div>
+    <h2 class="cm-section-title">Últimas adquisiciones</h2>
+    <p class="cm-section-sub">Las cartas más recientes añadidas a nuestro catálogo</p>
 
-      <div class="cm-acq-grid">
-
-        <div class="cm-acq-card">
-          <div class="cm-acq-img img-electric">
-            <span class="cm-acq-badge cm-badge-ultra">Ultra Rara</span>
-            ⚡
-          </div>
-          <div class="cm-acq-info">
-            <div class="cm-acq-name">Pikachu VMAX</div>
-            <div class="cm-acq-set">Brilliant Stars · #44</div>
-            <div class="cm-acq-footer">
-              <div class="cm-acq-price">€42.99</div>
-              <button class="cm-acq-btn">+ Añadir</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="cm-acq-card">
-          <div class="cm-acq-img img-psychic">
-            <span class="cm-acq-badge cm-badge-secret">Secreta</span>
-            🔮
-          </div>
-          <div class="cm-acq-info">
-            <div class="cm-acq-name">Mewtwo EX</div>
-            <div class="cm-acq-set">Base Set · #10</div>
-            <div class="cm-acq-footer">
-              <div class="cm-acq-price">€189.00</div>
-              <button class="cm-acq-btn">+ Añadir</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="cm-acq-card">
-          <div class="cm-acq-img img-grass">
-            <span class="cm-acq-badge cm-badge-rare">Rara</span>
-            🌿
-          </div>
-          <div class="cm-acq-info">
-            <div class="cm-acq-name">Venusaur</div>
-            <div class="cm-acq-set">Scarlet & Violet · #3</div>
-            <div class="cm-acq-footer">
-              <div class="cm-acq-price">€18.50</div>
-              <button class="cm-acq-btn">+ Añadir</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="cm-acq-card">
-          <div class="cm-acq-img img-fire">
-            <span class="cm-acq-badge cm-badge-ultra">Ultra Rara</span>
-            🔥
-          </div>
-          <div class="cm-acq-info">
-            <div class="cm-acq-name">Charizard ex</div>
-            <div class="cm-acq-set">Obsidian Flames · #125</div>
-            <div class="cm-acq-footer">
-              <div class="cm-acq-price">€215.00</div>
-              <button class="cm-acq-btn">+ Añadir</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="cm-acq-card">
-          <div class="cm-acq-img img-water">
-            <span class="cm-acq-badge cm-badge-common">Común</span>
-            💧
-          </div>
-          <div class="cm-acq-info">
-            <div class="cm-acq-name">Squirtle</div>
-            <div class="cm-acq-set">Classic Collection · #7</div>
-            <div class="cm-acq-footer">
-              <div class="cm-acq-price">€3.99</div>
-              <button class="cm-acq-btn">+ Añadir</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="cm-acq-card">
-          <div class="cm-acq-img img-dark">
-            <span class="cm-acq-badge cm-badge-secret">Secreta</span>
-            ✨
-          </div>
-          <div class="cm-acq-info">
-            <div class="cm-acq-name">Umbreon Gold</div>
-            <div class="cm-acq-set">Evolving Skies · #215</div>
-            <div class="cm-acq-footer">
-              <div class="cm-acq-price">€320.00</div>
-              <button class="cm-acq-btn">+ Añadir</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <div class="cm-acq-grid">
+      @for (card of latestCards; track card.id) {
+        <app-card
+          [card]="card"
+          [isFavorite]="favoritesIds.has(card.id)"
+          [isInCart]="cartIds.has(card.id)"
+          (addToCart)="onAddToCart($event)"
+          (toggleFavorite)="onToggleFavorite($event)">
+        </app-card>
+      }
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ─── TESTIMONIOS ─── -->
   <section class="cm-section cm-reviews">
