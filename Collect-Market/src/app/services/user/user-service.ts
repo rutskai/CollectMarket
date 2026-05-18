@@ -33,5 +33,17 @@ export class UserService {
     return this.http.get<ModelUser>(`${this.apiUrl}/${id}`);
   }
 
+  updateName(userId: number, name: string): Observable<any> {
+  return this.http.put(`${this.apiUrl}/${userId}/name`, null, {
+    params: { name }
+  });
+}
+
+updateAvatar(userId: number, file: File): Observable<any> {
+  const formData = new FormData();
+  formData.append('file', file);
+  return this.http.put(`${this.apiUrl}/${userId}/avatar`, formData);
+}
+
  
 }

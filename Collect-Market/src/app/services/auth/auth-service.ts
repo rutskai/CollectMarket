@@ -95,4 +95,21 @@ export class AuthService {
     });
   }
 
+    /**
+ * Cambia la contraseña
+ * @param userId - Id
+ * @param currentPassword - Contraseña actual
+ * @param newPassword - Nueva contraseña
+ * @param confirmPassword - Confirmación de contraseña
+ * @returns Observable con response { success, user }
+ */
+
+  changePassword(userId: number, currentPassword: string, newPassword: string, confirmPassword: string): Observable<any> {
+  return this.http.put(`/api/users/${userId}/password`, {
+    currentPassword,
+    newPassword,
+    confirmPassword
+  });
+}
+
 }
