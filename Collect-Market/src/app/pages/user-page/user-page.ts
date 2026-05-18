@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service';
 import { ModelUser } from '../../models/user';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 declare var $: any;
 
 @Component({
   selector: 'app-user-page',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './user-page.html',
   styleUrl: './user-page.css',
 })

@@ -4,7 +4,7 @@
     <!-- Avatar -->
     <div class="user-avatar-section">
       <div class="user-avatar-ring">
-        <img src="user/Sprigatito.png" alt="Profile picture" />
+        <img [src]="user?.avatarUrl || 'user/Sprigatito.png'" alt="Foto de perfil" />
       </div>
       <h2 class="user-name">{{ user?.name }}</h2>
       <span class="user-email">{{ user?.email }}</span>
@@ -20,7 +20,7 @@
         <span class="user-menu-arrow">›</span>
       </a>
 
-      <a class="user-menu-item" routerLink="/settings">
+      <a class="user-menu-item" routerLink="/personalization-page">
         <div class="user-menu-info">
           <span class="user-menu-title">Personalización</span>
           <span class="user-menu-sub">Cambia tu nombre y avatar</span>
