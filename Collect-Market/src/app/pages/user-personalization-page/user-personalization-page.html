@@ -1,1 +1,56 @@
-<p>user-personalization-page works!</p>
+<div id="personalization" class="video-bg">
+  <div class="pers-card">
+
+    <!-- Cabecera -->
+    <div class="pers-header">
+      <a class="pers-back" routerLink="/user">← Volver</a>
+      <h2 class="pers-title">Personalización</h2>
+    </div>
+
+    <!-- Foto de perfil -->
+    <div class="pers-section">
+  <div class="pers-section-title">Foto de perfil</div>
+  <div class="pers-avatar-wrap">
+    <div class="pers-avatar-ring">
+      <img [src]="avatarPreview || user?.avatarUrl || 'user/Sprigatito.png'" alt="Avatar" />
+    </div>
+    <div class="pers-avatar-btns">
+      <label class="pers-file-btn">
+        Elegir imagen
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+      </label>
+      <button class="pers-file-btn pers-file-save" (click)="onSaveAvatar()" [disabled]="!selectedFile">
+        Guardar foto
+      </button>
+    </div>
+  </div>
+  @if (avatarSuccess) { <span class="pers-success">{{ avatarSuccess }}</span> }
+  @if (avatarError)   { <span class="pers-error">{{ avatarError }}</span> }
+</div>
+
+    <div class="pers-divider"></div>
+
+    <!-- Nombre -->
+    <div class="pers-section">
+      <div class="pers-section-title">Cambiar nombre de usuario</div>
+      <input class="pers-input" type="text" placeholder="Nuevo nombre..." [(ngModel)]="newName" />
+      @if (nameSuccess) { <span class="pers-success">{{ nameSuccess }}</span> }
+      @if (nameError)   { <span class="pers-error">{{ nameError }}</span> }
+      <button class="pers-btn-primary" (click)="onSaveName()">Guardar nombre</button>
+    </div>
+
+    <div class="pers-divider"></div>
+
+    <!-- Contraseña -->
+    <div class="pers-section">
+      <div class="pers-section-title">Cambiar contraseña</div>
+      <input class="pers-input" type="password" placeholder="Contraseña actual" [(ngModel)]="currentPassword" />
+      <input class="pers-input" type="password" placeholder="Nueva contraseña" [(ngModel)]="newPassword" />
+      <input class="pers-input" type="password" placeholder="Confirmar nueva contraseña" [(ngModel)]="confirmPassword" />
+      @if (passwordSuccess) { <span class="pers-success">{{ passwordSuccess }}</span> }
+      @if (passwordError)   { <span class="pers-error">{{ passwordError }}</span> }
+      <button class="pers-btn-primary" (click)="onSavePassword()">Guardar contraseña</button>
+    </div>
+
+  </div>
+</div>
