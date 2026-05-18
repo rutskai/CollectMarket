@@ -4,5 +4,6 @@ export interface ModelUser {
   email?: string; 
   createdAt?: string;
   updatedAt?: string;
+  avatarUrl?: string;
 }
 
