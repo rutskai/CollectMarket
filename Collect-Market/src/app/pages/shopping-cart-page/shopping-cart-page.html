@@ -1,9 +1,5 @@
 <div class="cart-wrap">
-
-
-
   <div class="cart-content">
-
     @if (cartItems.length === 0) {
       <div class="cart-empty">
         <div class="cart-empty-icon">🛒</div>
@@ -13,14 +9,12 @@
       </div>
     } @else {
       <div class="cart-layout">
-
-        <!-- Lista de cartas -->
         <div class="cart-items">
           @for (item of cartItems; track item.id) {
             <div class="cart-item">
-              <img class="cart-item-img" 
-     [src]="ImageHelper.getImageUrl(item.card.imageUrl)" 
-     [alt]="item.card.name" />
+              <img class="cart-item-img"
+                [src]="ImageHelper.getImageUrl(item.card.imageUrl)"
+                [alt]="item.card.name" />
               <div class="cart-item-info">
                 <div class="cart-item-name">{{ item.card.name }}</div>
                 <div class="cart-item-set">{{ item.card.setName }}</div>
@@ -38,13 +32,11 @@
             </div>
           }
         </div>
-
-      
         <div class="cart-summary">
           <div class="summary-title">Order summary</div>
           <div class="summary-row">
-            <span>Items ({{ getTotalItems() }})</span>
-            <span>{{ formatPrice(getTotalPrice()) }}</span>
+            <span>Items ({{ totalItems }})</span>
+            <span>{{ formatPrice(totalPrice) }}</span>
           </div>
           <div class="summary-row">
             <span>Shipping</span>
@@ -53,13 +45,11 @@
           <div class="summary-divider"></div>
           <div class="summary-row summary-total">
             <span>Total</span>
-            <span>{{ formatPrice(getTotalPrice()) }}</span>
+            <span>{{ formatPrice(totalPrice) }}</span>
           </div>
           <button class="summary-checkout-btn">Checkout →</button>
         </div>
-
       </div>
     }
-
   </div>
 </div>

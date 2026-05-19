@@ -1,8 +1,5 @@
 <div class="shop-wrap">
 
-  <!-- ══════════════════════════════════
-       TABS
-  ══════════════════════════════════ -->
   <div class="tabs-bar">
     <button class="tab-btn" [class.active]="activeTab === 'new'" (click)="changeTab('new')">
       🆕 Packs <span class="tab-count">{{ newCards.length }}</span>
@@ -12,14 +9,9 @@
     </button>
   </div>
 
-  <!-- ══════════════════════════════════
-       MAIN LAYOUT
-  ══════════════════════════════════ -->
   <div class="shop-main">
 
-    <!-- ── SIDEBAR FILTERS ── -->
     <aside class="filters-sidebar">
-
       <div class="filter-block">
         <div class="filter-title">Tipo</div>
         <div class="filter-options">
@@ -65,22 +57,18 @@
         </div>
         <button class="apply-filter-btn" (click)="applyFilters()">Aplicar filtros</button>
       </div>
-
     </aside>
 
-    <!-- ── PRODUCTS AREA ── -->
     <div class="products-area">
 
-      <!-- Banner novedades -->
       <div class="new-banner">
-         <img src="pixel-art/pikachu.png" alt="Logo" class="banner-icon">
+        <img src="pixel-art/pikachu.png" alt="Logo" class="banner-icon">
         <div>
           <strong>Nuevas cartas cada Lunes</strong>
           — Nuevas cartas añadidas al catálogo cada semana. No te lo pierdas!
         </div>
       </div>
 
-      <!-- Topbar -->
       <div class="products-topbar">
         <div class="results-count">
           Mostrando <strong>{{ activeTab === 'new' ? newCards.length : allCards.length }}</strong> cartas
@@ -100,32 +88,18 @@
         </div>
       </div>
 
-      <!-- ════ TAB: NEW ════ -->
       @if (activeTab === 'new') {
         <div class="cards-grid">
           @for (card of newCards; track card.id) {
-            <app-card
-              [card]="card"
-              [isFavorite]="favoritesIds.has(card.id)"
-              [isInCart]="cartIds.has(card.id)"
-              (addToCart)="onAddToCart($event)"
-              (toggleFavorite)="onToggleFavorite($event)">
-            </app-card>
+            <app-card [card]="card" />
           }
         </div>
       }
 
-      <!-- ════ TAB: INDIVIDUAL CARDS ════ -->
       @if (activeTab === 'cards') {
         <div class="cards-grid">
           @for (card of displayCards; track card.id) {
-            <app-card
-              [card]="card"
-              [isFavorite]="favoritesIds.has(card.id)"
-              [isInCart]="cartIds.has(card.id)"
-              (addToCart)="onAddToCart($event)"
-              (toggleFavorite)="onToggleFavorite($event)">
-            </app-card>
+            <app-card [card]="card" />
           }
         </div>
 
@@ -139,8 +113,6 @@
             }
             <button class="page-btn arrow" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
           </div>
-
-          
         }
       }
 

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service';
 import { CartService } from '../../services/cart/cart-service';
 import { ModelUser } from '../../models/user';
@@ -15,71 +15,44 @@ import { ImageHelper } from '../../helpers/image-helper';
 })
 export class ShoppingCartPage implements OnInit {
 
-  cartItems: ModelCartItem[] = [];
   user: ModelUser | null = null;
   ImageHelper = ImageHelper;
 
   constructor(
-    
     private cartService: CartService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.authService.user$.subscribe(user => {
       this.user = user;
       if (user) {
-        this.loadCart(user.id);
+        this.cartService.load(user.id);  // ← carga los datos al entrar
       }
     });
   }
 
-
-
-loadCart(userId: number): void {
-  this.cartService.getCart(userId).subscribe(items => {
-    this.cartItems = items;
-    console.log('imageUrl raw:', items[0]?.card?.imageUrl);
-    console.log('imageUrl final:', ImageHelper.getImageUrl(items[0]?.card?.imageUrl));
-    this.cdr.detectChanges();
-  });
-}
+  get cartItems()  { return this.cartService.cartItems(); }
+  get totalItems() { return this.cartService.totalItems(); }
+  get totalPrice() { return this.cartService.totalPrice(); }
 
   onUpdateQuantity(item: ModelCartItem, quantity: number): void {
     if (!this.user) return;
-    this.cartService.updateQuantity(this.user.id, item.cardId, quantity).subscribe(() => {
-      if (quantity <= 0) {
-        this.cartItems = this.cartItems.filter(i => i.cardId !== item.cardId);
-      } else {
-        item.quantity = quantity;
-      }
-      this.cdr.detectChanges();
-    });
+    if (quantity <= 0) {
+      this.cartService.toggle(this.user.id, item.cardId);
+    } else {
+      this.cartService.updateQuantity(this.user.id, item.cardId, quantity);
+    }
   }
 
   onRemoveItem(item: ModelCartItem): void {
     if (!this.user) return;
-    this.cartService.removeFromCart(this.user.id, item.cardId).subscribe(() => {
-      this.cartItems = this.cartItems.filter(i => i.cardId !== item.cardId);
-      this.cdr.detectChanges();
-    });
+    this.cartService.toggle(this.user.id, item.cardId);
   }
 
   onClearCart(): void {
     if (!this.user) return;
-    this.cartService.clearCart(this.user.id).subscribe(() => {
-      this.cartItems = [];
-      this.cdr.detectChanges();
-    });
-  }
-
-  getTotalItems(): number {
-    return this.cartItems.reduce((acc, item) => acc + item.quantity, 0);
-  }
-
-  getTotalPrice(): number {
-    return this.cartItems.reduce((acc, item) => acc + item.card.price * item.quantity, 0);
+    this.cartService.clearCart(this.user.id);
   }
 
   formatPrice(price: number): string {

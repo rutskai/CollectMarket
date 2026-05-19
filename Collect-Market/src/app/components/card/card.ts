@@ -1,42 +1,57 @@
-  import { Component, EventEmitter, Output, Input} from '@angular/core';
-  import { ModelCard } from '../../models/card';
-  import { CommonModule } from '@angular/common';
-  import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnInit, computed, Signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ModelCard } from '../../models/card';
+import { AuthService } from '../../services/auth/auth-service';
+import { CartService } from '../../services/cart/cart-service';
+import { FavoritesService } from '../../services/favorite/favorites-service';
 
+@Component({
+  selector: 'app-card',
+  imports: [CommonModule],
+  templateUrl: './card.html',
+  styleUrl: './card.css',
+})
+export class Card implements OnInit {
 
-  @Component({
-    selector: 'app-card',
-    imports: [CommonModule],
-    templateUrl: './card.html',
-    styleUrl: './card.css',
-  })
-  export class Card {
+  @Input() card!: ModelCard;
 
-    constructor(private http: HttpClient){}
+  isFavorite: Signal<boolean> = computed(() => false);
+  isInCart: Signal<boolean>   = computed(() => false);
 
-    @Input() card!: ModelCard;
-    @Input() isFavorite: boolean = false;
-    @Input() isInCart: boolean = false;
-    @Output() addToCart = new EventEmitter<ModelCard>();
-    @Output() toggleFavorite = new EventEmitter<ModelCard>();
+  private userId: number | null = null;
 
-    get imageUrl(): string {
-      if (!this.card.imageUrl) return 'assets/card-placeholder.png';
-      if (this.card.imageUrl.endsWith('.png') || 
-          this.card.imageUrl.endsWith('.jpg') || 
-          this.card.imageUrl.endsWith('.webp')) {
-        return this.card.imageUrl;
-      }
-      return `${this.card.imageUrl}/high.webp`; 
+  constructor(
+    private authService: AuthService,
+    private favoritesService: FavoritesService,
+    private cartService: CartService
+  ) {}
+
+  ngOnInit(): void {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      this.userId = user.id;
+      this.isFavorite = this.favoritesService.isFavorite(this.card.id);
+      this.isInCart   = this.cartService.isInCart(this.card.id);
     }
-onAddToCart(): void {
-    console.log('Card component emitiendo addToCart para:', this.card.id);
-    this.addToCart.emit(this.card);
   }
 
   onToggleFavorite(): void {
-    console.log('Card component emitiendo toggleFavorite para:', this.card.id);
-    this.toggleFavorite.emit(this.card);
+    if (!this.userId) { alert('Debes iniciar sesión.'); return; }
+    this.favoritesService.toggle(this.userId, this.card.id);
   }
 
+  onAddToCart(): void {
+    if (!this.userId) { alert('Debes iniciar sesión.'); return; }
+    this.cartService.toggle(this.userId, this.card.id);
   }
+
+  get imageUrl(): string {
+    if (!this.card.imageUrl) return 'assets/card-placeholder.png';
+    if (
+      this.card.imageUrl.endsWith('.png') ||
+      this.card.imageUrl.endsWith('.jpg') ||
+      this.card.imageUrl.endsWith('.webp')
+    ) return this.card.imageUrl;
+    return `${this.card.imageUrl}/high.webp`;
+  }
+}

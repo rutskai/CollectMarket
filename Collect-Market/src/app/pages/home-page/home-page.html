@@ -61,13 +61,7 @@
 
     <div class="cm-acq-grid">
       @for (card of latestCards; track card.id) {
-        <app-card
-          [card]="card"
-          [isFavorite]="favoritesIds.has(card.id)"
-          [isInCart]="cartIds.has(card.id)"
-          (addToCart)="onAddToCart($event)"
-          (toggleFavorite)="onToggleFavorite($event)">
-        </app-card>
+        <app-card [card]="card" />
       }
     </div>
   </div>

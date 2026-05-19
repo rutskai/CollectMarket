@@ -3,10 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModelCard } from '../../models/card';
 import { Card } from '../../components/card/card';
-import { FavoritesService } from '../../services/favorites-service';
 import { CardsService } from '../../services/cards/cards-service';
-import { AuthService } from '../../services/auth/auth-service';
-import { CartService } from '../../services/cart/cart-service';
 import { Filter, ModelFilteredCards } from '../../models/filter';
 import { PaginationHelper } from '../../helpers/pagination-helper';
 
@@ -25,10 +22,6 @@ export class ShopPage implements OnInit {
   minPrice = 0;
   maxPrice = 500;
 
-  userId: number | null = null;
-  favoritesIds = new Set<number>();
-  cartIds = new Set<number>();
-
   allSourceCards: ModelCard[] = [];
   allCards: ModelCard[] = [];
   displayCards: ModelCard[] = [];
@@ -43,28 +36,16 @@ export class ShopPage implements OnInit {
   expansionFilters: Filter[] = [];
 
   constructor(
-    private favoritesService: FavoritesService,
     private cardsService: CardsService,
-    private authService: AuthService,
-    private cartService: CartService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.loadCards();
     this.loadFilterOptions();
-
-    if (this.authService.isLoggedIn()) {
-      const user = this.authService.getCurrentUser();
-      if (user) {
-        this.userId = user.id;
-        this.loadFavorites();
-        this.loadCart();
-      }
-    }
   }
 
- 
+  // Cartas
 
   loadCards(): void {
     this.cardsService.getCards().subscribe({
@@ -75,45 +56,6 @@ export class ShopPage implements OnInit {
         this.resetPageAndUpdate();
       },
       error: (err) => console.error('Error cargando cartas:', err)
-    });
-  }
-
-  loadFavorites(): void {
-    if (this.userId === null) return;
-    this.favoritesService.getFavorites(this.userId).subscribe(favCards => {
-      this.favoritesIds = new Set(favCards.map(c => c.id));
-      this.cdr.detectChanges();
-    });
-  }
-
-  loadCart(): void {
-    if (this.userId === null) return;
-    this.cartService.getCart(this.userId).subscribe(items => {
-      this.cartIds = new Set(items.map(i => i.cardId));
-      this.cdr.detectChanges();
-    });
-  }
-
-  loadFilterOptions(): void {
-    this.cardsService.getTypes().subscribe(types => {
-      this.typeFilters = types
-        .filter(Boolean)
-        .map(t => ({ name: t, color: this.typeColor(t), active: false }));
-      this.cdr.detectChanges();
-    });
-
-    this.cardsService.getRarities().subscribe(rarities => {
-      this.rarityFilters = rarities
-        .filter(Boolean)
-        .map(r => ({ name: r, active: false }));
-      this.cdr.detectChanges();
-    });
-
-    this.cardsService.getExpansions().subscribe(expansions => {
-      this.expansionFilters = expansions
-        .filter(Boolean)
-        .map(e => ({ name: e, active: false }));
-      this.cdr.detectChanges();
     });
   }
 
@@ -187,64 +129,35 @@ export class ShopPage implements OnInit {
     });
   }
 
-  // Favoritos
-
-  onToggleFavorite(card: ModelCard): void {
-    if (!this.authService.isLoggedIn() || this.userId === null) {
-      alert('Debes iniciar sesión para agregar a favoritos.');
-      return;
-    }
-
-    if (this.favoritesIds.has(card.id)) {
-      this.favoritesService.removeFavorite(this.userId, card.id).subscribe(() => {
-        this.favoritesIds.delete(card.id);
-        this.cdr.detectChanges();
-      });
-    } else {
-      this.favoritesService.addFavorite(this.userId, card.id).subscribe(() => {
-        this.favoritesIds.add(card.id);
-        this.cdr.detectChanges();
-      });
-    }
-  }
-
-  // Carrito
-
-onAddToCart(card: ModelCard): void {
-  if (!this.authService.isLoggedIn() || this.userId === null) {
-    alert('Debes iniciar sesión para añadir al carrito.');
-    return;
-  }
-
-  // Si ya está en el carrito, lo eliminamos
-  if (this.cartIds.has(card.id)) {
-    this.cartService.removeFromCart(this.userId, card.id).subscribe({
-      next: () => {
-        this.cartIds.delete(card.id);
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Error al eliminar del carrito:', err)
+  loadFilterOptions(): void {
+    this.cardsService.getTypes().subscribe(types => {
+      this.typeFilters = types
+        .filter(Boolean)
+        .map(t => ({ name: t, color: this.typeColor(t), active: false }));
+      this.cdr.detectChanges();
     });
-  } else {
-    // Si no está, lo añadimos
-    this.cartService.addToCart(this.userId, card.id).subscribe({
-      next: () => {
-        this.cartIds.add(card.id);
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Error al añadir al carrito:', err)
+
+    this.cardsService.getRarities().subscribe(rarities => {
+      this.rarityFilters = rarities
+        .filter(Boolean)
+        .map(r => ({ name: r, active: false }));
+      this.cdr.detectChanges();
+    });
+
+    this.cardsService.getExpansions().subscribe(expansions => {
+      this.expansionFilters = expansions
+        .filter(Boolean)
+        .map(e => ({ name: e, active: false }));
+      this.cdr.detectChanges();
     });
   }
-}
 
- 
+  // Helpers
 
   changeTab(tab: TabType): void {
     this.activeTab = tab;
     this.cdr.detectChanges();
   }
-
-  // Helpers 
 
   typeColor(type: string): string {
     const colors: Record<string, string> = {
