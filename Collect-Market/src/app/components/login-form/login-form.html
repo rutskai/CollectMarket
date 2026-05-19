@@ -1,24 +1,56 @@
 <div id="login" class="video-bg" data-vide-bg="/video/pickachu_runtime">
 
-  <form class="form-login p-4" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+  <form class="form-login p-4" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="title-form mb-3">
       <h1 class="h3">Iniciar Sesión</h1>
     </div>
 
     <div class="mb-3">
       <label for="email" class="form-label">Email:</label>
-      <input type="email" class="form-control" id="email" name="email" [(ngModel)]="credentials.email" required />
+      <input type="email" class="form-control" id="email" formControlName="email" />
+      
+      @let emailControl = loginForm.get('email');
+      
+      @if (emailControl?.invalid && ( emailControl?.touched)) {
+        <div class="text-error">
+          @if (emailControl?.errors?.['required']) {
+            <p>Se requiere el email</p>
+          }
+          @if (emailControl?.errors?.['email']) {
+            <p>Formato de email inválido</p>
+          }
+        </div>
+      }
     </div>
 
     <div class="mb-3">
       <label for="password" class="form-label">Contraseña:</label>
-      <input type="password" class="form-control" id="password" name="password" [(ngModel)]="credentials.password"
-        required />
+      <input type="password" class="form-control" id="password" formControlName="password" />
+      
+      @let passwordControl = loginForm.get('password');
+      
+          @if (passwordControl?.invalid && passwordControl?.touched) {
+        <div class="text-error">
+          @if (passwordControl?.errors?.['required']) {
+            <p>Se requiere contraseña</p>
+          }
+          @if (passwordControl?.errors?.['minlength']) {
+            <p>La contraseña debe tener al menos 6 caracteres</p>
+          }
+        </div>
+      }
     </div>
 
-    <button type="submit" class="btn btn-primary w-100" id="send-login" [disabled]="loginForm.invalid">
+    <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">
       Iniciar Sesión
     </button>
+    
+    @if (errorMessage) {
+      <div class="alert alert-error mt-3">
+        {{ errorMessage }}
+      </div>
+    }
+    
     <div class="auth-links">
       <p class="mt-3">¿No tienes cuenta? <a routerLink="/auth/register">Registrarse</a></p>
       <p>¿Olvidaste tu contraseña? <a routerLink="/auth/recover">Recuperar cuenta</a></p>

@@ -318,7 +318,7 @@
     gap: 8px;
   }
 
-  .alert-danger {
+  .alert-error {
     background: rgba(255, 107, 107, 0.2);
     color: #ffb3b3;
     border: 1px solid rgba(255, 107, 107, 0.3);
@@ -331,7 +331,7 @@
   }
 
   /* Texto de error de validación */
-  .text-danger {
+  .text-error {
     color: #ffb3b3 !important;
     font-size: 12px;
     margin-top: 5px;
