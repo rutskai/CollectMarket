@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -11,10 +12,12 @@ namespace Api
             app.MapPost("/api/login", async (LoginRequest request, AppDb db) =>
             {
                 var user = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
-                if (user == null) return Results.Unauthorized();
+                if (user == null) 
+                    return Results.NotFound(new { message = "Email no encontrado." });
 
                 bool validPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.Password);
-                if (!validPassword) return Results.Unauthorized();
+                if (!validPassword) 
+                    return  Results.Json(new { message = "Contraseña incorrecta." }, statusCode: 401);
 
                 return Results.Ok(new
                 {
@@ -31,7 +34,7 @@ namespace Api
             app.MapPost("/api/register", async (RegisterRequest request, AppDb db) =>
             {
                 var existingUser = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
-                if (existingUser != null) return Results.Conflict("Email ya en uso");
+                if (existingUser != null) return Results.Conflict(new { message = "Email ya en uso." });
 
                 var user = new User
                 {
