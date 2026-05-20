@@ -20,13 +20,10 @@
 
     <!-- ── SIDEBAR CATEGORÍAS ── -->
     <aside class="categories-sidebar">
-      <div class="search-wrapper">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Buscar preguntas..." [(ngModel)]="searchQuery">
-      </div>
+  
 
       <div class="category-block">
-        <div class="category-title">📂 Categorías</div>
+        <div class="category-title">Categorías</div>
         <div class="category-options">
           @for (cat of categories; track cat.name) {
             <div class="category-opt" [class.active]="selectedCategory === cat.name" (click)="selectCategory(cat.name)">

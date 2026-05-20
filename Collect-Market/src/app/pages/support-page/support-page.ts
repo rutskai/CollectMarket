@@ -27,7 +27,6 @@ interface Category {
 })
 export class SupportPage {
   activeTab: SupportTab = 'faq';
-  searchQuery = '';
   openFAQ: number | null = null;
   selectedCategory = 'Todos';
 
@@ -39,12 +38,12 @@ export class SupportPage {
   };
 
   categories: Category[] = [
-    { name: 'Todos', icon: '📋', count: 8 },
-    { name: 'Cuenta y perfil', icon: '👤', count: 3 },
-    { name: 'Pedidos y envíos', icon: '📦', count: 4 },
-    { name: 'Pagos y facturación', icon: '💳', count: 2 },
-    { name: 'Cartas y colecciones', icon: '🃏', count: 5 },
-    { name: 'Vender en Collect', icon: '🏷️', count: 2 }
+    { name: 'Todos', icon: '', count: 8 },
+    { name: 'Cuenta y perfil', icon: '', count: 3 },
+    { name: 'Pedidos y envíos', icon: '', count: 4 },
+    { name: 'Pagos y facturación', icon: '', count: 2 },
+    { name: 'Cartas y colecciones', icon: '', count: 5 },
+    { name: 'Vender en Collect', icon: '', count: 2 }
   ];
 
   faqs: FAQ[] = [
@@ -66,13 +65,6 @@ export class SupportPage {
       filtered = filtered.filter(f => f.category === this.selectedCategory);
     }
     
-    if (this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase();
-      filtered = filtered.filter(f => 
-        f.question.toLowerCase().includes(query) || 
-        f.answer.toLowerCase().includes(query)
-      );
-    }
     
     return filtered;
   }
@@ -89,9 +81,7 @@ export class SupportPage {
     this.openFAQ = this.openFAQ === id ? null : id;
   }
 
-  clearSearch(): void {
-    this.searchQuery = '';
-  }
+
 
   isFormValid(): boolean {
     return this.contactForm.name.trim() !== '' &&
