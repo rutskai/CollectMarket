@@ -4,6 +4,7 @@ import { ModelCard } from '../../models/card';
 import { AuthService } from '../../services/auth/auth-service';
 import { CartService } from '../../services/cart/cart-service';
 import { FavoritesService } from '../../services/favorite/favorites-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-card',
@@ -23,7 +24,7 @@ export class Card implements OnInit {
   constructor(
     private authService: AuthService,
     private favoritesService: FavoritesService,
-    private cartService: CartService
+    private cartService: CartService, private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +45,11 @@ export class Card implements OnInit {
     if (!this.userId) { alert('Debes iniciar sesión.'); return; }
     this.cartService.toggle(this.userId, this.card.id);
   }
+
+ 
+goToDetail() {
+  this.router.navigate(['/card', this.card.id]);
+}
 
   get imageUrl(): string {
     if (!this.card.imageUrl) return 'assets/card-placeholder.png';

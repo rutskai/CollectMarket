@@ -1,5 +1,5 @@
   <div class="poke-card">
-    <div class="img-wrap">
+    <div class="img-wrap" (click)="goToDetail()">
       <img [src]="imageUrl" [alt]="card.name" />
       @if (card.stock <= 2) {
         <span class="stock-low">¡Solo {{ card.stock }}!</span>
