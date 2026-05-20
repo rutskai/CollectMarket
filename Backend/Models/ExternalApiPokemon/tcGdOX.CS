@@ -41,7 +41,7 @@ public class Attack
     [JsonPropertyName("effect")]
     public string? Effect { get; set; }
     
-    // Método helper para obtener el daño como string
+    // Método helper para obtener el daño 
     public string GetDamageString()
     {
         return Damage?.ToString() ?? "";

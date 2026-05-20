@@ -5,15 +5,45 @@ using MySql.Data.MySqlClient;
 
 namespace Services
 {
+    /**
+     * Servicio encargado de importar cartas
+     * desde la API pública TCGdex.
+     *
+     * Funcionalidades:
+     * - Obtener cartas desde la API
+     * - Procesar información
+     * - Generar precios y stock automáticos
+     * - Insertar datos en MySQL usando Dapper
+     */
     public class CardImportService
     {
         private readonly string _connectionString;
 
+        /**
+         * Obtiene la cadena de conexión desde
+         * la configuración de la aplicación.
+         *
+         * @param configuration Configuración global.
+         */
         public CardImportService(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }
 
+        /**
+         * Importa cartas desde la API TCGdex.
+         *
+         * Orden:
+         * 1. Obtener listas básicas por expansión
+         * 2. Obtener detalles completos de cada carta
+         * 3. Construir descripción y datos
+         * 4. Insertar en base de datos
+         *
+         * @return Tuple con:
+         * - Success indica éxito o fallo
+         * - Message mensaje descriptivo
+         * - Inserted cantidad insertada
+         */
         public async Task<(bool Success, string Message, int Inserted)> ImportCardsFromPokemonAPI()
         {
             try
@@ -26,10 +56,16 @@ namespace Services
                 };
 
                 int totalInserted = 0;
-
+                
+                // Abrir conexión MySQL
                 await using var connection = new MySqlConnection(_connectionString);
                 await connection.OpenAsync();
 
+                /**
+                 * Consulta SQL de inserción.
+                 *
+                 * INSERT IGNORE evita duplicados.
+                 */
                 const string sql = """
                 INSERT IGNORE INTO Card
                 (name, set_name, rarity, type, image_url, description, price, stock)
@@ -43,7 +79,7 @@ namespace Services
 
                 foreach (var setId in sets.Keys)
                 {
-                    // Paso 1: Obtener lista básica de cartas
+                    // Obtener lista básica de cartas
                     var listUrl = $"https://api.tcgdex.net/v2/en/cards?set={setId}";
                     var listResponse = await client.GetAsync(listUrl);
 
@@ -66,7 +102,7 @@ namespace Services
                     {
                         try
                         {
-                            // Paso 2: Obtener detalles completos de cada carta
+                        
                             var detailUrl = $"https://api.tcgdex.net/v2/en/cards/{basicCard.Id}";
                             var detailResponse = await client.GetAsync(detailUrl);
 
@@ -84,7 +120,7 @@ namespace Services
 
                             if (fullCard == null) continue;
 
-                            // Construir descripción
+                          
                             string description = fullCard.Description ?? "";
                             if (string.IsNullOrWhiteSpace(description) && fullCard.Attacks != null && fullCard.Attacks.Length > 0)
                             {
@@ -97,7 +133,7 @@ namespace Services
                             }
                             description = description.Trim();
 
-                            // Determinar rareza (ahora viene del detalle)
+                            
                             string rarity = fullCard.Rarity ?? "Common";
 
                             await connection.ExecuteAsync(sql, new
@@ -119,10 +155,10 @@ namespace Services
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"❌ Error procesando carta {basicCard.Id}: {ex.Message}");
+                            Console.WriteLine($"Error procesando carta {basicCard.Id}: {ex.Message}");
                         }
                     }
-                    Console.WriteLine($"✅ {setId} → {basicCards.Count} cartas procesadas");
+                    Console.WriteLine($"✔ {setId} → {basicCards.Count} cartas procesadas");
                 }
 
                 await connection.CloseAsync();
@@ -134,6 +170,14 @@ namespace Services
             }
         }
 
+        /**
+         * Genera automáticamente un precio
+         * según la rareza de la carta.
+         *
+         * @param rarity Rareza de la carta.
+         *
+         * @return Precio generado.
+         */
         private static decimal GeneratePrice(string rarity)
         {
             return rarity switch
@@ -146,6 +190,15 @@ namespace Services
             };
         }
 
+        /**
+         * Genera stock aleatorio según rareza.
+         *
+         * Cartas raras generan menos stock.
+         *
+         * @param rarity Rareza de la carta.
+         *
+         * @return Cantidad de stock generada.
+         */
         private static int GenerateStock(string? rarity)
         {
             rarity ??= "Unknown";

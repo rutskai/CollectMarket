@@ -3,9 +3,29 @@ using Services;
 using Api;
 using CloudinaryDotNet;
 
+/**
+ * Punto principal (main)de la aplicación.
+ *
+ * Funcionalidades:
+ * - Configuración de servicios
+ * - Configuración de Entity Framework
+ * - Configuración de Cloudinary
+ * - Configuración de CORS
+ * - Ejecución de migraciones
+ * - Registro de endpoints
+ * - Inicialización del servidor web
+ */
+
 var builder = WebApplication.CreateBuilder(args);
 
-//Cloudinary
+/**
+ * Configuración de Cloudinary.
+ *
+ * Se utiliza para:
+ * - Subida de imágenes
+ * - Gestión de avatars
+ * - Almacenamiento en la nube
+ */
 var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
 var cloudinary = new Cloudinary(new Account(
     cloudinaryConfig["CloudName"],
@@ -14,10 +34,17 @@ var cloudinary = new Cloudinary(new Account(
 ));
 builder.Services.AddSingleton(cloudinary);
 
-// CONFIGURAR SERVICIOS
+/**
+ * Configuración de Entity Framework
+ * usando MySQL.
+ *
+ * Características:
+ * - MySQL 8
+ * - Reintentos automáticos
+ * - Inyección de dependencias
+ */
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Agregar Entity Framework con MySQL
 builder.Services.AddDbContext<AppDb>(options =>
    options.UseMySql(
     connectionString,
@@ -25,10 +52,19 @@ builder.Services.AddDbContext<AppDb>(options =>
     mysqlOptions => mysqlOptions.EnableRetryOnFailure()
 ));
 
-// Registrar servicio de importación
+/**
+ * Registrar servicio de importación
+ * de cartas Pokémon.
+ *
+ */
 builder.Services.AddScoped<CardImportService>();
 
-// CORS para Angular
+/**
+ * Configuración de CORS.
+ *
+ * Permite conexiones desde Angular
+ * ejecutándose en localhost.
+ */
 builder.Services.AddCors(options =>
 {
    
@@ -41,13 +77,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-// -------------------------------------------------------------------------------------------------------------------------------------
-
 var app = builder.Build();
 app.UseCors("AllowAngular");
 
 
-// Docker Migraciones Database
+/**
+ * Ejecutar migraciones automáticas
+ * y carga inicial de datos.
+ */
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDb>();
@@ -70,19 +107,25 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// ENDPOINTS: Cartas
+/**
+ * Registrar los endpoints de la aplicación.
+ */
 app.CardsEndpoints();
-// ENDPOINTS: Usuarios
 app.UsersEndpoints();
-// ENDPOINTS: Favoritos
 app.FavoritesEndpoints();
-// ENDPOINTS: Autentificación
 app.AuthEndpoints();
-// ENDPOINTS: Carrito de la compra
 app.CartEndpoints();
 
-// Health check
+/**
+ * Endpoint Health Check.
+ *
+ * Permite verificar si la API
+ * está funcionando correctamente.
+ */
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
-// EJECUTAR
+
+/**
+ * Iniciar aplicación web.
+ */
 app.Run();

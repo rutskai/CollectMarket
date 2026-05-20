@@ -2,8 +2,23 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 
+/**
+ *  Entity Framework.
+ *
+ * Se encarga de:
+ * - Gestionar la conexión con la base de datos
+ * - Definir las tablas mediante DbSet
+ * - Configurar relaciones y restricciones
+ * - Mapear entidades a tablas SQL
+ */
 class AppDb : DbContext
 {
+    /**
+     * Recibe las opciones de configuración
+     * definidas en Program.cs.
+     *
+     * @param options Opciones de Entity Framework.
+     */
     public AppDb(DbContextOptions<AppDb> options) : base(options) { }
 
     public DbSet<User> Users => Set<User>();
@@ -11,74 +26,87 @@ class AppDb : DbContext
     public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
     public DbSet<CartItem> CartItems => Set<CartItem>();
 
+    /**
+     * Configuración avanzada de entidades.
+     *
+     * Aquí se definen:
+     * - Tablas
+     * - Claves primarias
+     * - Relaciones
+     * - Índices
+     * - Restricciones
+     * - Valores por defecto
+     *
+     * @param modelBuilder Constructor de modelos Entity Framework.
+     */
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
 
         modelBuilder.Entity<User>(entity =>
-{
-    entity.ToTable("User");
-    entity.HasKey(u => u.Id);
+        {
+            entity.ToTable("User");
+            entity.HasKey(u => u.Id);
 
-    entity.Property(u => u.Name)
-        .IsRequired()
-        .HasMaxLength(255);
+            entity.Property(u => u.Name)
+                .IsRequired()
+                .HasMaxLength(255);
 
-    entity.Property(u => u.Email)
-        .IsRequired()
-        .HasMaxLength(255);
+            entity.Property(u => u.Email)
+                .IsRequired()
+                .HasMaxLength(255);
 
-    entity.Property(u => u.Password)
-        .IsRequired()
-        .HasMaxLength(255);
+            entity.Property(u => u.Password)
+                .IsRequired()
+                .HasMaxLength(255);
 
-    entity.Property(u => u.CreatedAt);
+            entity.Property(u => u.CreatedAt);
 
-    entity.Property(u => u.UpdatedAt);
+            entity.Property(u => u.UpdatedAt);
 
-    entity.HasIndex(u => u.Email)
-        .IsUnique();
-});
+            entity.HasIndex(u => u.Email)
+                .IsUnique();
+        });
 
 
         modelBuilder.Entity<Card>(entity =>
- {
-     entity.ToTable("Card");
-     entity.HasKey(c => c.Id);
+        {
+            entity.ToTable("Card");
+            entity.HasKey(c => c.Id);
 
-     entity.Property(c => c.Name)
-         .IsRequired()
-         .HasMaxLength(255);
+            entity.Property(c => c.Name)
+                .IsRequired()
+                .HasMaxLength(255);
 
-     entity.Property(c => c.SetName)
-         .HasMaxLength(255);
+            entity.Property(c => c.SetName)
+                .HasMaxLength(255);
 
-     entity.Property(c => c.Rarity)
-         .HasMaxLength(100);
+            entity.Property(c => c.Rarity)
+                .HasMaxLength(100);
 
-     entity.Property(c => c.Type)
-         .HasMaxLength(50);
+            entity.Property(c => c.Type)
+                .HasMaxLength(50);
 
-     entity.Property(c => c.ImageUrl)
-         .HasMaxLength(255);
+            entity.Property(c => c.ImageUrl)
+                .HasMaxLength(255);
 
-     entity.Property(c => c.Price)
-         .HasColumnType("decimal(10,2)")
-         .HasDefaultValue(0);
+            entity.Property(c => c.Price)
+                .HasColumnType("decimal(10,2)")
+                .HasDefaultValue(0);
 
-     entity.Property(c => c.Stock)
-         .HasDefaultValue(0);
+            entity.Property(c => c.Stock)
+                .HasDefaultValue(0);
 
-     entity.Property(c => c.Description);
+            entity.Property(c => c.Description);
 
-     entity.Property(c => c.CreatedAt);
-     entity.Property(c => c.UpdatedAt);
+            entity.Property(c => c.CreatedAt);
+            entity.Property(c => c.UpdatedAt);
 
-     entity.HasIndex(c => c.Name);
-     entity.HasIndex(c => c.Rarity);
-     entity.HasIndex(c => c.SetName);
- });
+            entity.HasIndex(c => c.Name);
+            entity.HasIndex(c => c.Rarity);
+            entity.HasIndex(c => c.SetName);
+        });
 
         modelBuilder.Entity<UserFavorite>(entity =>
        {
@@ -101,24 +129,24 @@ class AppDb : DbContext
        });
 
         modelBuilder.Entity<CartItem>(entity =>
- {
-     entity.ToTable("CartItem");
-     entity.HasKey(c => c.Id);
+        {
+            entity.ToTable("CartItem");
+            entity.HasKey(c => c.Id);
 
-     entity.Property(c => c.Quantity)
-         .HasDefaultValue(1);
+            entity.Property(c => c.Quantity)
+                .HasDefaultValue(1);
 
-     entity.Property(c => c.AddedAt);
+            entity.Property(c => c.AddedAt);
 
-     entity.HasOne(c => c.User)
-         .WithMany()
-         .HasForeignKey(c => c.UserId)
-         .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-     entity.HasOne(c => c.Card)
-         .WithMany()
-         .HasForeignKey(c => c.CardId)
-         .OnDelete(DeleteBehavior.Cascade);
- });
+            entity.HasOne(c => c.Card)
+                .WithMany()
+                .HasForeignKey(c => c.CardId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }

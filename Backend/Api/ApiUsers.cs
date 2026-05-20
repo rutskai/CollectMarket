@@ -6,10 +6,24 @@ using Models;
 namespace Api
 {
     public static class Users
-    {
+    {   
+        /**
+         * Registra todos los endpoints de usuarios.
+         *
+         * @param app Aplicación principal ASP.NET.
+         */
         public static void UsersEndpoints(this WebApplication app)
         {
-
+             /**
+             * Obtiene todos los usuarios registrados.
+             *
+             * La respuesta utiliza la clase UserPublic
+             * para evitar exponer la contraseña.
+             *
+             * @param db Contexto de base de datos.
+             *
+             * @return 200 OK con la lista de usuarios.
+             */
             app.MapGet("/api/users", async (AppDb db) =>
             {
                 var users = await db.Users
@@ -24,7 +38,19 @@ namespace Api
                     .ToListAsync();
                 return Results.Ok(users);
             });
-
+            
+             /**
+             * Obtiene un usuario por ID.
+             *
+             * Devuelve únicamente información pública
+             * mediante UserPublic.
+             *
+             * @param id ID del usuario.
+             * @param db Contexto de base de datos.
+             *
+             * @return 200 OK si el usuario existe.
+             * @return 404 NotFound si no existe.
+             */
             app.MapGet("/api/users/{id}", async (int id, AppDb db) =>
             {
                 var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -41,6 +67,16 @@ namespace Api
                 return Results.Ok(userDto);
             });
 
+            /**
+             * Actualiza el nombre de un usuario.
+             *
+             * @param id ID del usuario.
+             * @param name Nuevo nombre.
+             * @param db Contexto de base de datos.
+             *
+             * @return 200 OK si la actualización es exitosa.
+             * @return 404 NotFound si el usuario no existe.
+             */
             app.MapPut("/api/users/{id}/name", async (int id, string name, AppDb db) =>
             {
                 var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -53,23 +89,44 @@ namespace Api
                 return Results.Ok(new { user.Id, user.Name });
             });
             
-            // PUT - Actualizar avatar
+            /**
+             * Actualiza el avatar de un usuario.
+             *
+             * Funcionalidades:
+             * - Validación de formato
+             * - Validación de tamaño máximo
+             * - Subida de imagen a Cloudinary
+             * - Redimensionamiento automático
+             *
+             * Formatos permitidos: .jpg.jpeg.png.webp
+             *
+             * Tamaño máximo: 2 MB
+             *
+             * @param id ID del usuario.
+             * @param file Archivo de imagen.
+             * @param db Contexto de base de datos.
+             * @param cloudinary Servicio Cloudinary.
+             *
+             * @return 200 OK si la imagen se actualiza.
+             * @return 400 BadRequest si el archivo es inválido.
+             * @return 404 NotFound si el usuario no existe.
+             */
             app.MapPut("/api/users/{id}/avatar", async (int id, IFormFile file, AppDb db, Cloudinary cloudinary) =>
             {
                 var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
                 if (user == null) return Results.NotFound();
 
-                // Validar extensión
+     
                 var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
                 var ext = Path.GetExtension(file.FileName).ToLower();
                 if (!allowed.Contains(ext))
                     return Results.BadRequest("Formato no permitido.");
 
-                // Validar tamaño (2MB)
+             
                 if (file.Length > 2 * 1024 * 1024)
                     return Results.BadRequest("Imagen demasiado grande.");
 
-                // Subir a Cloudinary
+               
                 using var stream = file.OpenReadStream();
                 var uploadParams = new ImageUploadParams
                 {
