@@ -5,6 +5,7 @@ import { ModelCard } from '../../models/card';
 import { CardsService } from '../../services/cards/cards-service';
 import { CartService } from '../../services/cart/cart-service';
 import { FavoritesService } from '../../services/favorite/favorites-service';
+import { AuthService } from '../../services/auth/auth-service';
 
 
 @Component({
@@ -26,10 +27,13 @@ export class DetailCardPage implements OnInit {
     private cardsService: CardsService,
     private cartService: CartService,
     private favoritesService: FavoritesService,
+    private authService:AuthService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
+    this.userId = this.authService.getCurrentUser()?.id ?? null;
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.cardsService.getCardById(id).subscribe({
       next: (card) => {
