@@ -50,13 +50,6 @@
       <!-- ════ TAB: FAQ ════ -->
       @if (activeTab === 'faq') {
         <div class="faq-section">
-          @if (searchQuery && filteredFAQs.length === 0) {
-            <div class="no-results">
-              <i class="fa-solid fa-face-sad-tear"></i>
-              <p>No se encontraron resultados para "{{ searchQuery }}"</p>
-              <button (click)="clearSearch()">Limpiar búsqueda</button>
-            </div>
-          }
 
           @for (faq of filteredFAQs; track faq.id) {
             <div class="faq-item" [class.open]="openFAQ === faq.id" (click)="toggleFAQ(faq.id)">
