@@ -6,9 +6,30 @@ namespace Api
 {
     public static class Auth
     {
+        /**
+         * Registra todos los endpoints
+         * de autenticación.
+         *
+         * @param app Aplicación principal ASP.NET.
+         */
         public static void AuthEndpoints(this WebApplication app)
         {
 
+            /**
+             * Endpoint para iniciar sesión.
+             *
+             * Funcionalidades:
+             * - Verificar existencia del email
+             * - Validar contraseña encriptada
+             * - Retornar información pública del usuario
+             *
+             * @param request Datos de login.
+             * @param db Contexto de base de datos.
+             *
+             * @return 200 OK con mensaje y datos públicos del usuario si el login es correcto.
+             * @return 401 Unauthorized con objeto (mensaje personalizado )si la contraseña es incorrecta.
+             * @return 404 NotFound con mensaje personalizado si el email no existe.
+             */
             app.MapPost("/api/login", async (LoginRequest request, AppDb db) =>
             {
                 var user = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
@@ -31,6 +52,20 @@ namespace Api
                 });
             });
 
+            /**
+             * Endpoint para registrar usuarios.
+             *
+             * Funcionalidades:
+             * - Verificar email único
+             * - Encriptar contraseña
+             * - Guardar usuario en BD
+             *
+             * @param request Datos del usuario.
+             * @param db Contexto de base de datos.
+             *
+             * @return 201 Created si el usuario se registra.
+             * @return 409 Conflict con mensaje si el email ya existe.
+             */
             app.MapPost("/api/register", async (RegisterRequest request, AppDb db) =>
             {
                 var existingUser = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
@@ -58,30 +93,44 @@ namespace Api
                 });
             });
 
-            // PUT - Cambiar contraseña
-        app.MapPut("/api/users/{id}/password", async (int id, ChangePasswordRequest request, AppDb db) =>
-        {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null) return Results.NotFound();
+            /**
+             * Endpoint para cambiar contraseña.
+             *
+             * Validaciones:
+             * - Usuario existente
+             * - Contraseña actual correcta
+             * - Coincidencia de nuevas contraseñas
+             * - Longitud mínima
+             *
+             * @param id ID del usuario.
+             * @param request Datos del cambio.
+             * @param db Contexto de base de datos.
+             *
+             * @return 200 OK con mensaje si se actualiza correctamente.
+             * @return 400 BadRequest con mensaje si falla una validación.
+             * @return 404 NotFound si el usuario no existe.
+             */
+            app.MapPut("/api/users/{id}/password", async (int id, ChangePasswordRequest request, AppDb db) =>
+            {
+                var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+                if (user == null) return Results.NotFound();
 
-            // Verificar contraseña actual
-            bool validPassword = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password);
-            if (!validPassword) return Results.BadRequest("La contraseña actual no es correcta.");
+                bool validPassword = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password);
+                if (!validPassword) return Results.BadRequest("La contraseña actual no es correcta.");
 
-            // Verificar que las nuevas coinciden
-            if (request.NewPassword != request.ConfirmPassword)
-                return Results.BadRequest("Las contraseñas nuevas no coinciden.");
+                if (request.NewPassword != request.ConfirmPassword)
+                    return Results.BadRequest("Las contraseñas nuevas no coinciden.");
 
-            // Validar longitud mínima
-            if (request.NewPassword.Length < 6)
-                return Results.BadRequest("La contraseña debe tener al menos 6 carácteres.");
 
-            user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-            user.UpdatedAt = DateTime.Now;
-            await db.SaveChangesAsync();
+                if (request.NewPassword.Length < 6)
+                    return Results.BadRequest("La contraseña debe tener al menos 6 carácteres.");
 
-            return Results.Ok(new { message = "Contraseña actualizada correctamente." });
-        });
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+                user.UpdatedAt = DateTime.Now;
+                await db.SaveChangesAsync();
+
+                return Results.Ok(new { message = "Contraseña actualizada correctamente." });
+            });
 
         }
     }
