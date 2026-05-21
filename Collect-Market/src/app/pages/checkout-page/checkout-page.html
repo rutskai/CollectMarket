@@ -1,0 +1,102 @@
+<div class="checkout-wrap">
+  <div class="checkout-content">
+
+    <div class="checkout-header">
+      <h1 class="checkout-title">Finalizar compra</h1>
+      <p class="checkout-sub">Revisa tu pedido y completa los datos</p>
+    </div>
+
+    <div class="checkout-layout">
+
+      <div class="checkout-left">
+
+        <div class="checkout-section">
+          <h2 class="section-title">Dirección de envío</h2>
+          <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" [(ngModel)]="fullName" placeholder="John Doe" />
+          </div>
+          <div class="form-group">
+            <label>Dirección</label>
+            <input type="text" [(ngModel)]="address" placeholder="Calle Mayor 1, 2ºA" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ciudad</label>
+              <input type="text" [(ngModel)]="city" placeholder="Barcelona" />
+            </div>
+            <div class="form-group">
+              <label>Código postal</label>
+              <input type="text" [(ngModel)]="postalCode" placeholder="08001" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>País</label>
+            <input type="text" [(ngModel)]="country" placeholder="España" />
+          </div>
+        </div>
+
+        <div class="checkout-section">
+          <h2 class="section-title">Método de pago</h2>
+          <div class="payment-options">
+            <div class="payment-opt" [class.active]="paymentMethod === 'card'" (click)="paymentMethod = 'card'">
+            
+              <span>Tarjeta de crédito</span>
+            </div>
+            <div class="payment-opt" [class.active]="paymentMethod === 'paypal'" (click)="paymentMethod = 'paypal'">
+          
+              <span>PayPal</span>
+            </div>
+          </div>
+
+          @if (paymentMethod === 'card') {
+            <div class="form-group">
+              <label>Número de tarjeta</label>
+              <input type="text" [(ngModel)]="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" />
+            </div>
+          }
+        </div>
+
+        @if (error) {
+          <div class="checkout-error">{{ error }}</div>
+        }
+
+        <button class="checkout-btn" (click)="onSubmit()" [disabled]="loading">
+          @if (loading) {
+            Procesando...
+          } @else {
+            Confirmar pedido — {{ formatPrice(totalPrice) }}
+          }
+        </button>
+
+      </div>
+
+      <div class="checkout-right">
+        <div class="order-summary">
+          <h2 class="section-title">Tu pedido</h2>
+          <div class="order-items">
+            @for (item of cartItems; track item.id) {
+              <div class="order-item">
+                <div class="order-item-info">
+                  <span class="order-item-name">{{ item.card.name }}</span>
+                  <span class="order-item-qty">x{{ item.quantity }}</span>
+                </div>
+                <span class="order-item-price">{{ formatPrice(item.card.price * item.quantity) }}</span>
+              </div>
+            }
+          </div>
+          <div class="order-divider"></div>
+          <div class="order-row">
+            <span>Envío</span>
+            <span class="order-free">Gratis</span>
+          </div>
+          <div class="order-total">
+            <span>Total</span>
+            <span>{{ formatPrice(totalPrice) }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
