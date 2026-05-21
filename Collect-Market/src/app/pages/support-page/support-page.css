@@ -47,6 +47,14 @@
   pointer-events: none;
   z-index: 0;
 }
+.error-message {
+  color: #ef8e8e !important;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+
 
 /* ══════════════════════════════════════════
    TABS
@@ -375,6 +383,16 @@
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 20px;
+}
+.form-group select {
+  background-color: var(--surface) !important;
+  color: #ffffff !important;
+  cursor: pointer;
+}
+
+.form-group select option {
+  background-color: var(--surface) !important;
+  color: #ffffff !important;
 }
 
 .form-group {

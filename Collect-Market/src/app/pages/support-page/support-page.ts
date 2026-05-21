@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 export type SupportTab = 'faq' | 'contact';
 
@@ -14,14 +14,13 @@ interface FAQ {
 
 interface Category {
   name: string;
-  icon: string;
   count: number;
 }
 
 @Component({
   selector: 'app-support-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './support-page.html',
   styleUrls: ['./support-page.css']
 })
@@ -30,20 +29,20 @@ export class SupportPage {
   openFAQ: number | null = null;
   selectedCategory = 'Todos';
 
-  contactForm = {
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  };
+  contactForm = new FormGroup({
+    name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    subject: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    message: new FormControl('', [Validators.required, Validators.minLength(10)])
+  });
 
   categories: Category[] = [
-    { name: 'Todos', icon: '', count: 8 },
-    { name: 'Cuenta y perfil', icon: '', count: 3 },
-    { name: 'Pedidos y envíos', icon: '', count: 4 },
-    { name: 'Pagos y facturación', icon: '', count: 2 },
-    { name: 'Cartas y colecciones', icon: '', count: 5 },
-    { name: 'Vender en Collect', icon: '', count: 2 }
+    { name: 'Todos', count: 8 },
+    { name: 'Cuenta y perfil', count: 3 },
+    { name: 'Pedidos y envíos', count: 4 },
+    { name: 'Pagos y facturación', count: 2 },
+    { name: 'Cartas y colecciones', count: 5 },
+    { name: 'Vender en Collect', count: 2 }
   ];
 
   faqs: FAQ[] = [
@@ -83,19 +82,21 @@ export class SupportPage {
 
 
 
-  isFormValid(): boolean {
-    return this.contactForm.name.trim() !== '' &&
-           this.contactForm.email.trim() !== '' &&
-           this.contactForm.email.includes('@') &&
-           this.contactForm.subject !== '' &&
-           this.contactForm.message.trim() !== '';
+   get isFormValid(): boolean {
+    return this.contactForm.valid;
   }
 
-  submitContact(): void {
-    if (this.isFormValid()) {
-      console.log('Formulario enviado:', this.contactForm);
+   submitContact(): void {
+    if (this.contactForm.valid) {
+      console.log('Formulario enviado:', this.contactForm.value);
       alert('¡Mensaje enviado con éxito! Te responderemos en menos de 24 horas.');
-      this.contactForm = { name: '', email: '', subject: '', message: '' };
-    }
-  }
+      
+      // Resetear el formulario (igual que el login)
+      this.contactForm.reset({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    }}
 }
