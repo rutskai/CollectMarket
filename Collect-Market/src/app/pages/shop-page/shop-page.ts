@@ -7,8 +7,6 @@ import { CardsService } from '../../services/cards/cards-service';
 import { Filter, ModelFilteredCards } from '../../models/filter';
 import { PaginationHelper } from '../../helpers/pagination-helper';
 
-export type TabType = 'new' | 'packs' | 'cards';
-
 @Component({
   selector: 'app-shop-page',
   standalone: true,
@@ -18,13 +16,11 @@ export type TabType = 'new' | 'packs' | 'cards';
 })
 export class ShopPage implements OnInit {
 
-  activeTab: TabType = 'cards';
   maxPrice = 0;
 
   allSourceCards: ModelCard[] = [];
   allCards: ModelCard[] = [];
   displayCards: ModelCard[] = [];
-  newCards: ModelCard[] = [];
 
   currentPage = 1;
   itemsPerPage = 14;
@@ -44,21 +40,16 @@ export class ShopPage implements OnInit {
     this.loadFilterOptions();
   }
 
-  // Cartas
-
   loadCards(): void {
     this.cardsService.getCards().subscribe({
       next: (cards) => {
         this.allSourceCards = cards;
         this.allCards = cards;
-        this.newCards = cards.slice(0, 20);
         this.resetPageAndUpdate();
       },
       error: (err) => console.error('Error cargando cartas:', err)
     });
   }
-
-  // Paginación
 
   updateDisplayCards(): void {
     const pagination = PaginationHelper.paginate(this.allCards, this.currentPage, this.itemsPerPage);
@@ -86,8 +77,6 @@ export class ShopPage implements OnInit {
     this.currentPage = 1;
     this.updateDisplayCards();
   }
-
-  // Filtros
 
   toggleType(filter: Filter): void      { filter.active = !filter.active; this.applyFilters(); }
   toggleRarity(filter: Filter): void    { filter.active = !filter.active; this.applyFilters(); }
@@ -149,13 +138,6 @@ export class ShopPage implements OnInit {
     });
   }
 
-  // Helpers
-
-  changeTab(tab: TabType): void {
-    this.activeTab = tab;
-    this.cdr.detectChanges();
-  }
-
   typeColor(type: string): string {
     const colors: Record<string, string> = {
       'Electric': '#f4c430',
@@ -168,29 +150,7 @@ export class ShopPage implements OnInit {
     return colors[type] ?? '#aaaaaa';
   }
 
-  getRarityClass(rarity: string): string {
-    const map: Record<string, string> = {
-      'Ultra Rare': 'badge-ultra',
-      'Secret':     'badge-secret',
-      'Rare':       'badge-rare',
-      'Common':     'badge-common',
-      'New':        'badge-new',
-    };
-    return map[rarity] ?? 'badge-common';
-  }
-
-  getRarityLabel(rarity: string, isNew?: boolean): string {
-    if (isNew) return 'NEW';
-    const map: Record<string, string> = {
-      'Ultra Rare': 'ULTRA',
-      'Secret':     'SECRET',
-      'Rare':       'RARE',
-      'Common':     'COMMON',
-    };
-    return map[rarity] ?? rarity.toUpperCase();
-  }
-
   formatPrice(price: number): string {
-    return `€${price.toFixed(2)}`;
+    return `${price.toFixed(2)} €`;
   }
 }

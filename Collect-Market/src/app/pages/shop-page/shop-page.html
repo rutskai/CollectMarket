@@ -1,19 +1,14 @@
 <div class="shop-wrap">
 
   <div class="tabs-bar">
-     <button class="tab-btn" [class.active]="activeTab === 'cards'" (click)="changeTab('cards')">
+    <button class="tab-btn active">
       Cartas individuales <span class="tab-count">{{ allCards.length }}</span>
     </button>
-    <button class="tab-btn" [class.active]="activeTab === 'new'" (click)="changeTab('new')">
-      Packs <span class="tab-count">{{ newCards.length }}</span>
-    </button>
-   
   </div>
 
   <div class="shop-main">
 
     <aside class="filters-sidebar">
-
       <div class="filter-block">
         <div class="filter-title">Tipo</div>
         <div class="filter-options">
@@ -64,7 +59,6 @@
           (ngModelChange)="applyFilters()" />
         </div>
       </div>
-
     </aside>
 
     <div class="products-area">
@@ -79,7 +73,7 @@
 
       <div class="products-topbar">
         <div class="results-count">
-          Mostrando <strong>{{ activeTab === 'new' ? newCards.length : allCards.length }}</strong> cartas
+          Mostrando <strong>{{ allCards.length }}</strong> cartas
         </div>
         <div class="topbar-right">
           <select class="sort-select">
@@ -96,32 +90,22 @@
         </div>
       </div>
 
-      @if (activeTab === 'new') {
-        <div class="cards-grid">
-          @for (card of newCards; track card.id) {
-            <app-card [card]="card" />
-          }
-        </div>
-      }
-
-      @if (activeTab === 'cards') {
-        <div class="cards-grid">
-          @for (card of displayCards; track card.id) {
-            <app-card [card]="card" />
-          }
-        </div>
-
-        @if (totalPages > 1) {
-          <div class="pagination">
-            <button class="page-btn arrow" (click)="prevPage()" [disabled]="currentPage === 1">‹</button>
-            @for (page of getVisiblePages(); track page) {
-              <button class="page-btn" [class.active]="page === currentPage" (click)="changePage(page)">
-                {{ page }}
-              </button>
-            }
-            <button class="page-btn arrow" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
-          </div>
+      <div class="cards-grid">
+        @for (card of displayCards; track card.id) {
+          <app-card [card]="card" />
         }
+      </div>
+
+      @if (totalPages > 1) {
+        <div class="pagination">
+          <button class="page-btn arrow" (click)="prevPage()" [disabled]="currentPage === 1">‹</button>
+          @for (page of getVisiblePages(); track page) {
+            <button class="page-btn" [class.active]="page === currentPage" (click)="changePage(page)">
+              {{ page }}
+            </button>
+          }
+          <button class="page-btn arrow" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
+        </div>
       }
 
     </div>

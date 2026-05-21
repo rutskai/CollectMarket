@@ -115,7 +115,6 @@ app.UsersEndpoints();
 app.FavoritesEndpoints();
 app.AuthEndpoints();
 app.CartEndpoints();
-app.PacksEndpoints();
 
 /**
  * Endpoint Health Check.
