@@ -9,6 +9,7 @@ import { ShoppingCartPage } from './pages/shopping-cart-page/shopping-cart-page'
 import { SupportPage } from './pages/support-page/support-page';
 import { UserPersonalizationPage } from './pages/user-personalization-page/user-personalization-page';
 import { DetailCardPage } from './pages/detail-card-page/detail-card-page';
+import { CheckoutPage } from './pages/checkout-page/checkout-page';
 
 export const routes: Routes = [
     {path:"", component: HomePage},
@@ -22,5 +23,6 @@ export const routes: Routes = [
     {path:"support-page", component:SupportPage},
     {path: 'personalization-page', component: UserPersonalizationPage },
     {path: 'card/:id', component: DetailCardPage },
+    {path: 'checkout-page', component: CheckoutPage},
     
 ];
