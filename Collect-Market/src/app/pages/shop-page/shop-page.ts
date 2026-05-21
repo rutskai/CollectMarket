@@ -19,8 +19,7 @@ export type TabType = 'new' | 'packs' | 'cards';
 export class ShopPage implements OnInit {
 
   activeTab: TabType = 'cards';
-  minPrice = 0;
-  maxPrice = 500;
+  maxPrice = 0;
 
   allSourceCards: ModelCard[] = [];
   allCards: ModelCard[] = [];
@@ -103,8 +102,7 @@ export class ShopPage implements OnInit {
       activeRarities.length > 0 ||
       activeTypes.length > 0    ||
       activeSets.length > 0     ||
-      this.minPrice > 0         ||
-      this.maxPrice < 500;
+      this.maxPrice > 0;
 
     if (!hasActiveFilters) {
       this.allCards = this.allSourceCards;
@@ -116,8 +114,7 @@ export class ShopPage implements OnInit {
       rarities: activeRarities,
       types: activeTypes,
       setNames: activeSets,
-      minPrice: this.minPrice > 0   ? this.minPrice : undefined,
-      maxPrice: this.maxPrice < 500 ? this.maxPrice : undefined,
+      maxPrice: this.maxPrice > 0 ? this.maxPrice : undefined,
     };
 
     this.cardsService.getFilteredCards(filters).subscribe({

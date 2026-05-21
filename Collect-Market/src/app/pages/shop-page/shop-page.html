@@ -1,17 +1,19 @@
 <div class="shop-wrap">
 
   <div class="tabs-bar">
+     <button class="tab-btn" [class.active]="activeTab === 'cards'" (click)="changeTab('cards')">
+      Cartas individuales <span class="tab-count">{{ allCards.length }}</span>
+    </button>
     <button class="tab-btn" [class.active]="activeTab === 'new'" (click)="changeTab('new')">
-      🆕 Packs <span class="tab-count">{{ newCards.length }}</span>
+      Packs <span class="tab-count">{{ newCards.length }}</span>
     </button>
-    <button class="tab-btn" [class.active]="activeTab === 'cards'" (click)="changeTab('cards')">
-      🃏 Cartas individuales <span class="tab-count">{{ allCards.length }}</span>
-    </button>
+   
   </div>
 
   <div class="shop-main">
 
     <aside class="filters-sidebar">
+
       <div class="filter-block">
         <div class="filter-title">Tipo</div>
         <div class="filter-options">
@@ -51,12 +53,18 @@
 
       <div class="filter-block">
         <div class="filter-title">Precio</div>
-        <div class="price-range">
-          <input class="price-input" type="number" placeholder="Min €" [(ngModel)]="minPrice" />
-          <input class="price-input" type="number" placeholder="Max €" [(ngModel)]="maxPrice" />
+        <div class="price-slider-wrap">
+          <div class="price-values">
+            <span>€0</span>
+            <span class="price-current">€{{ maxPrice }}</span>
+            <span>€100</span>
+          </div>
+          <input class="price-slider" type="range" min="0" max="100" [style.--val]="maxPrice"
+          [(ngModel)]="maxPrice"
+          (ngModelChange)="applyFilters()" />
         </div>
-        <button class="apply-filter-btn" (click)="applyFilters()">Aplicar filtros</button>
       </div>
+
     </aside>
 
     <div class="products-area">
