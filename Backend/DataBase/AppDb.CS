@@ -25,6 +25,8 @@ class AppDb : DbContext
     public DbSet<Card> Cards => Set<Card>();
     public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
     public DbSet<CartItem> CartItems => Set<CartItem>();
+    public DbSet<Order> Orders => Set<Order>();   
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>(); 
 
     /**
      * Configuración avanzada de entidades.
@@ -146,6 +148,34 @@ class AppDb : DbContext
             entity.HasOne(c => c.Card)
                 .WithMany()
                 .HasForeignKey(c => c.CardId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.ToTable("Order");
+            entity.HasKey(o => o.Id);
+            entity.Property(o => o.Total).HasColumnType("decimal(10,2)");
+            entity.Property(o => o.Status).HasDefaultValue("pending");
+            entity.Property(o => o.CreatedAt);
+            entity.HasOne(o => o.User)
+                .WithMany()
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<OrderItem>(entity =>
+        {
+            entity.ToTable("OrderItem");
+            entity.HasKey(o => o.Id);
+            entity.Property(o => o.UnitPrice).HasColumnType("decimal(10,2)");
+            entity.HasOne(o => o.Order)
+                .WithMany(o => o.Items)
+                .HasForeignKey(o => o.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(o => o.Card)
+                .WithMany()
+                .HasForeignKey(o => o.CardId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }
