@@ -13,21 +13,61 @@ export class CardsService {
 
   constructor(private http: HttpClient) {}
 
+   /**
+   * Obtiene todas las cartas disponibles.
+   *
+   * @returns Observable con la lista de cartas.
+   */
    getCards(): Observable<ModelCard[]> {
     return this.http.get<ModelCard[]>(`${this.apiUrl}/cards`);
   }
 
+  /**
+   * Obtiene una carta por su ID.
+   *
+   * @param id ID de la carta.
+   *
+   * @returns Observable con los datos de la carta.
+   */
   getCardById(id: number): Observable<ModelCard> {
     return this.http.get<ModelCard>(`${this.apiUrl}/cards/${id}`);
   }
 
+   /**
+   * Obtiene cartas filtradas por rareza.
+   *
+   * @param rarity Rareza de las cartas.
+   *
+   * @returns Observable con las cartas encontradas.
+   */
   getCardsByRarity(rarity: string): Observable<ModelCard[]> {
     return this.http.get<ModelCard[]>(`${this.apiUrl}/cards/rarity/${rarity}`);
   }
 
+  /**
+   * Busca cartas por nombre o expansión.
+   *
+   * @param term Texto de búsqueda.
+   *
+   * @returns Observable con las cartas coincidentes.
+   */
   searchCards(term: string): Observable<ModelCard[]> {
     return this.http.get<ModelCard[]>(`${this.apiUrl}/cards/search/${term}`);
   }
+
+  /**
+   * Filtra cartas usando múltiples criterios. Estos son:
+   *
+   * - rarezas
+   * - tipos
+   * - nombres del set
+   * - precio mínimo
+   * - precio máximo
+   *
+   * @param filters Objeto con los filtros a aplicar.
+   *
+   * @returns Observable con las cartas filtradas.
+   */
 
     getFilteredCards(filters: ModelFilteredCards): Observable<ModelCard[]> {
     let params = new HttpParams();
@@ -42,12 +82,30 @@ export class CardsService {
     return this.http.get<ModelCard[]>(`${this.apiUrl}/cards/filter`, { params });
   }
 
+   /**
+   * Obtiene todos los tipos de cartas disponibles.
+   *
+   * @returns Observable con la lista de tipos.
+   */
+
   getTypes(): Observable<string[]> {
   return this.http.get<string[]>(`${this.apiUrl}/cards/types`);
   }
+
+    /**
+   * Obtiene todas las rarezas disponibles.
+   *
+   * @returns Observable con la lista de rarezas.
+   */
   getRarities(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/cards/rarities`);
   }
+
+  /**
+   * Obtiene todas las expansiones disponibles.
+   *
+   * @returns Observable con la lista de expansiones.
+   */
   getExpansions(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/cards/expansions`);
   }

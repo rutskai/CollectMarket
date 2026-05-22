@@ -16,6 +16,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Recupera el usuario almacenado en localStorage.
+   *
+   * @returns Usuario almacenado o null si no existe.
+   */
   private getStoredUser(): ModelUser | null {
     try {
       const user = localStorage.getItem('currentUser');
@@ -35,6 +40,13 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return this.http.post(this.loginUrl, { email, password });
   }
+
+   /**
+   * Almacena el usuario en localStorage
+   * y actualiza el Subject.
+   *
+   * @param user Usuario a almacenar.
+   */
 
   setUser(user: ModelUser): void {
     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -69,9 +81,21 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+   /**
+   * Almacena el token JWT en localStorage.
+   *
+   * @param token Token JWT a almacenar.
+   */
+
   setToken(token: string): void {
     localStorage.setItem('token', token);
   }
+
+   /**
+   * Obtiene el usuario actualmente autenticado.
+   *
+   * @returns Usuario actual o null si no está autenticado.
+   */
 
   getCurrentUser(): ModelUser | null {
   return this.userSubject.value;
