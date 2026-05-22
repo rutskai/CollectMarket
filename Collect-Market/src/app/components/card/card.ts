@@ -32,6 +32,11 @@ export class Card implements OnInit {
      private modalService: LoginModalService
   ) {}
 
+
+  /**
+   * Inicializa los signals de favorito y carrito
+   * si el usuario está autenticado.
+   */
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     if (user) {
@@ -41,20 +46,41 @@ export class Card implements OnInit {
     }
   }
 
+    /**
+   * Alterna el estado de favorito de la carta.
+   *
+   * Si el usuario no está autenticado abre el modal de login.
+   */
   onToggleFavorite(): void {
   if (!this.userId) { this.modalService.open(); return; }
   this.favoritesService.toggle(this.userId, this.card.id);
 }
+  /**
+   * Alterna el estado de la carta en el carrito.
+   *
+   * Si el usuario no está autenticado abre el modal de login.
+   */
 
   onAddToCart(): void {
     if (!this.userId) { this.modalService.open(); return; }
     this.cartService.toggle(this.userId, this.card.id);
   }
 
- 
+  /**
+   * Navega al detalle de la carta.
+   */
 goToDetail() {
   this.router.navigate(['/card', this.card.id]);
 }
+
+/**
+   * Construye la URL de la imagen de la carta.
+   *
+   * Si no hay imagen devuelve el placeholder.
+   * Si la URL no tiene extensión añade /high.webp.
+   *
+   * @returns URL de la imagen.
+   */
 
   get imageUrl(): string {
     if (!this.card.imageUrl) return 'assets/card-placeholder.png';

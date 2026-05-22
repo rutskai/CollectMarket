@@ -22,6 +22,16 @@ function passwordsMatchValidator(control: AbstractControl): ValidationErrors | n
 })
 export class RegisterForm implements OnInit {
 
+   /**
+   * Formulario reactivo de registro.
+   *
+   * Campos:
+   * - name: mínimo 3 caracteres
+   * - email: formato email válido
+   * - password: mínimo 6 caracteres
+   * - repeatPassword: debe coincidir con password
+   */
+
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -33,10 +43,21 @@ export class RegisterForm implements OnInit {
 
   constructor(private authService: AuthService, private router: Router,  private cdr: ChangeDetectorRef) {}
 
+    /**
+   * Inicializa el fondo de vídeo del componente.
+   */
   ngOnInit(): void {
     $('#register').vide({ mp4: 'video/pickachu_runtime' });
   }
 
+   /**
+   * Gestiona el envío del formulario de registro.
+   *
+   * Si el formulario es inválido no hace nada.
+   * Si el email ya existe muestra un mensaje de error 409.
+   * Si el registro es exitoso redirige al login.
+   */
+  
   onSubmit(): void {
     if (this.registerForm.invalid) return;
 

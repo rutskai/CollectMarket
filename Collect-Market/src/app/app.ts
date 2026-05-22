@@ -12,5 +12,13 @@ import { LoginModal } from './components/login-modal/login-modal';
 })
 export class App {
   protected readonly title = signal('Collect-Market');
+
+  /**
+   * Inyecta el servicio del modal de login
+   * para controlarlo desde la plantilla.
+   *
+   * @param modalService Servicio que gestiona la visibilidad del modal.
+   */
+  
   constructor(public modalService: LoginModalService) {}
 }

@@ -22,6 +22,12 @@ export class Header implements OnInit {
     private cartService: CartService
   ) {}
 
+  /**
+   * Se suscribe al estado del usuario.
+   *
+   * Si hay usuario autenticado carga sus favoritos y carrito.
+   * Si no hay usuario limpia ambos servicios.
+   */
   ngOnInit(): void {
     this.authService.user$.subscribe(user => {
       this.user = user;

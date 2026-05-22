@@ -14,16 +14,26 @@ export class LoginModal {
 
   constructor(private router: Router) {}
 
+   /**
+   * Cierra el modal y navega al login.
+   */
   goToLogin(): void {
     this.close.emit();
     this.router.navigate(['/auth/login']);
   }
 
+
+  /**
+   * Cierra el modal y navega al registro.
+   */
   goToRegister(): void {
     this.close.emit();
     this.router.navigate(['/auth/register']);
   }
 
+   /**
+   * Cierra el modal al hacer click en el fondo.
+   */
   onBackdropClick(): void {
     this.close.emit();
   }
