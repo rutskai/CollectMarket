@@ -1,92 +1,87 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth-service';
 import { CartService } from '../../services/cart/cart-service';
 
-import { OrderPublic } from '../../models/order';
-import { OrderService } from '../../services/orders/order-service';
-
 @Component({
   selector: 'app-checkout-page',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
 })
 export class CheckoutPage implements OnInit {
 
-  fullName = '';
-  address = '';
-  city = '';
-  postalCode = '';
-  country = '';
-  paymentMethod = 'card';
-  cardNumber = '';
+  checkoutForm = new FormGroup({
+    fullName:      new FormControl('', [Validators.required]),
+    address:       new FormControl('', [Validators.required]),
+    city:          new FormControl('', [Validators.required]),
+    postalCode:    new FormControl('', [Validators.required, Validators.pattern(/^\d{4,5}$/)]),
+    country:       new FormControl('', [Validators.required]),
+    paymentMethod: new FormControl('card', [Validators.required]),
+    cardNumber:    new FormControl('', [Validators.pattern(/^\d{4} \d{4} \d{4} \d{4}$/)]),
+  });
 
   loading = false;
   error = '';
-
   private userId: number | null = null;
 
   constructor(
     private authService: AuthService,
     private cartService: CartService,
-    private orderService: OrderService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     if (user) this.userId = user.id;
+
+    // Si cambia el método de pago, actualiza validación de tarjeta
+    this.checkoutForm.get('paymentMethod')?.valueChanges.subscribe(method => {
+      const cardControl = this.checkoutForm.get('cardNumber');
+      if (method === 'card') {
+        cardControl?.setValidators([Validators.required, Validators.pattern(/^\d{4} \d{4} \d{4} \d{4}$/)]);
+      } else {
+        cardControl?.clearValidators();
+      }
+      cardControl?.updateValueAndValidity();
+    });
   }
 
   get cartItems() { return this.cartService.cartItems(); }
   get totalPrice() { return this.cartService.totalPrice(); }
+  get paymentMethod() { return this.checkoutForm.get('paymentMethod')?.value; }
+
+  // Formatea el número de tarjeta con espacios
+  onCardInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let val = input.value.replace(/\D/g, '').substring(0, 16);
+    val = val.replace(/(.{4})/g, '$1 ').trim();
+    this.checkoutForm.get('cardNumber')?.setValue(val, { emitEvent: false });
+  }
 
   onSubmit(): void {
-    if (!this.userId) return;
-    if (!this.fullName || !this.address || !this.city || !this.postalCode || !this.country) {
-      this.error = 'Por favor rellena todos los campos.';
-      return;
-    }
-    if (this.paymentMethod === 'card' && !this.cardNumber) {
-      this.error = 'Introduce el número de tarjeta.';
+    if (!this.userId || this.checkoutForm.invalid) {
+      this.checkoutForm.markAllAsTouched();
       return;
     }
 
     this.loading = true;
     this.error = '';
 
-    const order: OrderPublic = {
-      userId: this.userId,
-      fullName: this.fullName,
-      address: this.address,
-      city: this.city,
-      postalCode: this.postalCode,
-      country: this.country,
-      paymentMethod: this.paymentMethod,
-      cardNumber: this.cardNumber,
-      items: this.cartItems.map(i => ({
-        cardId: i.cardId,
-        quantity: i.quantity,
-        unitPrice: i.card.price
-      }))
-    };
-
-    this.orderService.createOrder(order).subscribe({
-      next: (res) => {
-        this.cartService.clearCart(this.userId!);
-        this.router.navigate(['/order-confirmation', res.id]);
-      },
-      error: () => {
-        this.loading = false;
-        this.error = 'Error al procesar el pedido. Inténtalo de nuevo.';
-      }
-    });
+    setTimeout(() => {
+      this.cartService.clearCart(this.userId!);
+      this.router.navigate(['/order-confirmation']);
+    }, 1500);
   }
 
   formatPrice(price: number): string {
-    return `€${price.toFixed(2)}`;
+    return `${price.toFixed(2)} €`;
+  }
+
+  isInvalid(field: string): boolean {
+    const control = this.checkoutForm.get(field);
+    return !!(control?.invalid && control?.touched);
   }
 }
