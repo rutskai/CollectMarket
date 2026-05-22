@@ -4,6 +4,7 @@ import { CardsService } from '../../services/cards/cards-service';
 import { Card } from '../../components/card/card';
 import { RouterLink } from '@angular/router';
 import { ModelCard } from '../../models/card';
+import { ImageHelper } from '../../helpers/image-helper';
 
 declare var $: any;
 
@@ -15,6 +16,7 @@ declare var $: any;
 })
 export class HomePage implements OnInit {
 
+  ImageHelper=ImageHelper
   cards: ModelCard[] = [];
   latestCards: ModelCard[] = [];
 
@@ -35,15 +37,5 @@ export class HomePage implements OnInit {
       },
       error: (err) => console.error('Error cargando cartas:', err)
     });
-  }
-
-  getImageUrl(card: ModelCard): string {
-    if (!card.imageUrl) return 'assets/card-placeholder.png';
-    if (
-      card.imageUrl.endsWith('.png') ||
-      card.imageUrl.endsWith('.jpg') ||
-      card.imageUrl.endsWith('.webp')
-    ) return card.imageUrl;
-    return `${card.imageUrl}/high.webp`;
   }
 }

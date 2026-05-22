@@ -45,7 +45,7 @@
   @for (card of cards; track card.id; let i = $index) {
     <div class="cm-poke-card" [ngClass]="'cm-card' + (i + 1)">
       <div class="cm-card-shine"></div>
-      <img [src]="getImageUrl(card)" [alt]="card.name" />
+      <img [src]="ImageHelper.getImageUrl(card.imageUrl)" [alt]="card.name" />
     </div>
   }
 </div>

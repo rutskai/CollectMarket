@@ -6,6 +6,7 @@ import { CardsService } from '../../services/cards/cards-service';
 import { CartService } from '../../services/cart/cart-service';
 import { FavoritesService } from '../../services/favorite/favorites-service';
 import { AuthService } from '../../services/auth/auth-service';
+import { ImageHelper } from '../../helpers/image-helper';
 
 
 @Component({
@@ -15,6 +16,8 @@ import { AuthService } from '../../services/auth/auth-service';
   styleUrl: './detail-card-page.css',
 })
 export class DetailCardPage implements OnInit {
+
+  ImageHelper = ImageHelper;
   card: ModelCard | null = null;
   loading = true;
   userId: number | null = null;
@@ -67,17 +70,6 @@ export class DetailCardPage implements OnInit {
       return;
     }
     this.cartService.toggle(this.userId, this.card.id);
-  }
-
-  get imageUrl(): string {
-    if (!this.card?.imageUrl) return 'assets/card-placeholder.png';
-    if (
-      this.card.imageUrl.endsWith('.png') ||
-      this.card.imageUrl.endsWith('.jpg') ||
-      this.card.imageUrl.endsWith('.webp')
-    )
-      return this.card.imageUrl;
-    return `${this.card.imageUrl}/high.webp`;
   }
 
   getRarityClass(rarity?: string): string {

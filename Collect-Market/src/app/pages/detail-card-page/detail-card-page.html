@@ -1,108 +1,109 @@
 <div class="detail-wrap">
 
   @if (loading) {
-    <div class="detail-loading">Cargando carta...</div>
+  <div class="detail-loading">Cargando carta...</div>
   }
 
   @if (!loading && !card) {
-    <div class="detail-empty">
-      <div class="detail-empty-icon">🃏</div>
-      <div class="detail-empty-title">Carta no encontrada</div>
-      <a class="detail-back-btn" routerLink="/shop">← Volver a la tienda</a>
-    </div>
+  <div class="detail-empty">
+    <div class="detail-empty-icon">🃏</div>
+    <div class="detail-empty-title">Carta no encontrada</div>
+    <a class="detail-back-btn" routerLink="/shop">← Volver a la tienda</a>
+  </div>
   }
 
   @if (!loading && card) {
-    <div class="detail-content">
+  <div class="detail-content">
 
-     
-      <div class="detail-breadcrumb">
-        <a routerLink="/">Inicio</a>
-        <span>›</span>
-        <a href="/shop">Tienda</a>
-        <span>›</span>
-        <span>{{ card.name }}</span>
+
+    <div class="detail-breadcrumb">
+      <a routerLink="/">Inicio</a>
+      <span>›</span>
+      <a href="/shop">Tienda</a>
+      <span>›</span>
+      <span>{{ card.name }}</span>
+    </div>
+
+
+    <div class="detail-main">
+
+      <!-- Imagen -->
+      <div class="detail-img-wrap">
+        <img [src]="ImageHelper.getImageUrl(card.imageUrl)" [alt]="card.name" class="detail-img" />
+        <div class="detail-img-glow"></div>
       </div>
 
-      <!-- Layout principal -->
-      <div class="detail-main">
 
-        <!-- Imagen -->
-        <div class="detail-img-wrap">
-          <img [src]="imageUrl" [alt]="card.name" class="detail-img" />
-          <div class="detail-img-glow"></div>
+      <div class="detail-info">
+
+
+        <div class="detail-badges">
+          @if (card.rarity) {
+          <span class="detail-badge" [ngClass]="getRarityClass(card.rarity)">{{ card.rarity }}</span>
+          }
+          @if (card.type) {
+          <span class="detail-badge detail-badge-type">{{ card.type }}</span>
+          }
+          @if (card.stock <= 2) { <span class="detail-badge detail-badge-stock">¡Solo {{ card.stock }}!</span>
+            }
         </div>
 
-        <!-- Info -->
-        <div class="detail-info">
+        <h1 class="detail-title">{{ card.name }}</h1>
+        <div class="detail-set">{{ card.setName }}</div>
 
-          <!-- Badges -->
-          <div class="detail-badges">
-            @if (card.rarity) {
-              <span class="detail-badge" [ngClass]="getRarityClass(card.rarity)">{{ card.rarity }}</span>
-            }
-            @if (card.type) {
-              <span class="detail-badge detail-badge-type">{{ card.type }}</span>
-            }
-            @if (card.stock <= 2) {
-              <span class="detail-badge detail-badge-stock">¡Solo {{ card.stock }}!</span>
-            }
+        @if (card.description && card.description.trim().length > 0) {
+        <p class="detail-description">{{ card.description }}</p>
+        } @else {
+        <p class="detail-description detail-description-empty">Sin descripción disponible.</p>
+        }
+
+ 
+        <div class="detail-specs">
+          <div class="detail-spec">
+            <span class="detail-spec-lbl">Expansión</span>
+            <span class="detail-spec-val">{{ card.setName ?? '—' }}</span>
           </div>
-
-          <h1 class="detail-title">{{ card.name }}</h1>
-          <div class="detail-set">{{ card.setName }}</div>
-
-         @if (card.description && card.description.trim().length > 0) {
-  <p class="detail-description">{{ card.description }}</p>
-} @else {
-  <p class="detail-description detail-description-empty">Sin descripción disponible.</p>
-}
-
-          <!-- Specs -->
-          <div class="detail-specs">
-            <div class="detail-spec">
-              <span class="detail-spec-lbl">Expansión</span>
-              <span class="detail-spec-val">{{ card.setName ?? '—' }}</span>
-            </div>
-            <div class="detail-spec">
-              <span class="detail-spec-lbl">Rareza</span>
-              <span class="detail-spec-val">{{ card.rarity ?? '—' }}</span>
-            </div>
-            <div class="detail-spec">
-              <span class="detail-spec-lbl">Tipo</span>
-              <span class="detail-spec-val">{{ card.type ?? '—' }}</span>
-            </div>
-            <div class="detail-spec">
-              <span class="detail-spec-lbl">Stock</span>
-              <span class="detail-spec-val">{{ card.stock }} disponibles</span>
-            </div>
+          <div class="detail-spec">
+            <span class="detail-spec-lbl">Rareza</span>
+            <span class="detail-spec-val">{{ card.rarity ?? '—' }}</span>
           </div>
-
-          <!-- Precio y acciones -->
-          <div class="detail-buy">
-            <div class="detail-price">{{ formatPrice(card.price) }}</div>
-            <div class="detail-buy-sub">+ envío gratuito</div>
-
-            <div class="detail-actions">
-              <button class="detail-btn-cart" (click)="addToCart()">
-                {{ isInCart() ? '✓ En el carrito' : 'Añadir al carrito' }}
-              </button>
-              <button class="detail-btn-fav" [class.active]="isFavorite()" (click)="toggleFavorite()">
-                @if (isFavorite()) {
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffd700">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                } @else {
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffd700" stroke-width="2">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                  </svg>
-                }
-              </button>
-            </div>
+          <div class="detail-spec">
+            <span class="detail-spec-lbl">Tipo</span>
+            <span class="detail-spec-val">{{ card.type ?? '—' }}</span>
           </div>
-
+          <div class="detail-spec">
+            <span class="detail-spec-lbl">Stock</span>
+            <span class="detail-spec-val">{{ card.stock }} disponibles</span>
+          </div>
         </div>
+
+   
+        <div class="detail-buy">
+          <div class="detail-price">{{ formatPrice(card.price) }}</div>
+          <div class="detail-buy-sub">+ envío gratuito</div>
+
+          <div class="detail-actions">
+            <button class="detail-btn-cart" (click)="addToCart()">
+              {{ isInCart() ? '✓ En el carrito' : 'Añadir al carrito' }}
+            </button>
+            <button class="detail-btn-fav" [class.active]="isFavorite()" (click)="toggleFavorite()">
+              @if (isFavorite()) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffd700">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              } @else {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffd700" stroke-width="2">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+              }
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
+  </div>
   }
 </div>

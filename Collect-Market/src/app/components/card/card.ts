@@ -7,17 +7,19 @@ import { FavoritesService } from '../../services/favorite/favorites-service';
 import { Router } from '@angular/router';
 import { LoginModal } from '../login-modal/login-modal';
 import { LoginModalService } from '../../services/login-modal/login-modal-service';
+import { ImageHelper } from '../../helpers/image-helper';
 
 @Component({
   selector: 'app-card',
-  imports: [CommonModule, LoginModal],
+  imports: [CommonModule],
   templateUrl: './card.html',
   styleUrl: './card.css',
 })
 export class Card implements OnInit {
 
   @Input() card!: ModelCard;
-
+  
+  ImageHelper = ImageHelper;
   showLoginModal = false; 
   isFavorite: Signal<boolean> = computed(() => false);
   isInCart: Signal<boolean>   = computed(() => false);
@@ -73,22 +75,5 @@ goToDetail() {
   this.router.navigate(['/card', this.card.id]);
 }
 
-/**
-   * Construye la URL de la imagen de la carta.
-   *
-   * Si no hay imagen devuelve el placeholder.
-   * Si la URL no tiene extensión añade /high.webp.
-   *
-   * @returns URL de la imagen.
-   */
 
-  get imageUrl(): string {
-    if (!this.card.imageUrl) return 'assets/card-placeholder.png';
-    if (
-      this.card.imageUrl.endsWith('.png') ||
-      this.card.imageUrl.endsWith('.jpg') ||
-      this.card.imageUrl.endsWith('.webp')
-    ) return this.card.imageUrl;
-    return `${this.card.imageUrl}/high.webp`;
-  }
 }
