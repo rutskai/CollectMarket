@@ -334,6 +334,7 @@
   overflow: hidden;
   transition: max-height 0.3s ease;
   padding: 0 20px;
+   
   border-top: 0 solid var(--border);
 }
 
@@ -341,26 +342,16 @@
   max-height: 300px;
   padding: 0 20px 18px 20px;
   border-top-width: 1px;
+
 }
 
 .faq-answer p {
   font-size: 13px;
   color: var(--text-muted);
   line-height: 1.5;
+   margin-top: 10px;
 }
 
-.faq-link {
-  display: inline-block;
-  margin-top: 10px;
-  color: var(--gold);
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.faq-link:hover {
-  text-decoration: underline;
-}
 
 /* ── CONTACTO ── */
 .contact-grid {
