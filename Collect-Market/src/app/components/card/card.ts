@@ -5,10 +5,12 @@ import { AuthService } from '../../services/auth/auth-service';
 import { CartService } from '../../services/cart/cart-service';
 import { FavoritesService } from '../../services/favorite/favorites-service';
 import { Router } from '@angular/router';
+import { LoginModal } from '../login-modal/login-modal';
+import { LoginModalService } from '../../services/login-modal/login-modal-service';
 
 @Component({
   selector: 'app-card',
-  imports: [CommonModule],
+  imports: [CommonModule, LoginModal],
   templateUrl: './card.html',
   styleUrl: './card.css',
 })
@@ -16,6 +18,7 @@ export class Card implements OnInit {
 
   @Input() card!: ModelCard;
 
+  showLoginModal = false; 
   isFavorite: Signal<boolean> = computed(() => false);
   isInCart: Signal<boolean>   = computed(() => false);
 
@@ -24,7 +27,9 @@ export class Card implements OnInit {
   constructor(
     private authService: AuthService,
     private favoritesService: FavoritesService,
-    private cartService: CartService, private router: Router
+    private cartService: CartService, 
+    private router: Router,
+     private modalService: LoginModalService
   ) {}
 
   ngOnInit(): void {
@@ -37,12 +42,12 @@ export class Card implements OnInit {
   }
 
   onToggleFavorite(): void {
-    if (!this.userId) { alert('Debes iniciar sesión.'); return; }
-    this.favoritesService.toggle(this.userId, this.card.id);
-  }
+  if (!this.userId) { this.modalService.open(); return; }
+  this.favoritesService.toggle(this.userId, this.card.id);
+}
 
   onAddToCart(): void {
-    if (!this.userId) { alert('Debes iniciar sesión.'); return; }
+    if (!this.userId) { this.modalService.open(); return; }
     this.cartService.toggle(this.userId, this.card.id);
   }
 
