@@ -7,9 +7,7 @@
       </div>
       <div class="fav-valor">
         <span class="fav-valor-lbl">Valor total</span>
-        <span class="fav-valor-num">{{
-          getTotalValue() | currency: 'EUR' : 'symbol' : '1.2-2'
-        }}</span>
+        <span class="fav-valor-num">{{ formatPrice(getTotalValue()) }}</span>
       </div>
     </div>
   }

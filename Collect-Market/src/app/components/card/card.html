@@ -8,7 +8,7 @@
     <div class="card-info">
       <div class="price-rarity">
         <span class="rarity-badge">{{ card.rarity }}</span>
-        <span class="card-price">€{{ card.price | number: '1.2-2' }}</span>
+        <span class="card-price">{{ card.price | number: '1.2-2' }} €</span>
       </div>
       <div class="card-footer">
         <button class="btn-add" (click)="onAddToCart()">
