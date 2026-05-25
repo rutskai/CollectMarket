@@ -12,6 +12,14 @@
 
     <!-- Menú -->
     <div class="user-menu">
+      <a class="user-menu-item" routerLink="/order-list-page">
+        <div class="user-menu-info">
+          <span class="user-menu-title">Mis pedidos</span>
+          <span class="user-menu-sub">Ver el estado de tus pedidos</span>
+        </div>
+        <span class="user-menu-arrow">›</span>
+      </a>
+
       <a class="user-menu-item" routerLink="/sell">
         <div class="user-menu-info">
           <span class="user-menu-title">Vender cartas</span>
@@ -29,7 +37,6 @@
       </a>
 
       <button class="user-menu-item user-menu-danger" (click)="logout()">
-      
         <div class="user-menu-info">
           <span class="user-menu-title">Cerrar sesión</span>
           <span class="user-menu-sub">Hasta pronto</span>
