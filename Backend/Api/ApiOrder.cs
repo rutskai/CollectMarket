@@ -9,6 +9,22 @@ namespace Api
         {
             app.MapPost("/api/orders", async (OrderPublic body, AppDb db) =>
             {
+    
+                foreach (var item in body.Items)
+                {
+                    var card = await db.Cards.FirstOrDefaultAsync(c => c.Id == item.CardId);
+                    
+                    if (card == null)
+                    {
+                        return Results.BadRequest($"La carta con ID {item.CardId} no existe");
+                    }
+
+                    if (card.Stock < item.Quantity)
+                    {
+                        return Results.BadRequest($"Stock insuficiente para {card.Name}. Disponible: {card.Stock}, Solicitado: {item.Quantity}");
+                    }
+                }
+
                 var order = new Order
                 {
                     UserId = body.UserId,
@@ -31,21 +47,59 @@ namespace Api
                 };
 
                 db.Orders.Add(order);
-                await db.SaveChangesAsync();
 
+                foreach (var item in body.Items)
+                {
+                    var card = await db.Cards.FirstOrDefaultAsync(c => c.Id == item.CardId);
+                    if (card != null)
+                    {
+                        card.Stock -= item.Quantity;
+                    }
+                }
+
+                await db.SaveChangesAsync();
                 return Results.Ok(new { order.Id, order.Total, order.Status });
             });
 
             app.MapGet("/api/orders/{userId}", async (int userId, AppDb db) =>
             {
-                var orders = await db.Orders
-                    .Where(o => o.UserId == userId)
-                    .Include(o => o.Items)
-                    .ThenInclude(i => i.Card)
-                    .OrderByDescending(o => o.CreatedAt)
-                    .ToListAsync();
+                try
+                {
+                    var orders = await db.Orders
+                        .Where(o => o.UserId == userId)
+                        .Include(o => o.Items)
+                            .ThenInclude(i => i.Card)
+                        .OrderByDescending(o => o.CreatedAt)
+                        .Select(o => new  // Objeto anónimo, no tiene referencias circulares
+                        {
+                            o.Id,
+                            o.UserId,
+                            o.FullName,
+                            o.Address,
+                            o.City,
+                            o.PostalCode,
+                            o.Country,
+                            o.PaymentMethod,
+                            o.Total,
+                            o.Status,
+                            o.CreatedAt,
+                            Items = o.Items.Select(i => new
+                            {
+                                i.CardId,
+                                i.Quantity,
+                                i.UnitPrice,
+                                Card = i.Card != null ? new { i.Card.Id, i.Card.Name, i.Card.Price } : null
+                            })
+                        })
+                        .ToListAsync();
 
-                return Results.Ok(orders);
+                    return Results.Ok(orders);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    return Results.Problem(ex.Message);
+                }
             });
         }
     }
