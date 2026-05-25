@@ -1,0 +1,82 @@
+<div class="orders-wrap">
+  <div class="orders-container">
+    
+    <!-- Header -->
+    <div class="orders-header">
+      <h1 class="orders-title">Mis pedidos</h1>
+      <p class="orders-sub">Aquí puedes ver el estado de todos tus pedidos</p>
+    </div>
+
+
+    @if (loading) {
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Cargando tus pedidos...</p>
+      </div>
+    }
+
+
+    @if (error && !loading) {
+      <div class="error-state">
+        <span class="error-icon">⚠️</span>
+        <p>{{ error }}</p>
+        <button class="retry-btn" (click)="loadOrders()">Reintentar</button>
+      </div>
+    }
+
+    @if (!loading && !error) {
+      <div class="orders-list">
+        @for (order of orders; track order.id) {
+          <div class="order-card">
+            
+  
+            <div class="order-header">
+              <div class="order-info">
+                <span class="order-number">#{{ order.id }}</span>
+                <span class="order-date">{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+              <div class="order-status">
+                <span class="status-text" [class]="getStatusClass(order.status)">
+                  {{ getStatusText(order.status) }}
+                </span>
+              </div>
+            </div>
+
+           
+            <div class="order-items">
+              @for (item of order.items; track item.cardId) {
+                <div class="order-item">
+                  <div class="item-info">
+                    <span class="item-name">{{ item.card?.name || 'Carta' }}</span>
+                    <span class="item-quantity">x{{ item.quantity }}</span>
+                  </div>
+                  <span class="item-price">{{ formatPrice(item.unitPrice * item.quantity) }}</span>
+                </div>
+              }
+            </div>
+
+         
+            <div class="order-footer">
+              <div class="order-total">
+                <span class="total-label">Total</span>
+                <span class="total-value">{{ formatPrice(order.total) }}</span>
+              </div>
+             
+            </div>
+
+          </div>
+        }
+
+        @if (orders.length === 0) {
+          <div class="empty-state">
+            <span class="empty-icon">📭</span>
+            <h3>No tienes pedidos aún</h3>
+            <p>¡Explora nuestra tienda y haz tu primera compra!</p>
+            <a class="shop-now-btn" routerLink="/shop">Ir a la tienda</a>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>
