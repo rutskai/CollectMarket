@@ -10,6 +10,8 @@ import { SupportPage } from './pages/support-page/support-page';
 import { UserPersonalizationPage } from './pages/user-personalization-page/user-personalization-page';
 import { DetailCardPage } from './pages/detail-card-page/detail-card-page';
 import { CheckoutPage } from './pages/checkout-page/checkout-page';
+import { OrderConfirmationPage } from './pages/order-confirmation-page/order-confirmation-page';
+import { OrderListPage } from './pages/order-list-page/order-list-page';
 
 export const routes: Routes = [
     {path:"", component: HomePage},
@@ -24,5 +26,7 @@ export const routes: Routes = [
     {path: 'personalization-page', component: UserPersonalizationPage },
     {path: 'card/:id', component: DetailCardPage },
     {path: 'checkout-page', component: CheckoutPage},
+    { path: 'order-confirmation-page', component: OrderConfirmationPage },
+    { path: 'order-list-page', component: OrderListPage }
     
 ];
