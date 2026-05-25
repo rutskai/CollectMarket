@@ -4,23 +4,24 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth-service';
 import { CartService } from '../../services/cart/cart-service';
+import { OrderService } from '../../services/orders/order-service';
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
 })
 export class CheckoutPage implements OnInit {
 
   checkoutForm = new FormGroup({
-    fullName:      new FormControl('', [Validators.required]),
-    address:       new FormControl('', [Validators.required]),
-    city:          new FormControl('', [Validators.required]),
-    postalCode:    new FormControl('', [Validators.required, Validators.pattern(/^\d{4,5}$/)]),
-    country:       new FormControl('', [Validators.required]),
+    fullName: new FormControl('', [Validators.required]),
+    address: new FormControl('', [Validators.required]),
+    city: new FormControl('', [Validators.required]),
+    postalCode: new FormControl('', [Validators.required, Validators.pattern(/^\d{4,5}$/)]),
+    country: new FormControl('', [Validators.required]),
     paymentMethod: new FormControl('card', [Validators.required]),
-    cardNumber:    new FormControl('', [Validators.pattern(/^\d{4} \d{4} \d{4} \d{4}$/)]),
+    cardNumber: new FormControl('', [Validators.pattern(/^\d{4} \d{4} \d{4} \d{4}$/)]),
   });
 
   loading = false;
@@ -30,8 +31,9 @@ export class CheckoutPage implements OnInit {
   constructor(
     private authService: AuthService,
     private cartService: CartService,
+    private orderService: OrderService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
@@ -70,10 +72,32 @@ export class CheckoutPage implements OnInit {
     this.loading = true;
     this.error = '';
 
-    setTimeout(() => {
-      this.cartService.clearCart(this.userId!);
-      this.router.navigate(['/order-confirmation']);
-    }, 1500);
+    const order = {
+      userId: this.userId,
+      fullName: this.checkoutForm.value.fullName!,
+      address: this.checkoutForm.value.address!,
+      city: this.checkoutForm.value.city!,
+      postalCode: this.checkoutForm.value.postalCode!,
+      country: this.checkoutForm.value.country!,
+      paymentMethod: this.checkoutForm.value.paymentMethod!,
+      cardNumber: this.checkoutForm.value.cardNumber ?? '',
+      items: this.cartItems.map(i => ({
+        cardId: i.cardId,
+        quantity: i.quantity,
+        unitPrice: i.card.price
+      }))
+    };
+
+    this.orderService.createOrder(order).subscribe({
+      next: (res) => {  
+        this.cartService.clearCart(this.userId!);
+        this.router.navigate(['/order-confirmation-page'], { state: { orderId: res.id } });
+      },
+      error: () => {
+        this.loading = false;
+        this.error = 'Error al procesar el pedido. Inténtalo de nuevo.';
+      }
+    });
   }
 
   formatPrice(price: number): string {
