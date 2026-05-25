@@ -1,0 +1,36 @@
+<div class="confirm-wrap">
+  <div class="confirm-card">
+
+    <div class="confirm-icon">✓</div>
+
+    <h1 class="confirm-title">¡Pedido confirmado!</h1>
+    <p class="confirm-sub">Gracias por tu compra. Hemos recibido tu pedido correctamente.</p>
+
+    <div class="confirm-order-number">
+      <span class="confirm-order-lbl">Número de pedido</span>
+      <span class="confirm-order-val">#{{ orderNumber }}</span>
+    </div>
+
+    <div class="confirm-info">
+      <div class="confirm-info-item">
+        <span class="confirm-info-icon">📦</span>
+        <div>
+          <div class="confirm-info-title">Preparando tu pedido</div>
+          <div class="confirm-info-sub">Tu pedido será enviado en 1-2 días laborables</div>
+        </div>
+      </div>
+      <div class="confirm-info-item">
+        <div>
+          <div class="confirm-info-title">Confirmación por email</div>
+          <div class="confirm-info-sub">Recibirás un email con los detalles del envío</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="confirm-actions">
+      <a class="confirm-btn-primary" routerLink="/shop">Seguir comprando</a>
+      <a class="confirm-btn-secondary" routerLink="/cart">Ver mi carrito</a>
+    </div>
+
+  </div>
+</div>
