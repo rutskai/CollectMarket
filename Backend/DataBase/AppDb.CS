@@ -62,6 +62,8 @@ class AppDb : DbContext
             entity.Property(u => u.Password)
                 .IsRequired()
                 .HasMaxLength(255);
+            entity.Property(u => u.AvatarUrl)  
+                .HasMaxLength(500);
 
             entity.Property(u => u.CreatedAt);
 
