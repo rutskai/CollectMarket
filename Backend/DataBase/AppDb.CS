@@ -158,7 +158,6 @@ class AppDb : DbContext
             entity.ToTable("Order");
             entity.HasKey(o => o.Id);
             entity.Property(o => o.Total).HasColumnType("decimal(10,2)");
-            entity.Property(o => o.Status).HasDefaultValue("pending");
             entity.Property(o => o.CreatedAt);
             entity.HasOne(o => o.User)
                 .WithMany()

@@ -12,6 +12,7 @@ namespace Models
         public string PaymentMethod { get; set; } = "";
         public string CardNumber { get; set; } = "";
         public decimal Total { get; set; }
+
         public string Status { get; set; } = "pending";
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
