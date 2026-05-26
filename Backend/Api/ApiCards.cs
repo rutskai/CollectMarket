@@ -149,6 +149,46 @@ namespace Api
              */
             app.MapGet("/api/cards/expansions", async (AppDb db) =>
                 Results.Ok(await db.Cards.Select(c => c.SetName).Distinct().ToListAsync()));
+            
+            /**
+            * Crea una nueva carta.
+            *
+            * @param body Datos de la carta a crear.
+            * @param db Contexto de base de datos.
+            *
+            * @return 200 OK si se creó correctamente.
+            * @return 400 BadRequest si ya existe.
+            */
+            app.MapPost("/api/cards", async (CardPublic body, AppDb db) =>
+            {
+                var existing = await db.Cards.FirstOrDefaultAsync(c =>
+                    c.Name == body.Name &&
+                    c.SetName == body.SetName &&
+                    c.Rarity == body.Rarity
+                );
+
+                if (existing != null)
+                    return Results.BadRequest(new { message = "Ya existe una carta con estas características." });
+
+                var card = new Card
+                {
+                    Name = body.Name,
+                    SetName = body.SetName ?? "",
+                    Rarity = body.Rarity ?? "",
+                    Type = body.Type ?? "",
+                    ImageUrl = body.ImageUrl ?? "",
+                    Price = body.Price,
+                    Stock = body.Stock,
+                    Description = body.Description ?? "",
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+
+                db.Cards.Add(card);
+                await db.SaveChangesAsync();
+
+                return Results.Ok(new { card.Id, card.Name, message = "Carta creada exitosamente" });
+            });
         }
     }
 }

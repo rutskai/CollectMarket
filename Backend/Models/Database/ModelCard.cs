@@ -36,3 +36,23 @@ public class Card
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; }
 }
+
+public class CardPublic
+{
+    [Column("name")]
+    public string Name { get; set; } = "";
+    [Column("set_name")]
+    public string? SetName { get; set; }
+    [Column("rarity")]
+    public string? Rarity { get; set; }
+    [Column("type")]
+    public string? Type { get; set; }
+    [Column("image_url")]
+    public string? ImageUrl { get; set; }
+    [Column("price")]
+    public decimal Price { get; set; }
+    [Column("stock")]
+    public int Stock { get; set; }
+    [Column("description")]
+    public string? Description { get; set; }
+}
