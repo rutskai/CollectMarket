@@ -1,25 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service';
-import { UserService } from '../../services/user/user-service';
 import { FavoritesService } from '../../services/favorite/favorites-service';
 import { CartService } from '../../services/cart/cart-service';
 import { ModelUser } from '../../models/user';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, FormsModule],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
 export class Header implements OnInit {
+
   public user: ModelUser | null = null;
+  public searchTerm: string = '';
 
   constructor(
     private authService: AuthService,
     private favoritesService: FavoritesService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {}
 
   /**
@@ -39,5 +42,24 @@ export class Header implements OnInit {
         this.cartService.clear();
       }
     });
+  }
+
+  /**
+   * Maneja la búsqueda de cartas.
+   * 
+   * Navega a la página de tienda con el parámetro de búsqueda.
+   * 
+   * @param event Evento del formulario
+   */
+  onSearch(event: Event): void {
+    event.preventDefault();
+    
+    if (this.searchTerm && this.searchTerm.trim()) {
+      const term = this.searchTerm.trim();
+      this.router.navigate(['/shop'], { 
+        queryParams: { search: term }
+      });
+      this.searchTerm = '';
+    }  
   }
 }

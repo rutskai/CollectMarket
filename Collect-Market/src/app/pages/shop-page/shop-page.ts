@@ -1,11 +1,14 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs'; 
 import { ModelCard } from '../../models/card';
 import { Card } from '../../components/card/card';
 import { CardsService } from '../../services/cards/cards-service';
 import { Filter, ModelFilteredCards } from '../../models/filter';
 import { PaginationHelper } from '../../helpers/pagination-helper';
+import { SearchService } from '../../services/search/search-service'; 
 
 @Component({
   selector: 'app-shop-page',
@@ -14,8 +17,7 @@ import { PaginationHelper } from '../../helpers/pagination-helper';
   templateUrl: './shop-page.html',
   styleUrls: ['./shop-page.css']
 })
-export class ShopPage implements OnInit {
-
+export class ShopPage implements OnInit, OnDestroy {  
   maxPrice = 0;
 
   allSourceCards: ModelCard[] = [];
@@ -29,26 +31,79 @@ export class ShopPage implements OnInit {
   typeFilters: Filter[] = [];
   rarityFilters: Filter[] = [];
   expansionFilters: Filter[] = [];
+  searchTerm: string = '';
+
+  private searchSubscription: Subscription | null = null;
 
   constructor(
     private cardsService: CardsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router,
+    private searchService: SearchService  
   ) {}
 
   ngOnInit(): void {
-    this.loadCards();
+  
+    this.route.queryParams.subscribe(params => {
+      this.searchTerm = params['search'] || '';
+      this.loadCards();
+    });
+    
+
+    this.searchSubscription = this.searchService.searchTerm.subscribe(term => {
+      if (term && term !== this.searchTerm) {
+        this.searchTerm = term;
+        this.router.navigate(['/shop'], { 
+          queryParams: { search: term } 
+        });
+      }
+    });
+    
     this.loadFilterOptions();
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 
   loadCards(): void {
     this.cardsService.getCards().subscribe({
       next: (cards) => {
         this.allSourceCards = cards;
-        this.allCards = cards;
-        this.resetPageAndUpdate();
+        this.applySearchFilter(cards); 
       },
       error: (err) => console.error('Error cargando cartas:', err)
     });
+  }
+
+
+  private applySearchFilter(cards: ModelCard[]): void {
+    if (this.searchTerm && this.searchTerm.trim()) {
+      const term = this.searchTerm.toLowerCase().trim();
+      this.allCards = cards.filter(card => 
+        card.name.toLowerCase().includes(term) ||
+        (card.setName && card.setName.toLowerCase().includes(term))
+      );
+    } else {
+      this.allCards = cards;
+    }
+    
+    this.resetPageAndUpdate();
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.searchService.clearSearch(); 
+    this.router.navigate(['/shop'], { queryParams: {} });
+    this.loadCards();  
+  }
+
+  backToShop(): void {
+    this.clearSearch();
   }
 
   updateDisplayCards(): void {
@@ -95,7 +150,7 @@ export class ShopPage implements OnInit {
 
     if (!hasActiveFilters) {
       this.allCards = this.allSourceCards;
-      this.resetPageAndUpdate();
+      this.applySearchFilter(this.allSourceCards); 
       return;
     }
 
@@ -109,6 +164,7 @@ export class ShopPage implements OnInit {
     this.cardsService.getFilteredCards(filters).subscribe({
       next: (cards) => {
         this.allCards = cards;
+        this.applySearchFilter(this.allCards);  
         this.resetPageAndUpdate();
       },
       error: (err) => console.error('Error al filtrar:', err)

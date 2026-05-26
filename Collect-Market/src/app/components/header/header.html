@@ -21,10 +21,9 @@
       </li>
     </ul>
 
-    <form id="header-form" action="/search" method="GET">
-      <input type="text" name="search" placeholder="Buscar carta..." />
-      <div id="search-icon" type="submit"><i class="fa-solid fa-magnifying-glass"></i></div>
-
+    <form id="header-form" (ngSubmit)="onSearch($event)">
+      <input type="text" name="search" [(ngModel)]="searchTerm" placeholder="Buscar carta..." />
+      <div id="search-icon" (click)="onSearch($event)"><i class="fa-solid fa-magnifying-glass"></i></div>
     </form>
 
     @if (!user) { 
