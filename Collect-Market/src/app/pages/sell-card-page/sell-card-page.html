@@ -1,0 +1,119 @@
+<div class="sell-wrap">
+  <div class="sell-content">
+
+    <!-- Header -->
+    <div class="sell-header">
+      <a class="sell-back" routerLink="/user">↩ Volver</a>
+      <h1 class="sell-title">Vender una carta</h1>
+      <p class="sell-sub">Publica tu carta en el catálogo para que otros usuarios puedan comprarla</p>
+    </div>
+
+    <form [formGroup]="sellForm" (ngSubmit)="onSubmit()">
+      <div class="sell-layout">
+
+        <!-- ── IZQUIERDA ── -->
+        <div class="sell-left">
+
+          <div class="sell-section">
+            <h2 class="section-title">Información de la carta</h2>
+
+            <div class="form-group">
+              <label>Nombre <span class="required">*</span></label>
+              <input type="text" formControlName="name" placeholder="Ej: Charizard" />
+              @if (isInvalid('name')) {
+                <span class="field-error">El nombre es obligatorio.</span>
+              }
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Expansión</label>
+                <input type="text" formControlName="setName" placeholder="Ej: Base Set" />
+              </div>
+              <div class="form-group">
+                <label>Rareza</label>
+                <select formControlName="rarity">
+                  <option value="">Seleccionar...</option>
+                  @for (r of rarities; track r) {
+                    <option [value]="r">{{ r }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Tipo</label>
+              <select formControlName="type">
+                <option value="">Seleccionar...</option>
+                @for (t of types; track t) {
+                  <option [value]="t">{{ t }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Descripción</label>
+              <textarea formControlName="description" placeholder="Describe el estado y características de la carta..." rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>URL de imagen</label>
+              <input type="text" formControlName="imageUrl" placeholder="https://..." />
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── DERECHA ── -->
+        <div class="sell-right">
+
+          <div class="sell-section">
+            <h2 class="section-title">Precio y stock</h2>
+
+            <div class="form-group">
+              <label>Precio (€) <span class="required">*</span></label>
+              <input type="number" formControlName="price" placeholder="0.00" min="0.01" step="0.01" />
+              @if (isInvalid('price')) {
+                <span class="field-error">Introduce un precio válido.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Stock <span class="required">*</span></label>
+              <input type="number" formControlName="stock" placeholder="1" min="1" />
+              @if (isInvalid('stock')) {
+                <span class="field-error">El stock debe ser al menos 1.</span>
+              }
+            </div>
+
+          </div>
+
+          <!-- Preview imagen -->
+          @if (sellForm.get('imageUrl')?.value) {
+            <div class="sell-preview">
+              <div class="sell-preview-title">Vista previa</div>
+              <img [src]="sellForm.get('imageUrl')?.value" alt="Preview" class="sell-preview-img"
+                onerror="this.style.display='none'" />
+            </div>
+          }
+
+          @if (success) {
+            <div class="sell-success">{{ success }}</div>
+          }
+          @if (error) {
+            <div class="sell-error">{{ error }}</div>
+          }
+
+          <button class="sell-btn" type="submit" [disabled]="loading">
+            @if (loading) {
+              Publicando...
+            } @else {
+              Publicar carta
+            }
+          </button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

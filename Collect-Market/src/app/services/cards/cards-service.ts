@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ModelCard } from '../../models/card';
+import { ModelCard, ModelCardPublic } from '../../models/card';
 import { ModelFilteredCards } from '../../models/filter';
 
 @Injectable({
@@ -108,6 +108,20 @@ export class CardsService {
    */
   getExpansions(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/cards/expansions`);
+  }
+
+  /**
+   * Crea una nueva carta (para vender).
+   *
+   * @param card Datos de la carta a crear.
+   *
+   * @returns Observable con el ID, nombre y mensaje de la carta creada.
+   */
+  createCard(card: ModelCardPublic): Observable<{ id: number; name: string; message: string }> {
+    return this.http.post<{ id: number; name: string; message: string }>(
+      `${this.apiUrl}/cards`, 
+      card
+    );
   }
   
 }

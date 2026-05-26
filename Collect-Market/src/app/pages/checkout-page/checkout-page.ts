@@ -8,7 +8,7 @@ import { OrderService } from '../../services/orders/order-service';
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
 })
