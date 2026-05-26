@@ -285,6 +285,7 @@
 
 .empty-icon {
   font-size: 64px;
+   opacity: 0.2;
   display: block;
   margin-bottom: 20px;
 }
@@ -315,6 +316,27 @@
   transform: translateY(-2px);
   opacity: 0.9;
 }
+
+.orders-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+}
+
+.orders-breadcrumb a {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.orders-breadcrumb a:hover {
+  color: #ffd700;
+}
+
+
 
 /* Responsive */
 @media (max-width: 600px) {

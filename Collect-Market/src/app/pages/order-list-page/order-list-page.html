@@ -1,12 +1,14 @@
 <div class="orders-wrap">
   <div class="orders-container">
-    
-    <!-- Header -->
     <div class="orders-header">
+      <div class="orders-breadcrumb">
+        <a routerLink="/user">Perfil</a>
+        <span>›</span>
+        <span>Mis pedidos</span>
+      </div>
       <h1 class="orders-title">Mis pedidos</h1>
       <p class="orders-sub">Aquí puedes ver el estado de todos tus pedidos</p>
     </div>
-
 
     @if (loading) {
       <div class="loading-state">
@@ -15,10 +17,8 @@
       </div>
     }
 
-
     @if (error && !loading) {
       <div class="error-state">
-        <span class="error-icon">⚠️</span>
         <p>{{ error }}</p>
         <button class="retry-btn" (click)="loadOrders()">Reintentar</button>
       </div>
@@ -28,8 +28,6 @@
       <div class="orders-list">
         @for (order of orders; track order.id) {
           <div class="order-card">
-            
-  
             <div class="order-header">
               <div class="order-info">
                 <span class="order-number">#{{ order.id }}</span>
@@ -41,8 +39,6 @@
                 </span>
               </div>
             </div>
-
-           
             <div class="order-items">
               @for (item of order.items; track item.cardId) {
                 <div class="order-item">
@@ -54,22 +50,17 @@
                 </div>
               }
             </div>
-
-         
             <div class="order-footer">
               <div class="order-total">
                 <span class="total-label">Total</span>
                 <span class="total-value">{{ formatPrice(order.total) }}</span>
               </div>
-             
             </div>
-
           </div>
         }
-
         @if (orders.length === 0) {
           <div class="empty-state">
-            <span class="empty-icon">📭</span>
+            <span class="empty-icon"> 🛒 </span>
             <h3>No tienes pedidos aún</h3>
             <p>¡Explora nuestra tienda y haz tu primera compra!</p>
             <a class="shop-now-btn" routerLink="/shop">Ir a la tienda</a>
@@ -77,6 +68,5 @@
         }
       </div>
     }
-
   </div>
 </div>
