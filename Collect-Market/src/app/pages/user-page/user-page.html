@@ -11,7 +11,15 @@
     </div>
 
     <!-- Menú -->
+     
     <div class="user-menu">
+        <a class="user-menu-item" routerLink="/personalization-page">
+        <div class="user-menu-info">
+          <span class="user-menu-title">Personalización</span>
+          <span class="user-menu-sub">Cambia tu nombre y avatar</span>
+        </div>
+        <span class="user-menu-arrow">›</span>
+      </a>
       <a class="user-menu-item" routerLink="/order-list-page">
         <div class="user-menu-info">
           <span class="user-menu-title">Mis pedidos</span>
@@ -28,13 +36,7 @@
         <span class="user-menu-arrow">›</span>
       </a>
 
-      <a class="user-menu-item" routerLink="/personalization-page">
-        <div class="user-menu-info">
-          <span class="user-menu-title">Personalización</span>
-          <span class="user-menu-sub">Cambia tu nombre y avatar</span>
-        </div>
-        <span class="user-menu-arrow">›</span>
-      </a>
+
 
       <button class="user-menu-item user-menu-danger" (click)="logout()">
         <div class="user-menu-info">
