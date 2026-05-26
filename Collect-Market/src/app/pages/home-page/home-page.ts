@@ -30,9 +30,13 @@ export class HomePage implements OnInit {
   loadCards(): void {
     this.cardService.getCards().subscribe({
       next: (data) => {
+        const sortedByDate = [...data].sort((a, b) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        this.latestCards = sortedByDate.slice(0, 5);
+
         const shuffled = [...data].sort(() => 0.6 - Math.random());
         this.cards = shuffled.slice(0, 3);
-        this.latestCards = data.slice(0, 5);
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error cargando cartas:', err)
