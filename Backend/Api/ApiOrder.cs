@@ -23,6 +23,8 @@ namespace Api
                     {
                         return Results.BadRequest($"Stock insuficiente para {card.Name}. Disponible: {card.Stock}, Solicitado: {item.Quantity}");
                     }
+
+                      card.Stock -= item.Quantity;
                 }
 
                 var order = new Order
@@ -47,15 +49,6 @@ namespace Api
                 };
 
                 db.Orders.Add(order);
-
-                foreach (var item in body.Items)
-                {
-                    var card = await db.Cards.FirstOrDefaultAsync(c => c.Id == item.CardId);
-                    if (card != null)
-                    {
-                        card.Stock -= item.Quantity;
-                    }
-                }
 
                 await db.SaveChangesAsync();
                 return Results.Ok(new { order.Id, order.Total, order.Status });
