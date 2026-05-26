@@ -57,6 +57,7 @@
   font-size: 18px;
   font-weight: 700;
   color: white;
+  margin-left: 70px;
 }
 
 /* ── Secciones ── */
@@ -192,6 +193,7 @@
   font-size: 13px;
   color: #ff8a8a;
 }
+
 
 /* ── Responsive ── */
 @media (max-width: 480px) {

@@ -231,6 +231,25 @@ input[type="number"] {
   }
 }
 
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+}
+
+.breadcrumb a {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: #ffd700;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .sell-wrap { padding: 24px 16px 60px; }
