@@ -123,5 +123,27 @@ export class CardsService {
       card
     );
   }
+
+  /**
+   * Obtiene las cartas a la venta de un usuario específico.
+   *
+   * @param userId ID del usuario vendedor.
+   *
+   * @returns Observable con la lista de cartas del usuario.
+   */
+  getUserCards(userId: number): Observable<ModelCard[]> {
+    return this.http.get<ModelCard[]>(`${this.apiUrl}/cards/user/${userId}`);
+  }
+
+  /**
+   * Elimina una carta (solo el propietario puede ).
+   *
+   * @param cardId ID de la carta a eliminar.
+   *
+   * @returns Observable con mensaje de confirmación.
+   */
+  deleteCard(cardId: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/cards/${cardId}`);
+  }
   
 }
