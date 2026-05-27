@@ -180,6 +180,7 @@ namespace Api
                     Price = body.Price,
                     Stock = body.Stock,
                     Description = body.Description ?? "",
+                    SellerId = body.SellerId,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };

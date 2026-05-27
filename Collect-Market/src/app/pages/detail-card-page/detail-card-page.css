@@ -68,9 +68,10 @@
 
 /* ── Imagen ── */
 .detail-img-wrap {
-  position: relative;
+
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
 }
 
 .detail-img {
@@ -285,6 +286,25 @@
   text-decoration: none;
   transition: opacity 0.2s;
   &:hover { opacity: 0.9; }
+}
+
+/*Vendedor*/
+.detail-seller {
+   margin-top: 16px;
+  text-align: center;
+}
+
+.detail-seller-lbl {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.detail-seller-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
 }
 
 /* ── Responsive ── */

@@ -8,7 +8,7 @@ import { FavoritesService } from '../../services/favorite/favorites-service';
 import { AuthService } from '../../services/auth/auth-service';
 import { ImageHelper } from '../../helpers/image-helper';
 import { EXPANSION_TRANSLATION, RARITY_TRANSLATION, TYPE_TRANSLATION } from '../../helpers/constants';
-
+import { UserService } from '../../services/user/user-service';
 
 @Component({
   selector: 'app-detail-card-page',
@@ -22,6 +22,7 @@ export class DetailCardPage implements OnInit {
   card: ModelCard | null = null;
   loading = true;
   userId: number | null = null;
+  sellerName: string | null = null; 
 
   isFavorite: Signal<boolean> = computed(() => false);
   isInCart: Signal<boolean> = computed(() => false);
@@ -31,31 +32,48 @@ export class DetailCardPage implements OnInit {
     private cardsService: CardsService,
     private cartService: CartService,
     private favoritesService: FavoritesService,
-    private authService:AuthService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef,
+    private userService:UserService,
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.authService.getCurrentUser()?.id ?? null;
+  this.userId = this.authService.getCurrentUser()?.id ?? null;
 
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.cardsService.getCardById(id).subscribe({
-      next: (card) => {
-        this.card = card;
-        this.loading = false;
-        if (this.userId) {
-          this.isFavorite = this.favoritesService.isFavorite(card.id);
-          this.isInCart = this.cartService.isInCart(card.id);
-        }
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error:', err);
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-    });
-  }
+  const id = Number(this.route.snapshot.paramMap.get('id'));
+  this.cardsService.getCardById(id).subscribe({
+    next: (card) => {
+      this.card = card;
+      this.loading = false;
+      
+
+      if (card.sellerId) {
+        this.userService.getUserById(card.sellerId).subscribe({
+          next: (user) => {
+            this.sellerName = user?.name || 'Vendedor desconocido';
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.sellerName = 'Vendedor desconocido';
+          }
+        });
+      } else {
+        this.sellerName = 'CollectMarket';
+      }
+      
+      if (this.userId) {
+        this.isFavorite = this.favoritesService.isFavorite(card.id);
+        this.isInCart = this.cartService.isInCart(card.id);
+      }
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Error:', err);
+      this.loading = false;
+      this.cdr.detectChanges();
+    },
+  });
+}
 
   toggleFavorite(): void {
     if (!this.userId || !this.card) {
@@ -83,7 +101,7 @@ export class DetailCardPage implements OnInit {
     return map[rarity ?? ''] ?? 'badge-common';
   }
 
-   getTranslatedRarity(): string {
+  getTranslatedRarity(): string {
     const rarity = this.card?.rarity;
     return RARITY_TRANSLATION[rarity ?? ''] ?? rarity ?? 'Rareza desconocida';
   }
