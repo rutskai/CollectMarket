@@ -30,6 +30,9 @@ public class Card
     [Column("description")]
     public string? Description { get; set; }
 
+    [Column("seller_id")]          
+    public int? SellerId { get; set; }
+
     [Column("created_at")]
     public DateTime CreatedAt { get; set; }
 
@@ -55,4 +58,6 @@ public class CardPublic
     public int Stock { get; set; }
     [Column("description")]
     public string? Description { get; set; }
+    [Column("seller_id")]          
+    public int? SellerId { get; set; }
 }

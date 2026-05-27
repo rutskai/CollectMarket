@@ -103,6 +103,7 @@ class AppDb : DbContext
                 .HasDefaultValue(0);
 
             entity.Property(c => c.Description);
+            entity.Property(c => c.SellerId);
 
             entity.Property(c => c.CreatedAt);
             entity.Property(c => c.UpdatedAt);
