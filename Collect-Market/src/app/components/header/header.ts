@@ -6,6 +6,7 @@ import { ModelUser } from '../../models/user';
 import { Router, RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { OrderService } from '../../services/orders/order-service';
 
 @Component({
   selector: 'app-header',
@@ -17,29 +18,48 @@ export class Header implements OnInit {
 
   public user: ModelUser | null = null;
   public searchTerm: string = '';
+  public orderCount: number=0;
 
   constructor(
     private authService: AuthService,
     private favoritesService: FavoritesService,
     private cartService: CartService,
-    private router: Router
+    private router: Router, private orderService: OrderService,
   ) {}
-
+ 
   /**
    * Se suscribe al estado del usuario.
    *
    * Si hay usuario autenticado carga sus favoritos y carrito.
    * Si no hay usuario limpia ambos servicios.
    */
+  
   ngOnInit(): void {
+  
+    
     this.authService.user$.subscribe(user => {
       this.user = user;
       if (user) {
         this.favoritesService.load(user.id);
         this.cartService.load(user.id);
+        this.loadUserOrders(user.id);
       } else {
         this.favoritesService.clear();
         this.cartService.clear();
+        this.orderCount = 0;
+      }
+    });
+
+  }
+
+  private loadUserOrders(userId: number): void {
+    this.orderService.getOrders(userId).subscribe({
+      next: (orders) => {
+        this.orderCount=orders.length
+        console.log('Pedidos cargados:', orders);
+      },
+      error: (err) => {
+        console.error('Error al cargar pedidos:', err);
       }
     });
   }
