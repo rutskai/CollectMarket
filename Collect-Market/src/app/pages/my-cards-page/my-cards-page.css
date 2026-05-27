@@ -1,0 +1,204 @@
+.my-cards-wrap {
+  min-height: 100vh;
+  background: #0f1923;
+  padding: 40px 28px;
+  color: white;
+}
+
+.my-cards-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.my-cards-header h1 {
+  font-size: 32px;
+  color: #ffd700;
+  margin-bottom: 8px;
+}
+
+.my-cards-header p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 215, 0, 0.3);
+  border-top-color: #ffd700;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.empty-state h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 30px;
+}
+
+.btn-sell {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffd700, #ffa500);
+  color: #1e2b3a;
+  padding: 12px 32px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.btn-sell:hover {
+  transform: translateY(-2px);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.card-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.card-image {
+  position: relative;
+  background: linear-gradient(135deg, #1a2a3a, #0f1923);
+  padding: 20px;
+  text-align: center;
+}
+
+.card-image img {
+  max-width: 180px;
+  border-radius: 12px;
+}
+
+.stock-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4444;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.card-info {
+  padding: 16px;
+}
+
+.card-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #ffd700;
+}
+
+.card-details {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.detail-badge {
+  background: rgba(255, 215, 0, 0.15);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  color: #ffd700;
+}
+
+.detail-badge.type {
+  background: rgba(100, 180, 250, 0.15);
+  color: #64b4fa;
+}
+
+.card-expansion {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+}
+
+.card-stock {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12px;
+}
+
+.card-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 16px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-delete {
+  flex: 1;
+  padding: 10px;
+  background: rgba(255, 68, 68, 0.15);
+  color: #ff6666;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-delete:hover {
+  background: rgba(255, 68, 68, 0.3);
+}
+
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .my-cards-wrap {
+    padding: 20px 16px;
+  }
+}

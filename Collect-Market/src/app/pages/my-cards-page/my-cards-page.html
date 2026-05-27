@@ -1,1 +1,60 @@
-<p>my-cards-page works!</p>
+<div class="my-cards-wrap">
+  <div class="my-cards-header">
+    <h1>Mis cartas a la venta</h1>
+    <p>Gestiona las cartas que has publicado</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando tus cartas...</p>
+    </div>
+  } @else if (myCards.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">📦</div>
+      <h2>No tienes cartas a la venta</h2>
+      <p>Vende tu primera carta y aparecerá aquí</p>
+      <a class="btn-sell" routerLink="/sell-card">Vender carta</a>
+    </div>
+  } @else {
+    <div class="cards-grid">
+      @for (card of myCards; track card.id) {
+        <div class="card-item">
+          <div class="card-image">
+            <img [src]="ImageHelper.getImageUrl(card.imageUrl)" [alt]="card.name">
+            @if (card.stock <= 2) {
+              <span class="stock-badge">¡Últimas!</span>
+            }
+          </div>
+          
+          <div class="card-info">
+            <h3 class="card-name">{{ card.name }}</h3>
+            
+            <div class="card-details">
+              <span class="detail-badge">{{ TranslateHelper.rarity(card.rarity) }}</span>
+              <span class="detail-badge type">{{ TranslateHelper.type(card.type) }}</span>
+            </div>
+            
+            <div class="card-expansion">
+              {{ TranslateHelper.expansion(card.setName) }}
+            </div>
+            
+            <div class="card-stock">
+              Stock: {{ card.stock }} unidades
+            </div>
+            
+            <div class="card-price">
+              {{ formatPrice(card.price) }}
+            </div>
+            
+            <div class="card-actions">
+              <button class="btn-delete" (click)="deleteCard(card.id)">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

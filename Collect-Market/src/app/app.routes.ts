@@ -13,6 +13,7 @@ import { CheckoutPage } from './pages/checkout-page/checkout-page';
 import { OrderConfirmationPage } from './pages/order-confirmation-page/order-confirmation-page';
 import { OrderListPage } from './pages/order-list-page/order-list-page';
 import { SellCardPage } from './pages/sell-card-page/sell-card-page';
+import { MyCardsPage } from './pages/my-cards-page/my-cards-page';
 
 export const routes: Routes = [
     {path:"", component: HomePage},
@@ -30,5 +31,6 @@ export const routes: Routes = [
     { path: 'order-confirmation-page', component: OrderConfirmationPage },
     { path: 'order-list-page', component: OrderListPage },
     { path: 'sell-card-page', component: SellCardPage },
+    {path:'my-cards-page', component: MyCardsPage}
     
 ];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service';
 import { FavoritesService } from '../../services/favorite/favorites-service';
 import { CartService } from '../../services/cart/cart-service';
@@ -25,6 +25,7 @@ export class Header implements OnInit {
     private favoritesService: FavoritesService,
     private cartService: CartService,
     private router: Router, private orderService: OrderService,
+    private cdr: ChangeDetectorRef
   ) {}
  
   /**
@@ -43,6 +44,8 @@ export class Header implements OnInit {
         this.favoritesService.load(user.id);
         this.cartService.load(user.id);
         this.loadUserOrders(user.id);
+        this.cdr.detectChanges();
+        
       } else {
         this.favoritesService.clear();
         this.cartService.clear();
