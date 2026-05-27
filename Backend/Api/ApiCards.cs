@@ -190,6 +190,46 @@ namespace Api
 
                 return Results.Ok(new { card.Id, card.Name, message = "Carta creada exitosamente" });
             });
+
+     
+
+            /**
+             * Obtiene las cartas de un usuario específico (las que ha puesto a la venta).
+             *
+             * @param userId ID del usuario vendedor.
+             * @param db Contexto de base de datos.
+             *
+             * @return 200 OK con la lista de cartas del usuario.
+             */
+            app.MapGet("/api/cards/user/{userId}", async (int userId, AppDb db) =>
+            {
+                var cards = await db.Cards
+                    .Where(c => c.SellerId == userId)
+                    .OrderByDescending(c => c.CreatedAt)
+                    .ToListAsync();
+                return Results.Ok(cards);
+            });
+
+            /**
+             * Elimina una carta (solo el propietario puede hacerlo).
+             *
+             * @param id ID de la carta a eliminar.
+             * @param db Contexto de base de datos.
+             *
+             * @return 200 OK si se eliminó correctamente.
+             * @return 404 NotFound si la carta no existe.
+             */
+            app.MapDelete("/api/cards/{id}", async (int id, AppDb db) =>
+            {
+                var card = await db.Cards.FirstOrDefaultAsync(c => c.Id == id);
+                if (card == null)
+                    return Results.NotFound(new { message = "Carta no encontrada" });
+                
+                db.Cards.Remove(card);
+                await db.SaveChangesAsync();
+                
+                return Results.Ok(new { message = "Carta eliminada correctamente" });
+            });
         }
     }
 }
