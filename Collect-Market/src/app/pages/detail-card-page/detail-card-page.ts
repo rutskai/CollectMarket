@@ -7,6 +7,7 @@ import { CartService } from '../../services/cart/cart-service';
 import { FavoritesService } from '../../services/favorite/favorites-service';
 import { AuthService } from '../../services/auth/auth-service';
 import { ImageHelper } from '../../helpers/image-helper';
+import { EXPANSION_TRANSLATION, RARITY_TRANSLATION, TYPE_TRANSLATION } from '../../helpers/constants';
 
 
 @Component({
@@ -80,6 +81,21 @@ export class DetailCardPage implements OnInit {
       Common: 'badge-common',
     };
     return map[rarity ?? ''] ?? 'badge-common';
+  }
+
+   getTranslatedRarity(): string {
+    const rarity = this.card?.rarity;
+    return RARITY_TRANSLATION[rarity ?? ''] ?? rarity ?? 'Rareza desconocida';
+  }
+
+  getTranslatedType(): string {
+    const type = this.card?.type;
+    return TYPE_TRANSLATION[type ?? ''] ?? type ?? 'Tipo desconocido';
+  }
+
+  getTranslatedExpansion(): string {
+    const expansion = this.card?.setName;
+    return EXPANSION_TRANSLATION[expansion ?? ''] ?? expansion ?? 'Expansión desconocida';
   }
 
   formatPrice(price: number): string {

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ModelCartItem } from '../../models/cart';
 import { ImageHelper } from '../../helpers/image-helper';
+import { EXPANSION_TRANSLATION, RARITY_TRANSLATION } from '../../helpers/constants';
 
 @Component({
   selector: 'app-shopping-cart-page',
@@ -53,6 +54,16 @@ export class ShoppingCartPage implements OnInit {
   onClearCart(): void {
     if (!this.user) return;
     this.cartService.clearCart(this.user.id);
+  }
+
+    getTranslatedRarity(item: ModelCartItem): string {
+    const rarity = item.card?.rarity;
+    return RARITY_TRANSLATION[rarity ?? ''] ?? rarity ?? 'Rareza desconocida';
+  }
+
+  getTranslatedExpansion(item: ModelCartItem): string {
+    const expansion = item.card?.setName;
+    return EXPANSION_TRANSLATION[expansion ?? ''] ?? expansion ?? 'Expansión desconocida';
   }
 
   formatPrice(price: number): string {

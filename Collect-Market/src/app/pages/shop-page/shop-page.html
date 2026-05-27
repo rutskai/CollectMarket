@@ -16,7 +16,7 @@
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleType(filter)">
               <div class="fo-check">{{ filter.active ? '✓' : '' }}</div>
               <div class="fo-dot" [style.background]="filter.color"></div>
-              {{ filter.name }}
+              {{ filter.spanishName || filter.name }} 
             </div>
           }
         </div>
@@ -28,7 +28,7 @@
           @for (filter of rarityFilters; track filter.name) {
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleRarity(filter)">
               <div class="fo-check">{{ filter.active ? '✓' : '' }}</div>
-              {{ filter.name }}
+              {{ filter.spanishName || filter.name }} 
             </div>
           }
         </div>
@@ -40,7 +40,7 @@
           @for (filter of expansionFilters; track filter.name) {
             <div class="filter-opt" [class.active]="filter.active" (click)="toggleExpansion(filter)">
               <div class="fo-check">{{ filter.active ? '✓' : '' }}</div>
-              {{ filter.name }}
+              {{ filter.spanishName || filter.name }}  
             </div>
           }
         </div>
