@@ -8,6 +8,7 @@ export interface ModelCard {
   price: number;
   stock: number;
   description?: string;
+   sellerId?: number;
   createdAt: string;
   updatedAt?: string; 
 }
@@ -21,4 +22,5 @@ export interface ModelCardPublic {
   price: number;
   stock: number;
   description?: string;
+   sellerId?: number;
 }
