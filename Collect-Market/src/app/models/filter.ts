@@ -8,7 +8,6 @@ export interface ModelFilteredCards {
 
 export interface Filter {
   name: string;
-  spanishName?: string;
   active: boolean;
   color?: string;
 }

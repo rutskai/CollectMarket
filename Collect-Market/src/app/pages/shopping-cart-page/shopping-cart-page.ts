@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
 import { ModelCartItem } from '../../models/cart';
 import { ImageHelper } from '../../helpers/image-helper';
 import { EXPANSION_TRANSLATION, RARITY_TRANSLATION } from '../../helpers/constants';
+import { TranslateHelper } from '../../helpers/translate-helper';
 
 @Component({
   selector: 'app-shopping-cart-page',
@@ -17,6 +18,7 @@ import { EXPANSION_TRANSLATION, RARITY_TRANSLATION } from '../../helpers/constan
 export class ShoppingCartPage implements OnInit {
 
   user: ModelUser | null = null;
+  TranslateHelper = TranslateHelper;
   ImageHelper = ImageHelper;
 
   constructor(

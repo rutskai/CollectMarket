@@ -9,6 +9,7 @@ import { LoginModal } from '../login-modal/login-modal';
 import { LoginModalService } from '../../services/login-modal/login-modal-service';
 import { ImageHelper } from '../../helpers/image-helper';
 import { RARITY_TRANSLATION } from '../../helpers/constants';
+import { TranslateHelper } from '../../helpers/translate-helper';
 
 @Component({
   selector: 'app-card',
@@ -20,6 +21,7 @@ export class Card implements OnInit {
 
   @Input() card!: ModelCard;
   
+  TranslateHelper = TranslateHelper;
   ImageHelper = ImageHelper;
   showLoginModal = false; 
   isFavorite: Signal<boolean> = computed(() => false);
@@ -75,10 +77,5 @@ export class Card implements OnInit {
 goToDetail() {
   this.router.navigate(['/card', this.card.id]);
 }
-getTranslatedRarity(): string {
-    const rarity = this.card.rarity;
-    return RARITY_TRANSLATION[rarity!] ?? this.card.rarity ?? "Rareza desconocida";
-  }
-
 
 }

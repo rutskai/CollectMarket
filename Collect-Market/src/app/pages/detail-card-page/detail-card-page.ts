@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth/auth-service';
 import { ImageHelper } from '../../helpers/image-helper';
 import { EXPANSION_TRANSLATION, RARITY_TRANSLATION, TYPE_TRANSLATION } from '../../helpers/constants';
 import { UserService } from '../../services/user/user-service';
+import { TranslateHelper } from '../../helpers/translate-helper';
 
 @Component({
   selector: 'app-detail-card-page',
@@ -18,6 +19,7 @@ import { UserService } from '../../services/user/user-service';
 })
 export class DetailCardPage implements OnInit {
 
+  TranslateHelper = TranslateHelper; 
   ImageHelper = ImageHelper;
   card: ModelCard | null = null;
   loading = true;
@@ -46,7 +48,6 @@ export class DetailCardPage implements OnInit {
       this.card = card;
       this.loading = false;
       
-
       if (card.sellerId) {
         this.userService.getUserById(card.sellerId).subscribe({
           next: (user) => {
@@ -101,20 +102,7 @@ export class DetailCardPage implements OnInit {
     return map[rarity ?? ''] ?? 'badge-common';
   }
 
-  getTranslatedRarity(): string {
-    const rarity = this.card?.rarity;
-    return RARITY_TRANSLATION[rarity ?? ''] ?? rarity ?? 'Rareza desconocida';
-  }
 
-  getTranslatedType(): string {
-    const type = this.card?.type;
-    return TYPE_TRANSLATION[type ?? ''] ?? type ?? 'Tipo desconocido';
-  }
-
-  getTranslatedExpansion(): string {
-    const expansion = this.card?.setName;
-    return EXPANSION_TRANSLATION[expansion ?? ''] ?? expansion ?? 'Expansión desconocida';
-  }
 
   formatPrice(price: number): string {
     return `${price.toFixed(2)} €`;

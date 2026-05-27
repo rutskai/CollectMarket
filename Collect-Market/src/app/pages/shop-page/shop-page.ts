@@ -10,6 +10,7 @@ import { Filter, ModelFilteredCards } from '../../models/filter';
 import { PaginationHelper } from '../../helpers/pagination-helper';
 import { SearchService } from '../../services/search/search-service'; 
 import { TYPE_TRANSLATION, RARITY_TRANSLATION,EXPANSION_TRANSLATION} from '../../helpers/constants';
+import { TranslateHelper } from '../../helpers/translate-helper';
 
 @Component({
   selector: 'app-shop-page',
@@ -19,6 +20,7 @@ import { TYPE_TRANSLATION, RARITY_TRANSLATION,EXPANSION_TRANSLATION} from '../..
   styleUrls: ['./shop-page.css']
 })
 export class ShopPage implements OnInit, OnDestroy {  
+  TranslateHelper = TranslateHelper;
   maxPrice = 0;
 
   allSourceCards: ModelCard[] = [];
@@ -172,41 +174,39 @@ export class ShopPage implements OnInit, OnDestroy {
     });
   }
 
-  loadFilterOptions(): void {
-    this.cardsService.getTypes().subscribe(types => {
-      this.typeFilters = types
-        .filter(Boolean)
-        .map(t => ({ 
-          name: t, 
-          spanishName: TYPE_TRANSLATION[t] || t,  
-          color: this.typeColor(t), 
-          active: false 
-        }));
-      this.cdr.detectChanges();
-    });
 
-    this.cardsService.getRarities().subscribe(rarities => {
-      this.rarityFilters = rarities
-        .filter(Boolean)
-        .map(r => ({ 
-          name: r, 
-          spanishName: RARITY_TRANSLATION[r] || r,  
-          active: false 
-        }));
-      this.cdr.detectChanges();
-    });
+loadFilterOptions(): void {
+  this.cardsService.getTypes().subscribe(types => {
+    this.typeFilters = types
+      .filter(Boolean)
+      .map(t => ({ 
+        name: t, 
+        color: this.typeColor(t), 
+        active: false 
+      }));
+    this.cdr.detectChanges();
+  });
 
-    this.cardsService.getExpansions().subscribe(expansions => {
-      this.expansionFilters = expansions
-        .filter(Boolean)
-        .map(e => ({ 
-          name: e, 
-          spanishName: EXPANSION_TRANSLATION[e] || e,  
-          active: false 
-        }));
-      this.cdr.detectChanges();
-    });
-  }
+  this.cardsService.getRarities().subscribe(rarities => {
+    this.rarityFilters = rarities
+      .filter(Boolean)
+      .map(r => ({ 
+        name: r, 
+        active: false 
+      }));
+    this.cdr.detectChanges();
+  });
+
+  this.cardsService.getExpansions().subscribe(expansions => {
+    this.expansionFilters = expansions
+      .filter(Boolean)
+      .map(e => ({ 
+        name: e, 
+        active: false 
+      }));
+    this.cdr.detectChanges();
+  });
+}
 
   typeColor(type: string): string {
     const colors: Record<string, string> = {

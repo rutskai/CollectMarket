@@ -17,8 +17,8 @@
                 [alt]="item.card.name" />
               <div class="cart-item-info">
                 <div class="cart-item-name">{{ item.card.name }}</div>
-                <div class="cart-item-set">{{ getTranslatedExpansion(item)}}</div>
-                <div class="cart-item-rarity">{{ getTranslatedRarity(item) }}</div>
+                <div class="cart-item-set">{{ TranslateHelper.expansion(item.card.setName) }}</div>
+                <div class="cart-item-rarity">{{ TranslateHelper.rarity(item.card.rarity) }}</div>
               </div>
               <div class="cart-item-controls">
                 <div class="cart-qty">

@@ -36,16 +36,14 @@
         </div>
       </div>
 
-      
-
       <div class="detail-info">
 
         <div class="detail-badges">
           @if (card.rarity) {
-          <span class="detail-badge" [ngClass]="getRarityClass(card.rarity)">{{ getTranslatedRarity() }}</span>
+          <span class="detail-badge" [ngClass]="getRarityClass(card.rarity)">{{ TranslateHelper.rarity(card.rarity) }}</span>
           }
           @if (card.type) {
-          <span class="detail-badge detail-badge-type">{{ getTranslatedType() }}</span>
+          <span class="detail-badge detail-badge-type">{{ TranslateHelper.type(card.type) }}</span>
           }
           @if (card.stock <= 2) { 
             <span class="detail-badge detail-badge-stock">¡Solo {{ card.stock }}!</span>
@@ -64,15 +62,15 @@
         <div class="detail-specs">
           <div class="detail-spec">
             <span class="detail-spec-lbl">Expansión</span>
-            <span class="detail-spec-val">{{ getTranslatedExpansion() }}</span>
+            <span class="detail-spec-val">{{ TranslateHelper.expansion(card.setName) }}</span>
           </div>
           <div class="detail-spec">
             <span class="detail-spec-lbl">Rareza</span>
-            <span class="detail-spec-val">{{ getTranslatedRarity() }}</span>
+            <span class="detail-spec-val">{{ TranslateHelper.rarity(card.rarity) }}</span>
           </div>
           <div class="detail-spec">
             <span class="detail-spec-lbl">Tipo</span>
-            <span class="detail-spec-val">{{ getTranslatedType()  }}</span>
+            <span class="detail-spec-val">{{ TranslateHelper.type(card.type) }}</span>
           </div>
           <div class="detail-spec">
             <span class="detail-spec-lbl">Stock</span>
