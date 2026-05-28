@@ -15,7 +15,7 @@ export class FavoritesService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Carga las cartas favoritas del usuario desde el servidor.
+   * Carga las cartas favoritas del usuario desde el backend.
    *
    * @param userId ID del usuario.
    */

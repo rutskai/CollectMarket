@@ -78,8 +78,7 @@ export class RegisterForm implements OnInit {
           this.errorMessage = err.error?.message || 'Error al registrarse';
         }
         this.cdr.detectChanges();
-      }
-      
+      }  
     });
   }
 }

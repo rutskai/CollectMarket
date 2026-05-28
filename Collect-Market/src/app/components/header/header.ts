@@ -16,10 +16,21 @@ import { OrderService } from '../../services/orders/order-service';
 })
 export class Header implements OnInit {
 
+
   public user: ModelUser | null = null;
   public searchTerm: string = '';
   public orderCount: number=0;
 
+  /**
+   * Constructor del componente Header.
+   * 
+   * @param authService - Servicio de autenticación
+   * @param favoritesService - Servicio de gestión de favoritos
+   * @param cartService - Servicio de gestión del carrito
+   * @param router - Enrutador para navegación
+   * @param orderService - Servicio de gestión de pedidos
+   * @param cdr - Detector de cambios para actualizaciones manuales
+   */
   constructor(
     private authService: AuthService,
     private favoritesService: FavoritesService,
@@ -34,7 +45,6 @@ export class Header implements OnInit {
    * Si hay usuario autenticado carga sus favoritos y carrito.
    * Si no hay usuario limpia ambos servicios.
    */
-  
   ngOnInit(): void {
   
     
@@ -55,6 +65,11 @@ export class Header implements OnInit {
 
   }
 
+  /**
+   * Carga los pedidos del usuario desde el servidor.
+   * 
+   * @param userId - ID del usuario
+   */
   private loadUserOrders(userId: number): void {
     this.orderService.getOrders(userId).subscribe({
       next: (orders) => {
@@ -70,7 +85,6 @@ export class Header implements OnInit {
 
   /**
    * Maneja la búsqueda de cartas.
-   * 
    * Navega a la página de tienda con el parámetro de búsqueda.
    * 
    * @param event Evento del formulario

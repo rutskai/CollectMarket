@@ -1,6 +1,12 @@
 import { ModelCard } from '../models/card';
 import { ModelPagination } from '../models/pagination';
 
+/**
+ * Clase helper para operaciones de paginación.
+ * 
+ * Proporciona métodos estáticos para paginar arrays de cartas,
+ * calcular páginas visibles y navegar entre páginas.
+ */
 export class PaginationHelper {
   /**
    * Pagina un array de cartas

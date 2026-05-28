@@ -21,7 +21,7 @@ export class CartService {
   constructor(private http: HttpClient) {}
 
    /**
-   * Carga los items del carrito del usuario desde el servidor.
+   * Carga los items del carrito del usuario desde el backend.
    *
    * @param userId ID del usuario.
    */
@@ -86,7 +86,7 @@ export class CartService {
    /**
    * Elimina todos los items del carrito del usuario.
    *
-   * Llama al servidor y limpia el estado local.
+   * Llama al backend y limpia el estado local.
    *
    * @param userId ID del usuario.
    */
@@ -97,7 +97,7 @@ export class CartService {
   }
 
    /**
-   * Limpia el carrito localmente sin llamar al servidor.
+   * Limpia el carrito localmente sin llamar al bakcend.
    *
    * Se usa al cerrar sesión.
    */

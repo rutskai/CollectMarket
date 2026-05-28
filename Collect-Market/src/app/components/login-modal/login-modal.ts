@@ -12,11 +12,16 @@ export class LoginModal {
   @Input() visible = false;
   @Output() close = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  /**
+  * Constructor del componente LoginModal.
+  * 
+  * @param router - navegación
+  */
+  constructor(private router: Router) { }
 
-   /**
-   * Cierra el modal y navega al login.
-   */
+  /**
+  * Cierra el modal y navega al login.
+  */
   goToLogin(): void {
     this.close.emit();
     this.router.navigate(['/auth/login']);
@@ -31,9 +36,9 @@ export class LoginModal {
     this.router.navigate(['/auth/register']);
   }
 
-   /**
-   * Cierra el modal al hacer click en el fondo.
-   */
+  /**
+  * Cierra el modal al hacer click en el fondo.
+  */
   onBackdropClick(): void {
     this.close.emit();
   }

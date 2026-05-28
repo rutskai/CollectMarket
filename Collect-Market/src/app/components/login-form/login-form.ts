@@ -24,9 +24,15 @@ export class LoginForm implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(6)])
   });
 
-  /** Mensaje de error a mostrar en el formulario. */
   errorMessage = '';
 
+  /**
+   * Constructor del componente LoginForm.
+   * 
+   * @param authService - Servicio de autenticación
+   * @param router - Enrutador para navegación
+   * @param cdr - Detector de cambios para actualizaciones manuales
+   */
   constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef) { }
 
   /**
