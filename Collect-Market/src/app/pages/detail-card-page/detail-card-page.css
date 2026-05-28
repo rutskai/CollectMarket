@@ -14,7 +14,6 @@
   background: var(--bg);
   min-height: 100vh;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
   padding: 40px 28px 80px;
   position: relative;
 }
@@ -231,7 +230,6 @@
   color: #1e2b3a;
   font-weight: 700;
   font-size: 15px;
-  font-family: 'Inter', sans-serif;
   border: none;
   border-radius: 12px;
   cursor: pointer;

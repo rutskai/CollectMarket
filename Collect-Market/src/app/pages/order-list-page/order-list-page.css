@@ -22,7 +22,6 @@
 .orders-wrap {
   background: var(--bg);
   min-height: 100vh;
-  font-family: 'Inter', system-ui, sans-serif;
   position: relative;
 }
 
@@ -121,7 +120,6 @@
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  font-family: inherit;
   transition: opacity 0.2s;
 }
 
