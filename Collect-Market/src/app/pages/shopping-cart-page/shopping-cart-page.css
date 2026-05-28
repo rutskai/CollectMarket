@@ -13,6 +13,11 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+.material-symbols-outlined {
+  font-size: 50px;
+   color: rgba(255, 215, 0, 0.2);
+}
+
 /* ── Wrapper ── */
 .cart-wrap {
   background: var(--bg);
@@ -300,7 +305,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 80px 20px;
+  padding: 150px 20px;
   text-align: center;
 }
 
