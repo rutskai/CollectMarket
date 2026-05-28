@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CardsService } from '../../services/cards/cards-service';
 import { AuthService } from '../../services/auth/auth-service';
 import { ModelCard } from '../../models/card';
@@ -29,6 +29,7 @@ export class MyCardsPage implements OnInit {
     private cardsService: CardsService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
+    private router:Router,
   ) {}
   
   ngOnInit(): void {
@@ -81,6 +82,10 @@ export class MyCardsPage implements OnInit {
       });
     }
   }
+
+  goToCard(cardId: number): void {
+  this.router.navigate(['/card', cardId]);
+}
   
   formatPrice(price: number): string {
     return `${price.toFixed(2)} €`;

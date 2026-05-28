@@ -11,7 +11,6 @@
     </div>
   } @else if (myCards.length === 0) {
     <div class="empty-state">
-      <div class="empty-icon">📦</div>
       <h2>No tienes cartas a la venta</h2>
       <p>Vende tu primera carta y aparecerá aquí</p>
       <a class="btn-sell" routerLink="/sell-card">Vender carta</a>
@@ -19,7 +18,7 @@
   } @else {
     <div class="cards-grid">
       @for (card of myCards; track card.id) {
-        <div class="card-item">
+        <div class="card-item" (click)="goToCard(card.id)">
           <div class="card-image">
             <img [src]="ImageHelper.getImageUrl(card.imageUrl)" [alt]="card.name">
             @if (card.stock <= 2) {

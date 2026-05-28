@@ -49,20 +49,6 @@
   backdrop-filter: blur(10px);
 }
 
-/* ── Icono ── */
-.confirm-icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: rgba(92, 184, 92, 0.15);
-  border: 2px solid rgba(92, 184, 92, 0.4);
-  color: #5cb85c;
-  font-size: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: popIn 0.4s ease;
-}
 
 @keyframes popIn {
   0%   { transform: scale(0); opacity: 0; }

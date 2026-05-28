@@ -393,6 +393,8 @@
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s;
+    text-decoration: none;
+     color: inherit;
 
   &:hover {
     border-color: rgba(255, 215, 0, 0.25);

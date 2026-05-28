@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-order-confirmation-page',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './order-confirmation-page.html',
   styleUrl: './order-confirmation-page.css',
 })
