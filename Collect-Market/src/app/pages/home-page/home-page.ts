@@ -8,6 +8,12 @@ import { ImageHelper } from '../../helpers/image-helper';
 
 declare var $: any;
 
+/**
+ * Componente de la página de inicio (home).
+ * 
+ * Muestra un vídeo de fondo, una selección de cartas aleatorias
+ * y las últimas cartas añadidas a la colección.
+ */
 @Component({
   selector: 'app-home-page',
   imports: [CommonModule, RouterLink, Card],
@@ -16,17 +22,34 @@ declare var $: any;
 })
 export class HomePage implements OnInit {
 
-  ImageHelper=ImageHelper
+  ImageHelper = ImageHelper
   cards: ModelCard[] = [];
   latestCards: ModelCard[] = [];
 
-  constructor(private cardService: CardsService,  private cdr: ChangeDetectorRef) {}
+  /**
+   * Constructor del componente HomePage.
+   * 
+   * @param cardService - Servicio de gestión de cartas
+   * @param cdr - Detector de cambios para actualizaciones manuales
+   */
+  constructor(private cardService: CardsService, private cdr: ChangeDetectorRef) {}
 
+  /**
+   * Inicializa el componente al cargarse.
+   * 
+   * Configura el vídeo de fondo y carga las cartas.
+   */
   ngOnInit(): void {
     $('#home').vide({ mp4: 'video/poke-center.gif' });
     this.loadCards();
   }
 
+  /**
+   * Carga las cartas desde el servidor.
+   * 
+   * Calcula las 5 cartas más recientes (por fecha de creación)
+   * y selecciona 3 cartas aleatorias para destacar.
+   */
   loadCards(): void {
     this.cardService.getCards().subscribe({
       next: (data) => {

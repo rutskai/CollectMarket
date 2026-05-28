@@ -6,6 +6,12 @@ import { AuthService } from '../../services/auth/auth-service';
 import { CartService } from '../../services/cart/cart-service';
 import { OrderService } from '../../services/orders/order-service';
 
+/**
+ * Componente de la página de finalización de compra (checkout).
+ * 
+ * Muestra un formulario para que el usuario ingrese sus datos de envío y pago,
+ * procesa el pedido y lo envía al backend.
+ */
 @Component({
   selector: 'app-checkout-page',
   imports: [CommonModule, ReactiveFormsModule],
@@ -14,6 +20,18 @@ import { OrderService } from '../../services/orders/order-service';
 })
 export class CheckoutPage implements OnInit {
 
+  /**
+   * Formulario reactivo del checkout.
+   * 
+   * Campos:
+   * - fullName: nombre completo (requerido)
+   * - address: dirección (requerido)
+   * - city: ciudad (requerido)
+   * - postalCode: código postal (requerido, formato 4-5 dígitos)
+   * - country: país (requerido)
+   * - paymentMethod: método de pago (requerido, default 'card')
+   * - cardNumber: número de tarjeta (validación condicional)
+   */
   checkoutForm = new FormGroup({
     fullName: new FormControl('', [Validators.required]),
     address: new FormControl('', [Validators.required]),
@@ -24,10 +42,21 @@ export class CheckoutPage implements OnInit {
     cardNumber: new FormControl('', [Validators.pattern(/^\d{4} \d{4} \d{4} \d{4}$/)]),
   });
 
+  /** Indica si se está procesando el pedido. */
   loading = false;
+  /** Mensaje de error en caso de fallo. */
   error = '';
+  /** ID del usuario autenticado. */
   private userId: number | null = null;
 
+  /**
+   * Constructor del componente CheckoutPage.
+   * 
+   * @param authService - Servicio de autenticación
+   * @param cartService - Servicio de gestión del carrito
+   * @param orderService - Servicio de gestión de pedidos
+   * @param router - Enrutador para navegación
+   */
   constructor(
     private authService: AuthService,
     private cartService: CartService,
@@ -35,6 +64,12 @@ export class CheckoutPage implements OnInit {
     private router: Router
   ) { }
 
+  /**
+   * Inicializa el componente al cargarse.
+   * 
+   * Obtiene el usuario autenticado y configura la validación condicional
+   * del campo de número de tarjeta según el método de pago seleccionado.
+   */
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     if (user) this.userId = user.id;
@@ -51,11 +86,18 @@ export class CheckoutPage implements OnInit {
     });
   }
 
+  /** Devuelve los items del carrito. */
   get cartItems() { return this.cartService.cartItems(); }
+  /** Devuelve el precio total del carrito. */
   get totalPrice() { return this.cartService.totalPrice(); }
+  /** Devuelve el método de pago seleccionado. */
   get paymentMethod() { return this.checkoutForm.get('paymentMethod')?.value; }
 
-  // Formatea el número de tarjeta con espacios
+  /**
+   * Formatea el número de tarjeta añadiendo espacios cada 4 dígitos.
+   * 
+   * @param event - Evento de entrada del input
+   */
   onCardInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let val = input.value.replace(/\D/g, '').substring(0, 16);
@@ -63,6 +105,12 @@ export class CheckoutPage implements OnInit {
     this.checkoutForm.get('cardNumber')?.setValue(val, { emitEvent: false });
   }
 
+  /**
+   * Procesa el envío del formulario y crea el pedido.
+   * 
+   * Valida el formulario, crea el objeto de pedido con los items del carrito,
+   * lo envía al backend y redirige a la página de confirmación.
+   */
   onSubmit(): void {
     if (!this.userId || this.checkoutForm.invalid) {
       this.checkoutForm.markAllAsTouched();
@@ -100,10 +148,22 @@ export class CheckoutPage implements OnInit {
     });
   }
 
+  /**
+   * Formatea un precio para mostrarlo con dos decimales y el símbolo de euro.
+   * 
+   * @param price - Precio a formatear
+   * @returns String con el precio formateado
+   */
   formatPrice(price: number): string {
     return `${price.toFixed(2)} €`;
   }
 
+  /**
+   * Comprueba si un campo del formulario es inválido y ha sido tocado.
+   * 
+   * @param field - Nombre del campo
+   * @returns true si el campo es inválido y ha sido tocado
+   */
   isInvalid(field: string): boolean {
     const control = this.checkoutForm.get(field);
     return !!(control?.invalid && control?.touched);

@@ -9,6 +9,12 @@ import { TranslateHelper } from '../../helpers/translate-helper';
 import { ConfirmModalService } from '../../services/confirm-modal/confirm-modal-service';
 import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
+/**
+ * Componente de la página de cartas del usuario.
+ * 
+ * Muestra todas las cartas que el usuario ha publicado para la venta,
+ * permitiendo eliminar cartas existentes.
+ */
 @Component({
   selector: 'app-my-cards-page',
   imports: [CommonModule, RouterLink, ConfirmModal],
@@ -25,6 +31,15 @@ export class MyCardsPage implements OnInit {
   userId: number | null = null;
   private cardToDelete: number | null = null;
 
+  /**
+   * Constructor del componente.
+   * 
+   * @param cardsService - Servicio de gestión de cartas
+   * @param authService - Servicio de autenticación
+   * @param cdr - Detector de cambios para actualizaciones manuales
+   * @param router - Enrutador para navegación
+   * @param confirmModal - Servicio para controlar el modal de confirmación
+   */
   constructor(
     private cardsService: CardsService,
     private authService: AuthService,
@@ -33,6 +48,11 @@ export class MyCardsPage implements OnInit {
     public confirmModal: ConfirmModalService
   ) { }
 
+  /**
+   * Inicializa el componente al cargarse.
+   * 
+   * Obtiene el usuario autenticado y carga sus cartas.
+   */
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     if (user) {
@@ -44,6 +64,9 @@ export class MyCardsPage implements OnInit {
     }
   }
 
+  /**
+   * Carga las cartas publicadas por el usuario desde el backend.
+   */
   loadUserCards(): void {
     if (!this.userId) return;
 
@@ -61,35 +84,53 @@ export class MyCardsPage implements OnInit {
     });
   }
 
-deleteCard(cardId: number): void {
-  this.cardToDelete = cardId;
-  this.confirmModal.open();
-}
-
-  onConfirmDelete(): void {
-  if (this.cardToDelete) {
-    this.cardsService.deleteCard(this.cardToDelete).subscribe({
-      next: () => {
-        this.myCards = this.myCards.filter(card => card.id !== this.cardToDelete);
-        this.cardToDelete = null;
-        this.confirmModal.close();
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error:', err);
-        alert('No se pudo eliminar la carta.');
-        this.cardToDelete = null;
-        this.confirmModal.close();
-      }
-    });
+  /**
+   * Solicita confirmación para eliminar una carta.
+   * 
+   * @param cardId - ID de la carta a eliminar
+   */
+  deleteCard(cardId: number): void {
+    this.cardToDelete = cardId;
+    this.confirmModal.open();
   }
-}
 
+  /**
+   * Elimina la carta tras la confirmación del usuario.
+   */
+  onConfirmDelete(): void {
+    if (this.cardToDelete) {
+      this.cardsService.deleteCard(this.cardToDelete).subscribe({
+        next: () => {
+          this.myCards = this.myCards.filter(card => card.id !== this.cardToDelete);
+          this.cardToDelete = null;
+          this.confirmModal.close();
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error:', err);
+          alert('No se pudo eliminar la carta.');
+          this.cardToDelete = null;
+          this.confirmModal.close();
+        }
+      });
+    }
+  }
 
+  /**
+   * Navega a la página de detalle de una carta.
+   * 
+   * @param cardId - ID de la carta
+   */
   goToCard(cardId: number): void {
     this.router.navigate(['/card', cardId]);
   }
 
+  /**
+   * Formatea un precio para mostrarlo con dos decimales y el símbolo de euro.
+   * 
+   * @param price - Precio a formatear
+   * @returns String con el precio formateado
+   */
   formatPrice(price: number): string {
     return `${price.toFixed(2)} €`;
   }
