@@ -1,20 +1,16 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfirmModalService {
+  visible = false;
 
-   showConfirm = signal(false);
+  open() { 
+    this.visible = true; 
+  }
 
-  /**
-   * Abre el modal de confirmación.
-   */
-  open() { this.showConfirm.set(true); }
-
-  /**
-   * Cierra el modal de confirmación.
-   */
-  close() { this.showConfirm.set(false); }  
-  
+  close() { 
+    this.visible = false; 
+  }
 }

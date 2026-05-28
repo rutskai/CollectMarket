@@ -11,6 +11,7 @@
     </div>
   } @else if (myCards.length === 0) {
     <div class="empty-state">
+      <span class="empty-icon ">//</span>
       <h2>No tienes cartas a la venta</h2>
       <p>Vende tu primera carta y aparecerá aquí</p>
       <a class="btn-sell" routerLink="/sell-card">Vender carta</a>
@@ -57,3 +58,8 @@
     </div>
   }
 </div>
+
+<app-confirm-modal 
+  [visible]="confirmModal.visible" 
+  (confirm)="onConfirmDelete()"
+  (cancel)="confirmModal.close()" />

@@ -7,31 +7,32 @@ import { ModelCard } from '../../models/card';
 import { ImageHelper } from '../../helpers/image-helper';
 import { TranslateHelper } from '../../helpers/translate-helper';
 import { ConfirmModalService } from '../../services/confirm-modal/confirm-modal-service';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 @Component({
   selector: 'app-my-cards-page',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ConfirmModal],
   templateUrl: './my-cards-page.html',
   styleUrl: './my-cards-page.css',
 })
 export class MyCardsPage implements OnInit {
 
-  private confirmModal = inject(ConfirmModalService);
   ImageHelper = ImageHelper;
   TranslateHelper = TranslateHelper;
-  
+
   myCards: ModelCard[] = [];
   loading = true;
   userId: number | null = null;
-  private cardToDelete: number | null = null; 
-  
+  private cardToDelete: number | null = null;
+
   constructor(
     private cardsService: CardsService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private router:Router,
-  ) {}
-  
+    private router: Router,
+    public confirmModal: ConfirmModalService
+  ) { }
+
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     if (user) {
@@ -42,10 +43,10 @@ export class MyCardsPage implements OnInit {
       this.loading = false;
     }
   }
-  
+
   loadUserCards(): void {
     if (!this.userId) return;
-    
+
     this.loading = true;
     this.cardsService.getUserCards(this.userId).subscribe({
       next: (cards) => {
@@ -59,34 +60,36 @@ export class MyCardsPage implements OnInit {
       }
     });
   }
-  
-  deleteCard(cardId: number): void {
-    this.cardToDelete = cardId; 
-    this.confirmModal.open();
-  }
+
+deleteCard(cardId: number): void {
+  this.cardToDelete = cardId;
+  this.confirmModal.open();
+}
 
   onConfirmDelete(): void {
-    if (this.cardToDelete) {
-      this.cardsService.deleteCard(this.cardToDelete).subscribe({
-        next: () => {
-          this.myCards = this.myCards.filter(card => card.id !== this.cardToDelete);
-          this.cardToDelete = null;
-          this.confirmModal.close();
-        },
-        error: (err) => {
-          console.error('Error al eliminar la carta:', err);
-          alert('No se pudo eliminar la carta. Inténtalo de nuevo.');
-          this.cardToDelete = null;
-          this.confirmModal.close();
-        }
-      });
-    }
+  if (this.cardToDelete) {
+    this.cardsService.deleteCard(this.cardToDelete).subscribe({
+      next: () => {
+        this.myCards = this.myCards.filter(card => card.id !== this.cardToDelete);
+        this.cardToDelete = null;
+        this.confirmModal.close();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        alert('No se pudo eliminar la carta.');
+        this.cardToDelete = null;
+        this.confirmModal.close();
+      }
+    });
   }
+}
+
 
   goToCard(cardId: number): void {
-  this.router.navigate(['/card', cardId]);
-}
-  
+    this.router.navigate(['/card', cardId]);
+  }
+
   formatPrice(price: number): string {
     return `${price.toFixed(2)} €`;
   }

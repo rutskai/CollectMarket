@@ -9,7 +9,7 @@ import { ConfirmModalService } from './services/confirm-modal/confirm-modal-serv
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, LoginModal,ConfirmModal, Footer],
+  imports: [RouterOutlet, Header, LoginModal, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -23,5 +23,5 @@ export class App {
    * @param modalService Servicio que gestiona la visibilidad del modal.
    */
   
-  constructor(public modalService: LoginModalService, public confirmModalService: ConfirmModalService) {}
+  constructor(public modalService: LoginModalService) {}
 }
