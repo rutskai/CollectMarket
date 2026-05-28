@@ -47,7 +47,7 @@
             </div>
             
             <div class="card-actions">
-              <button class="btn-delete" (click)="deleteCard(card.id)">
+              <button class="btn-delete" (click)="deleteCard(card.id); $event.stopPropagation()">
                 Eliminar
               </button>
             </div>
