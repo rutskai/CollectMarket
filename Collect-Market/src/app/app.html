@@ -4,3 +4,7 @@
 <app-login-modal 
   [visible]="modalService.showLogin()" 
   (close)="modalService.close()" />
+<app-confirm-modal 
+  [visible]="confirmModalService.showConfirm()" 
+  (confirm)="confirmModalService.close()"
+  (cancel)="confirmModalService.close()" />

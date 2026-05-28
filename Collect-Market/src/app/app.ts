@@ -4,10 +4,12 @@ import { Header } from "./components/header/header";
 import { LoginModalService } from './services/login-modal/login-modal-service';
 import { LoginModal } from './components/login-modal/login-modal';
 import { Footer } from './components/footer/footer';
+import { ConfirmModal } from './components/confirm-modal/confirm-modal';
+import { ConfirmModalService } from './services/confirm-modal/confirm-modal-service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, LoginModal, Footer],
+  imports: [RouterOutlet, Header, LoginModal,ConfirmModal, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -21,5 +23,5 @@ export class App {
    * @param modalService Servicio que gestiona la visibilidad del modal.
    */
   
-  constructor(public modalService: LoginModalService) {}
+  constructor(public modalService: LoginModalService, public confirmModalService: ConfirmModalService) {}
 }

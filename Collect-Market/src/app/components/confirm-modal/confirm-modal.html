@@ -1,0 +1,12 @@
+@if (visible) {
+  <div class="modal-backdrop" (click)="onBackdropClick()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <h2 class="modal-title">¿Eliminar carta?</h2>
+      <p class="modal-sub">Esta acción no se puede deshacer.</p>
+      <div class="modal-actions">
+        <button class="modal-btn-cancel" (click)="onCancel()">Cancelar</button>
+        <button class="modal-btn-confirm" (click)="onConfirm()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+}
