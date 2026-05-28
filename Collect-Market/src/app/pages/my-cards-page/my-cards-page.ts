@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CardsService } from '../../services/cards/cards-service';
@@ -25,7 +25,8 @@ export class MyCardsPage implements OnInit {
   
   constructor(
     private cardsService: CardsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr:ChangeDetectorRef,
   ) {}
   
   ngOnInit(): void {
@@ -33,8 +34,10 @@ export class MyCardsPage implements OnInit {
     if (user) {
       this.userId = user.id;
       this.loadUserCards();
+      this.cdr.detectChanges()
     } else {
       this.loading = false;
+      
     }
   }
   
@@ -46,6 +49,7 @@ export class MyCardsPage implements OnInit {
       next: (cards) => {
         this.myCards = cards;
         this.loading = false;
+        this.cdr.detectChanges()
       },
       error: (err) => {
         console.error('Error al cargar tus cartas:', err);

@@ -44,7 +44,7 @@ export class Header implements OnInit {
         this.favoritesService.load(user.id);
         this.cartService.load(user.id);
         this.loadUserOrders(user.id);
-        this.cdr.detectChanges();
+        
         
       } else {
         this.favoritesService.clear();
@@ -60,6 +60,7 @@ export class Header implements OnInit {
       next: (orders) => {
         this.orderCount=orders.length
         console.log('Pedidos cargados:', orders);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar pedidos:', err);
