@@ -20,22 +20,32 @@ import { TranslateHelper } from '../../helpers/translate-helper';
 export class Card implements OnInit {
 
   @Input() card!: ModelCard;
-  
+
   TranslateHelper = TranslateHelper;
   ImageHelper = ImageHelper;
-  showLoginModal = false; 
+  showLoginModal = false;
   isFavorite: Signal<boolean> = computed(() => false);
-  isInCart: Signal<boolean>   = computed(() => false);
+  isInCart: Signal<boolean> = computed(() => false);
 
   private userId: number | null = null;
+
+  /**
+ * Constructor del componente Card.
+ * 
+ * @param authService - Servicio de autenticación
+ * @param favoritesService - Servicio de gestión de favoritos
+ * @param cartService - Servicio de gestión del carrito
+ * @param router -  Navegación
+ * @param modalService - Servicio para controlar el modal de login
+ */
 
   constructor(
     private authService: AuthService,
     private favoritesService: FavoritesService,
-    private cartService: CartService, 
+    private cartService: CartService,
     private router: Router,
-     private modalService: LoginModalService
-  ) {}
+    private modalService: LoginModalService
+  ) { }
 
 
   /**
@@ -47,19 +57,19 @@ export class Card implements OnInit {
     if (user) {
       this.userId = user.id;
       this.isFavorite = this.favoritesService.isFavorite(this.card.id);
-      this.isInCart   = this.cartService.isInCart(this.card.id);
+      this.isInCart = this.cartService.isInCart(this.card.id);
     }
   }
 
-    /**
-   * Alterna el estado de favorito de la carta.
-   *
-   * Si el usuario no está autenticado abre el modal de login.
-   */
+  /**
+ * Alterna el estado de favorito de la carta.
+ *
+ * Si el usuario no está autenticado abre el modal de login.
+ */
   onToggleFavorite(): void {
-  if (!this.userId) { this.modalService.open(); return; }
-  this.favoritesService.toggle(this.userId, this.card.id);
-}
+    if (!this.userId) { this.modalService.open(); return; }
+    this.favoritesService.toggle(this.userId, this.card.id);
+  }
   /**
    * Alterna el estado de la carta en el carrito.
    *
@@ -74,8 +84,8 @@ export class Card implements OnInit {
   /**
    * Navega al detalle de la carta.
    */
-goToDetail() {
-  this.router.navigate(['/card', this.card.id]);
-}
+  goToDetail() {
+    this.router.navigate(['/card', this.card.id]);
+  }
 
 }
