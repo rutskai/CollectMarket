@@ -10,7 +10,6 @@ import { ConfirmModalService } from '../../services/confirm-modal/confirm-modal-
 
 @Component({
   selector: 'app-my-cards-page',
-  standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './my-cards-page.html',
   styleUrl: './my-cards-page.css',
