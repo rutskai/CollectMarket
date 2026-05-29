@@ -19,7 +19,11 @@ export class Header implements OnInit {
 
   public user: ModelUser | null = null;
   public searchTerm: string = '';
-  public orderCount: number=0;
+  public orderCount: number = 0;
+
+  //Audio
+  private audio = new Audio('music/routes_209_&_212.mp3');
+  isPlaying = false;
 
   /**
    * Constructor del componente Header.
@@ -37,8 +41,10 @@ export class Header implements OnInit {
     private cartService: CartService,
     private router: Router, private orderService: OrderService,
     private cdr: ChangeDetectorRef
-  ) {}
- 
+  ) {
+    this.audio.loop = true;
+  }
+
   /**
    * Se suscribe al estado del usuario.
    *
@@ -46,16 +52,16 @@ export class Header implements OnInit {
    * Si no hay usuario limpia ambos servicios.
    */
   ngOnInit(): void {
-  
-    
+
+
     this.authService.user$.subscribe(user => {
       this.user = user;
       if (user) {
         this.favoritesService.load(user.id);
         this.cartService.load(user.id);
         this.loadUserOrders(user.id);
-        
-        
+
+
       } else {
         this.favoritesService.clear();
         this.cartService.clear();
@@ -73,7 +79,7 @@ export class Header implements OnInit {
   private loadUserOrders(userId: number): void {
     this.orderService.getOrders(userId).subscribe({
       next: (orders) => {
-        this.orderCount=orders.length
+        this.orderCount = orders.length
         console.log('Pedidos cargados:', orders);
         this.cdr.detectChanges();
       },
@@ -91,13 +97,29 @@ export class Header implements OnInit {
    */
   onSearch(event: Event): void {
     event.preventDefault();
-    
+
     if (this.searchTerm && this.searchTerm.trim()) {
       const term = this.searchTerm.trim();
-      this.router.navigate(['/shop'], { 
+      this.router.navigate(['/shop'], {
         queryParams: { search: term }
       });
       this.searchTerm = '';
-    }  
+    }
+  }
+
+  /**
+   * Alterna la reproducción de la música de fondo.
+   *
+   * Si la música está sonando la pausa.
+   * Si está pausada la reproduce.
+   */
+
+  toggleMusic(): void {
+    if (this.isPlaying) {
+      this.audio.pause();
+    } else {
+      this.audio.play();
+    }
+    this.isPlaying = !this.isPlaying;
   }
 }
