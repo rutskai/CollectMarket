@@ -7,6 +7,12 @@ import { UserService } from '../../services/user/user-service';
 import { ModelUser } from '../../models/user';
 declare var $: any;
 
+/**
+ * Componente de la página de personalización de usuario.
+ * 
+ * Permite al usuario modificar su nombre, cambiar su foto de perfil
+ * y actualizar su contraseña.
+ */
 @Component({
   selector: 'app-user-personalization-page',
   imports: [CommonModule, FormsModule, RouterLink],
@@ -14,6 +20,7 @@ declare var $: any;
   styleUrl: './user-personalization-page.css',
 })
 export class UserPersonalizationPage implements OnInit {
+
 
   user: ModelUser | null = null;
 
@@ -35,12 +42,24 @@ export class UserPersonalizationPage implements OnInit {
   passwordSuccess = '';
   passwordError = '';
 
+  /**
+   * Constructor del componente UserPersonalizationPage.
+   * 
+   * @param authService - Servicio de autenticación
+   * @param userService - Servicio de gestión de usuarios
+   * @param cdr - Detector de cambios para actualizaciones manuales
+   */
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private cdr: ChangeDetectorRef
   ) {}
 
+  /**
+   * Inicializa el componente al cargarse.
+   * 
+   * Configura el vídeo de fondo y se suscribe al estado del usuario autenticado.
+   */
   ngOnInit(): void {
     $('#personalization').vide({mp4: 'video/pickachu_runtime'}, {poster: 'video/pickachu_runtime.png'});
     this.authService.user$.subscribe(user => {
@@ -50,8 +69,9 @@ export class UserPersonalizationPage implements OnInit {
     });
   }
 
-
-
+  /**
+   * Guarda el nuevo nombre del usuario.
+   */
   onSaveName(): void {
     if (!this.user || !this.newName.trim()) return;
     this.nameError = '';
@@ -71,8 +91,11 @@ export class UserPersonalizationPage implements OnInit {
     });
   }
 
-
-
+  /**
+   * Maneja la selección de un archivo para el avatar.
+   * 
+   * @param event - Evento de cambio del input de archivo
+   */
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
@@ -86,6 +109,9 @@ export class UserPersonalizationPage implements OnInit {
     reader.readAsDataURL(this.selectedFile);
   }
 
+  /**
+   * Guarda el nuevo avatar del usuario.
+   */
   onSaveAvatar(): void {
     if (!this.user || !this.selectedFile) return;
     this.avatarError = '';
@@ -105,8 +131,12 @@ export class UserPersonalizationPage implements OnInit {
     });
   }
 
-
-
+  /**
+   * Guarda la nueva contraseña del usuario.
+   * 
+   * Valida que la contraseña actual sea correcta
+   * y que la nueva contraseña coincida con su confirmación.
+   */
   onSavePassword(): void {
     if (!this.user) return;
     this.passwordError = '';

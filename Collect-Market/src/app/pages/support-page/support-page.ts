@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
+
 export type SupportTab = 'faq' | 'contact';
 
+/** Interfaz que representa una pregunta frecuente (FAQ). */
 interface FAQ {
   id: number;
   question: string;
@@ -12,6 +14,7 @@ interface FAQ {
   link?: boolean;
 }
 
+/** Interfaz que representa una categoría de FAQ. */
 interface Category {
   name: string;
   count: number;
@@ -25,10 +28,20 @@ interface Category {
   styleUrls: ['./support-page.css']
 })
 export class SupportPage {
+
   activeTab: SupportTab = 'faq';
   openFAQ: number | null = null;
   selectedCategory = 'Todos';
 
+  /**
+   * Formulario reactivo de contacto.
+   * 
+   * Campos:
+   * - name: nombre completo (requerido, mínimo 2 caracteres)
+   * - email: correo electrónico (requerido, formato email)
+   * - subject: asunto (requerido, mínimo 3 caracteres)
+   * - message: mensaje (requerido, mínimo 10 caracteres)
+   */
   contactForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -56,7 +69,11 @@ export class SupportPage {
     { id: 8, category: 'Cartas y colecciones', question: '¿Qué garantía tienen las cartas?', answer: 'Todas las cartas pasan por un control de calidad. Si recibes una carta en mal estado, tienes 14 días para solicitar devolución o cambio.' }
   ];
 
-  // Getter que filtra automáticamente por categoría y búsqueda
+  /**
+   * Getter que filtra automáticamente las FAQs por categoría seleccionada.
+   * 
+   * @returns Array de FAQs filtradas
+   */
   get filteredFAQs(): FAQ[] {
     let filtered = this.faqs;
     
@@ -64,39 +81,61 @@ export class SupportPage {
       filtered = filtered.filter(f => f.category === this.selectedCategory);
     }
     
-    
     return filtered;
   }
 
+  /**
+   * Cambia la pestaña activa del soporte.
+   * 
+   * @param tab - Pestaña a activar ('faq' o 'contact')
+   */
   changeTab(tab: SupportTab): void {
     this.activeTab = tab;
   }
 
+  /**
+   * Selecciona una categoría para filtrar las FAQs.
+   * 
+   * @param category - Nombre de la categoría
+   */
   selectCategory(category: string): void {
     this.selectedCategory = category;
   }
 
+  /**
+   * Abre o cierra una pregunta frecuente.
+   * 
+   * @param id - ID de la FAQ a togglear
+   */
   toggleFAQ(id: number): void {
     this.openFAQ = this.openFAQ === id ? null : id;
   }
 
-
-
-   get isFormValid(): boolean {
+  /**
+   * Indica si el formulario de contacto es válido.
+   * 
+   * @returns true si el formulario es válido
+   */
+  get isFormValid(): boolean {
     return this.contactForm.valid;
   }
 
-   submitContact(): void {
+  /**
+   * Envía el formulario de contacto.
+   * 
+   * Registra el mensaje en consola y resetea el formulario.
+   */
+  submitContact(): void {
     if (this.contactForm.valid) {
       console.log('Formulario enviado:', this.contactForm.value);
       alert('¡Mensaje enviado con éxito! Te responderemos en menos de 24 horas.');
       
-      // Resetear el formulario (igual que el login)
       this.contactForm.reset({
         name: '',
         email: '',
         subject: '',
         message: ''
       });
-    }}
+    }
+  }
 }

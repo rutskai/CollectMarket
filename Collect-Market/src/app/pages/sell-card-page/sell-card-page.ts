@@ -5,6 +5,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth-service';
 
+/**
+ * Componente de la página para vender cartas.
+ * 
+ * Permite a los usuarios autenticados publicar nuevas cartas
+ * para la venta en el mercado.
+ */
 @Component({
   selector: 'app-sell-card-page',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
@@ -13,6 +19,19 @@ import { AuthService } from '../../services/auth/auth-service';
 })
 export class SellCardPage {
 
+  /**
+   * Formulario reactivo para la publicación de una carta.
+   * 
+   * Campos:
+   * - name: nombre de la carta (necesario)
+   * - setName: nombre del set o colección
+   * - rarity: rareza de la carta
+   * - type: tipo de la carta
+   * - price: precio de venta (requerido, mínimo 0.01)
+   * - stock: cantidad disponible (requerido, mínimo 1)
+   * - description: descripción de la carta
+   * - imageUrl: URL de la imagen
+   */
   sellForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     setName: new FormControl(''),
@@ -31,13 +50,26 @@ export class SellCardPage {
   rarities = ['Common', 'Rare', 'Ultra Rare', 'Secret'];
   types = ['Electric', 'Fire', 'Water', 'Grass', 'Psychic', 'Dark'];
 
+  /**
+   * Constructor del componente SellCardPage.
+   * 
+   * @param cardsService - Servicio de gestión de cartas
+   * @param authService - Servicio de autenticación
+   */
   constructor(private cardsService: CardsService, private authService: AuthService) {
     const user = this.authService.getCurrentUser();
     this.userId = user?.id ?? null;
   }
 
+  /** ID del usuario autenticado (vendedor). */
   private userId: number | null = null;
 
+  /**
+   * Gestiona el envío del formulario para publicar una carta.
+   * 
+   * Valida el formulario, crea el objeto de carta con los datos
+   * y lo envía al servidor.
+   */
   onSubmit(): void {
     if (this.sellForm.invalid) {
       this.sellForm.markAllAsTouched();
@@ -63,7 +95,7 @@ export class SellCardPage {
     this.cardsService.createCard(card).subscribe({
       next: (res) => {
         this.loading = false;
-        this.success = `¡Carta "${res.name}" publicada correctamente!`;
+        this.success = `Carta "${res.name}" publicada correctamente!`;
         this.sellForm.reset();
       },
       error: () => {
@@ -73,10 +105,15 @@ export class SellCardPage {
     });
   }
 
+  /**
+   * Comprueba si un campo del formulario es inválido y ha sido tocado.
+   * 
+   * @param field - Nombre del campo
+   * @returns true si el campo es inválido y ha sido tocado
+   */
   isInvalid(field: string): boolean {
     const control = this.sellForm.get(field);
     return !!(control?.invalid && control?.touched);
   }
-
 
 }
