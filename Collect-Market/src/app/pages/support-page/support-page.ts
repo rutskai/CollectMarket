@@ -1,24 +1,20 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FAQ, Category } from '../../models/faq';
 
 
 export type SupportTab = 'faq' | 'contact';
 
-/** Interfaz que representa una pregunta frecuente (FAQ). */
-interface FAQ {
-  id: number;
-  question: string;
-  answer: string;
-  category: string;
-  link?: boolean;
-}
-
-/** Interfaz que representa una categoría de FAQ. */
-interface Category {
-  name: string;
-  count: number;
-}
+/**
+ * Componente de la página de soporte al usuario.
+ * 
+ * Proporciona dos pestañas principales:
+ * 1 - FAQ: Muestra preguntas frecuentes organizadas por categorías,
+ *    con funcionalidad de filtrado y expansión de respuestas.
+ * 2 - Contacto: Formulario de contacto para consultas personalizadas
+ *    con validación de campos.
+ */
 
 @Component({
   selector: 'app-support-page',
