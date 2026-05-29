@@ -123,9 +123,11 @@ static void StartCardImportInBackground(WebApplication app)
 {
     Task.Run(async () =>
     {
+        Console.WriteLine(" Iniciando importación de cartas...");
         using var scope = app.Services.CreateScope();
         var importService = scope.ServiceProvider.GetRequiredService<CardImportService>();
-        await importService.ImportCardsFromPokemonAPI();
+        var result = await importService.ImportCardsFromPokemonAPI();
+        Console.WriteLine($" Importación finalizada: {result.Message}");
     });
 }
 

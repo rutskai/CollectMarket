@@ -61,6 +61,13 @@ namespace Services
                 await using var connection = new MySqlConnection(_connectionString);
                 await connection.OpenAsync();
 
+                 var count = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Card");
+                if (count > 0)
+                {
+                    Console.WriteLine($" Ya hay {count} cartas en la BD, se omite la importación");
+                    return (true, $"Ya hay {count} cartas importadas", 0);
+                }
+
                 /**
                  * Consulta SQL de inserción.
                  *
@@ -68,9 +75,9 @@ namespace Services
                  */
                 const string sql = """
                 INSERT IGNORE INTO Card
-                (name, set_name, rarity, type, image_url, description, price, stock)
+                (name, set_name, rarity, type, image_url, description, price, stock, created_at, updated_at)
                 VALUES
-                (@Name, @SetName, @Rarity, @Type, @ImageUrl, @Description, @Price, @Stock);
+                (@Name, @SetName, @Rarity, @Type, @ImageUrl, @Description, @Price, @Stock, NOW(), NOW());
                 """;
 
                 using var client = new HttpClient();
