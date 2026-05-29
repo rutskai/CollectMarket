@@ -12,6 +12,7 @@ using CloudinaryDotNet;
  * - Configuración de Cloudinary
  * - Configuración de CORS
  * - Ejecución de migraciones
+ * - Ejecución de la importación de las cartas en segundo plano
  * - Registro de endpoints
  * - Inicialización del servidor web
  */
@@ -53,6 +54,13 @@ builder.Services.AddDbContext<AppDb>(options =>
 ));
 
 /**
+ * Registrar servicio de email.
+ *
+ */
+
+builder.Services.AddScoped<EmailService>();
+
+/**
  * Registrar servicio de importación
  * de cartas Pokémon.
  *
@@ -91,20 +99,34 @@ using (var scope = app.Services.CreateScope())
     try
     {
         await db.Database.MigrateAsync();
-
-        var importService = scope.ServiceProvider.GetRequiredService<CardImportService>();
-        await importService.ImportCardsFromPokemonAPI();
-    }
-    catch (MySqlConnector.MySqlException ex) when (ex.Number == 1050) // Tabla ya existe
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogWarning("TABLAS YA EXISTENTES - se omite migración: {Message}", ex.Message);
     }
     catch (Exception ex)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Error durante migración o importación de datos");
+        logger.LogError(ex, "Error durante migración");
     }
+}
+StartCardImportInBackground(app);
+
+/**
+ * Inicia la importación de cartas en segundo plano.
+ *
+ * Se ejecuta de forma asíncrona para no bloquear
+ * el arranque del servidor.
+ *
+ * Abre su propio contexto de base de datos
+ * para poder ejecutarse independientemente.
+ *
+ * @param app Aplicación principal ASP.NET.
+ */
+static void StartCardImportInBackground(WebApplication app)
+{
+    Task.Run(async () =>
+    {
+        using var scope = app.Services.CreateScope();
+        var importService = scope.ServiceProvider.GetRequiredService<CardImportService>();
+        await importService.ImportCardsFromPokemonAPI();
+    });
 }
 
 /**
@@ -116,6 +138,7 @@ app.FavoritesEndpoints();
 app.AuthEndpoints();
 app.CartEndpoints();
 app.OrdersEndpoints();
+app.RecoverEndpoints();
 
 /**
  * Endpoint Health Check.

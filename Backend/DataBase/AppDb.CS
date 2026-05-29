@@ -1,4 +1,3 @@
-// AppDb.cs
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -26,7 +25,8 @@ class AppDb : DbContext
     public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
     public DbSet<CartItem> CartItems => Set<CartItem>();
     public DbSet<Order> Orders => Set<Order>();   
-    public DbSet<OrderItem> OrderItems => Set<OrderItem>(); 
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>(); // NUEVA TABLA
 
     /**
      * Configuración avanzada de entidades.
@@ -45,7 +45,6 @@ class AppDb : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("User");
@@ -62,17 +61,16 @@ class AppDb : DbContext
             entity.Property(u => u.Password)
                 .IsRequired()
                 .HasMaxLength(255);
+                
             entity.Property(u => u.AvatarUrl)  
                 .HasMaxLength(500);
 
             entity.Property(u => u.CreatedAt);
-
             entity.Property(u => u.UpdatedAt);
 
             entity.HasIndex(u => u.Email)
                 .IsUnique();
         });
-
 
         modelBuilder.Entity<Card>(entity =>
         {
@@ -114,24 +112,24 @@ class AppDb : DbContext
         });
 
         modelBuilder.Entity<UserFavorite>(entity =>
-       {
-           entity.ToTable("UserFavorite");
-           entity.HasKey(f => f.Id);
+        {
+            entity.ToTable("UserFavorite");
+            entity.HasKey(f => f.Id);
 
-           entity.HasIndex(f => new { f.UserId, f.CardId }).IsUnique();
+            entity.HasIndex(f => new { f.UserId, f.CardId }).IsUnique();
 
-           entity.Property(f => f.CreatedAt);
+            entity.Property(f => f.CreatedAt);
 
-           entity.HasOne(f => f.User)
-               .WithMany()
-               .HasForeignKey(f => f.UserId)
-               .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-           entity.HasOne(f => f.Card)
-               .WithMany()
-               .HasForeignKey(f => f.CardId)
-               .OnDelete(DeleteBehavior.Cascade);
-       });
+            entity.HasOne(f => f.Card)
+                .WithMany()
+                .HasForeignKey(f => f.CardId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
 
         modelBuilder.Entity<CartItem>(entity =>
         {
@@ -178,6 +176,27 @@ class AppDb : DbContext
             entity.HasOne(o => o.Card)
                 .WithMany()
                 .HasForeignKey(o => o.CardId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<PasswordResetToken>(entity =>
+        {
+            entity.ToTable("PasswordResetToken");
+            entity.HasKey(t => t.Id);
+
+            entity.Property(t => t.Token)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            entity.Property(t => t.ExpiresAt)
+                .IsRequired();
+
+            entity.HasIndex(t => t.Token)
+                .IsUnique();
+
+            entity.HasOne(t => t.User)
+                .WithMany()
+                .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

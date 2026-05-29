@@ -14,12 +14,14 @@ import { OrderConfirmationPage } from './pages/order-confirmation-page/order-con
 import { OrderListPage } from './pages/order-list-page/order-list-page';
 import { SellCardPage } from './pages/sell-card-page/sell-card-page';
 import { MyCardsPage } from './pages/my-cards-page/my-cards-page';
+import { RecoverPasswordPage } from './pages/recover-password-page/recover-password-page';
 
 export const routes: Routes = [
     {path:"", component: HomePage},
     {path:"home", component: HomePage},
     {path:"auth/login", component: LoginPage},
     {path:"auth/register", component: RegisterPage},
+    { path: 'auth/recover', component: RecoverPasswordPage},
     {path:"user", component: UserPage},
     {path:"shop", component: ShopPage},
     {path:"favorite", component: FavoritePage},

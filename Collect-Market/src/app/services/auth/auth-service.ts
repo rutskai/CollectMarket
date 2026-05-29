@@ -10,6 +10,7 @@ export class AuthService {
 
   private loginUrl = '/api/login';
   private registerUrl = '/api/register';
+  private recoverUrl = '/api/auth/recover';
 
   private userSubject = new BehaviorSubject<ModelUser | null>(this.getStoredUser());
   public user$ = this.userSubject.asObservable();
@@ -119,7 +120,7 @@ export class AuthService {
     });
   }
 
-    /**
+  /**
  * Cambia la contraseña
  * @param userId - Id
  * @param currentPassword - Contraseña actual
@@ -129,11 +130,24 @@ export class AuthService {
  */
 
   changePassword(userId: number, currentPassword: string, newPassword: string, confirmPassword: string): Observable<any> {
-  return this.http.put(`/api/users/${userId}/password`, {
-    currentPassword,
-    newPassword,
-    confirmPassword
-  });
-}
+    return this.http.put(`/api/users/${userId}/password`, {
+      currentPassword,
+      newPassword,
+      confirmPassword
+    });
+  }
 
+  /**
+   * Solicita recuperación de contraseña.
+   * Envía un email al usuario con un enlace para restablecer su contraseña.
+   *
+   * @param email Email del usuario que solicita recuperación
+   * @returns Observable con mensaje de confirmación
+   */
+  recoverPassword(email: string): Observable<any> {
+    return this.http.post(this.recoverUrl, { email });
+  }
+
+
+  
 }

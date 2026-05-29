@@ -1,0 +1,46 @@
+<div id="recover" class="video-bg" data-vide-bg="/video/pickachu_runtime">
+  <form class="form-login p-4" [formGroup]="recoverForm" (ngSubmit)="onSubmit()">
+
+    <div class="title-form mb-3">
+      <h1 class="h3">Recuperar cuenta</h1>
+      <p>Introduce tu email y te enviaremos un enlace para restablecer tu contraseña</p>
+    </div>
+
+    @if (!sent) {
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" class="form-control" id="email" formControlName="email"
+          placeholder="tu@email.com" />
+        @let emailControl = recoverForm.get('email');
+        @if (emailControl?.invalid && emailControl?.touched) {
+          <div class="text-error">
+            @if (emailControl?.errors?.['required']) {
+              <p>Se requiere el email</p>
+            }
+            @if (emailControl?.errors?.['email']) {
+              <p>Formato de email inválido</p>
+            }
+          </div>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100" [disabled]="recoverForm.invalid">
+        Enviar enlace
+      </button>
+
+      @if (errorMessage) {
+        <div class="alert alert-error mt-3">{{ errorMessage }}</div>
+      }
+
+    } @else {
+      <div class="alert alert-success mt-3">
+        ✓ Si el email existe en nuestra base de datos, recibirás un enlace en breve.
+      </div>
+    }
+
+    <div class="auth-links">
+      <p><a routerLink="/auth/login">← Volver al inicio de sesión</a></p>
+    </div>
+
+  </form>
+</div>
