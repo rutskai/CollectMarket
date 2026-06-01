@@ -43,6 +43,7 @@ export class Header implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     this.audio.loop = true;
+    this.audio.volume = 0.04;
   }
 
   /**
