@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Dapper;
 using Models;
+using Helper;
 using MySql.Data.MySqlClient;
 
 namespace Services
@@ -151,8 +152,8 @@ namespace Services
                                 Type = fullCard.Types != null ? string.Join(", ", fullCard.Types) : "Sin tipo",
                                 ImageUrl = fullCard.Image ?? basicCard.Image,
                                 Description = description,
-                                Price = GeneratePrice(rarity),
-                                Stock = GenerateStock(rarity)
+                                Price = CardPriceHelper.GeneratePrice(rarity),
+                                Stock = CardPriceHelper.GenerateStock(rarity)
                             });
 
                             totalInserted++;
@@ -176,49 +177,6 @@ namespace Services
                 return (false, $"Error durante la importación: {ex.Message}", 0);
             }
         }
-
-        /**
-         * Genera automáticamente un precio
-         * según la rareza de la carta.
-         *
-         * @param rarity Rareza de la carta.
-         *
-         * @return Precio generado.
-         */
-        private static decimal GeneratePrice(string rarity)
-        {
-            return rarity switch
-            {
-                "Common" => 0.50m,
-                "Uncommon" => 1.50m,
-                "Rare" => 5.00m,
-                "Rare Holo" => 15.00m,
-                _ => 1.00m
-            };
-        }
-
-        /**
-         * Genera stock aleatorio según rareza.
-         *
-         * Cartas raras generan menos stock.
-         *
-         * @param rarity Rareza de la carta.
-         *
-         * @return Cantidad de stock generada.
-         */
-        private static int GenerateStock(string? rarity)
-        {
-            rarity ??= "Unknown";
-
-            return rarity switch
-            {
-                "Common" => Random.Shared.Next(50, 100),
-                "Uncommon" => Random.Shared.Next(30, 60),
-                "Rare" => Random.Shared.Next(10, 30),
-                "Rare Holo" => Random.Shared.Next(5, 15),
-                "Promo" => Random.Shared.Next(5, 10),
-                _ => 20
-            };
-        }
+   
     }
 }

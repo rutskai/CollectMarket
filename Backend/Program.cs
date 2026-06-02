@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Services;
 using Api;
+using Helper;
 using CloudinaryDotNet;
 
 /**
@@ -85,8 +89,38 @@ builder.Services.AddCors(options =>
     });
 });
 
+/**
+ * Configuración de JWT ( Token).
+ *
+ * Se utiliza para:
+ * - Autenticación
+ * - Generación y validación de tokens
+ * - Protección de endpoints
+ *
+ * La clave secreta debe coincidir con la usada en TokenHelper.GenerateToken()
+ */
+var Key = "CollectMarket2025-MiClave123354436478";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,           
+            ValidateAudience = false,        
+            ValidateLifetime = true,          
+            ValidateIssuerSigningKey = true, 
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key))
+        };
+    });
+
+builder.Services.AddAuthorization();
 var app = builder.Build();
 app.UseCors("AllowAngular");
+
+//Middleware autentificación
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 /**

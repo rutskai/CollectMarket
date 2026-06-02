@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Helper;
 
 namespace Api
 {
@@ -40,9 +41,11 @@ namespace Api
                 if (!validPassword) 
                     return  Results.Json(new { message = "Contraseña incorrecta." }, statusCode: 401);
 
+                var token = TokenHelper.GenerateToken(user);
                 return Results.Ok(new
                 {
                     message = "Login exitoso!",
+                    token = token,
                     user = new
                     {
                         id = user.Id,

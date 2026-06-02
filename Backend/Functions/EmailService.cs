@@ -6,54 +6,58 @@ using System.Net.Mail;
  *
  * Utiliza SMTP de Gmail para el envío.
  */
-public class EmailService
+
+namespace Helper
 {
-    private readonly string smtpServer;
-    private readonly int smtpPort;
-    private readonly string senderEmail;
-    private readonly string senderPassword;
-    private readonly string senderName;
-
-    /**
-     * Obtiene la configuración de email
-     * desde appsettings.json.
-     *
-     * @param configuration Configuración global.
-     */
-    public EmailService(IConfiguration configuration)
+    public class EmailService
     {
-        smtpServer    = configuration["EmailSettings:SmtpServer"] ?? "smtp.gmail.com";
-        smtpPort      = int.TryParse(configuration["EmailSettings:SmtpPort"], out var port) ? port : 587;
-        senderEmail   = configuration["EmailSettings:SenderEmail"] ?? "";
-        senderPassword = configuration["EmailSettings:SenderPassword"] ?? "";
-        senderName    = configuration["EmailSettings:SenderName"] ?? "CollectMarket";
-    }
+        private readonly string smtpServer;
+        private readonly int smtpPort;
+        private readonly string senderEmail;
+        private readonly string senderPassword;
+        private readonly string senderName;
 
-    /**
-     * Envía un email HTML.
-     *
-     * @param to Destinatario.
-     * @param subject Asunto.
-     * @param body Cuerpo HTML.
-     */
-    public async Task SendEmailAsync(string to, string subject, string body)
-    {
-        using var smtp = new SmtpClient(smtpServer)
+        /**
+         * Obtiene la configuración de email
+         * desde appsettings.json.
+         *
+         * @param configuration Configuración global.
+         */
+        public EmailService(IConfiguration configuration)
         {
-            Port        = smtpPort,
-            Credentials = new NetworkCredential(senderEmail, senderPassword),
-            EnableSsl   = true,
-        };
+            smtpServer = configuration["EmailSettings:SmtpServer"] ?? "smtp.gmail.com";
+            smtpPort = int.TryParse(configuration["EmailSettings:SmtpPort"], out var port) ? port : 587;
+            senderEmail = configuration["EmailSettings:SenderEmail"] ?? "";
+            senderPassword = configuration["EmailSettings:SenderPassword"] ?? "";
+            senderName = configuration["EmailSettings:SenderName"] ?? "CollectMarket";
+        }
 
-        var mail = new MailMessage
+        /**
+         * Envía un email HTML.
+         *
+         * @param to Destinatario.
+         * @param subject Asunto.
+         * @param body Cuerpo HTML.
+         */
+        public async Task SendEmailAsync(string to, string subject, string body)
         {
-            From       = new MailAddress(senderEmail, senderName),
-            Subject    = subject,
-            Body       = body,
-            IsBodyHtml = true,
-        };
+            using var smtp = new SmtpClient(smtpServer)
+            {
+                Port = smtpPort,
+                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                EnableSsl = true,
+            };
 
-        mail.To.Add(to);
-        await smtp.SendMailAsync(mail);
+            var mail = new MailMessage
+            {
+                From = new MailAddress(senderEmail, senderName),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true,
+            };
+
+            mail.To.Add(to);
+            await smtp.SendMailAsync(mail);
+        }
     }
 }
