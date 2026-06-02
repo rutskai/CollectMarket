@@ -147,6 +147,7 @@ Collect-Market/src/app/
 │   ├── home-page/              # Landing con cartas destacadas
 │   ├── shop-page/              # Tienda con filtros y paginación
 │   ├── detail-card-page/       # Detalle de una carta
+│   ├── not-found.ts            # Página de error 404 Not Found
 │   ├── favorite-page/          # Cartas favoritas del usuario
 │   ├── shopping-cart-page/     # Carrito de compra
 │   ├── checkout-page/          # Formulario de pago
