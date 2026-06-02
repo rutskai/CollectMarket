@@ -15,6 +15,7 @@ import { OrderListPage } from './pages/order-list-page/order-list-page';
 import { SellCardPage } from './pages/sell-card-page/sell-card-page';
 import { MyCardsPage } from './pages/my-cards-page/my-cards-page';
 import { RecoverPasswordPage } from './pages/recover-password-page/recover-password-page';
+import { NotFound } from './pages/not-found/not-found';
 
 export const routes: Routes = [
     {path:"", component: HomePage},
@@ -33,6 +34,8 @@ export const routes: Routes = [
     { path: 'order-confirmation-page', component: OrderConfirmationPage },
     { path: 'order-list-page', component: OrderListPage },
     { path: 'sell-card-page', component: SellCardPage },
-    {path:'my-cards-page', component: MyCardsPage}
+    {path:'my-cards-page', component: MyCardsPage},
+    {path:'404', component: NotFound},
+    { path: '**', redirectTo: '404' }
     
 ];
