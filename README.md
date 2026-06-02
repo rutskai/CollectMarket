@@ -367,4 +367,4 @@ Ruth Collado García
 
 Desarrollado como Trabajo de Fin de Grado.
 
-© 2025 CollectMarket
+© 2025-2026 CollectMarket
