@@ -42,6 +42,17 @@ CollectMarket es una aplicación web full-stack que permite a los usuarios compr
 | Cloudinary | — | Almacenamiento de imágenes |
 | Dapper | — | Importación de cartas |
 
+### Librerías
+| Librería | Modo | Uso |
+|---|---|---|
+| Vide | Frontend | Vídeos de fondo (plugin de jQuery) |
+| BCrypt.Net-Next| Backend | Hash contraseñas|
+| CloudinaryDotNet | Backend | Almacenamiento de avatares en la nube |
+| Dapper | Backend | Micro-ORM para consultas SQL (importación de cartas) |
+| Microsoft.EntityFrameworkCore| Backend | ORM* principal |
+| MySql.Data | Backend | Conector MySQL para .NET |
+
+    *ORM: técnica que permite convertir datos entre una base de datos relacional (tablas) y un lenguaje orientado a objetos (clases), evitando escribir SQL manualmente.
 ---
 
 ## Arquitectura
