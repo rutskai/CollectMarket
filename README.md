@@ -41,6 +41,7 @@ CollectMarket es una aplicación web full-stack que permite a los usuarios compr
 | BCrypt.Net | — | Hash de contraseñas |
 | Cloudinary | — | Almacenamiento de imágenes |
 | Dapper | — | Importación de cartas |
+| JWT | — | Autentificación tokens |
 
 ### Librerías
 | Librería | Modo | Uso |
@@ -136,6 +137,16 @@ CollectMarket/
 - Campos: nombre, expansión, rareza, tipo, precio, stock, descripción, imagen
 - Vista previa de imagen en tiempo real
 - Página de mis cartas con opción de eliminar
+
+### Soporte
+- Página de soporte con preguntas frecuentes (FAQ) organizadas por categorías
+- Formulario de contacto para consultas
+
+### Experiencia de usuario
+
+- Vídeos de fondo en página de inicio y login/register (temática Pokémon)
+- Página 404 Not Found personalizada
+- Diseño responsive 
 
 ---
 
