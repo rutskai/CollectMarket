@@ -10,6 +10,7 @@ import { ImageHelper } from '../../helpers/image-helper';
 import { EXPANSION_TRANSLATION, RARITY_TRANSLATION, TYPE_TRANSLATION } from '../../helpers/constants';
 import { UserService } from '../../services/user/user-service';
 import { TranslateHelper } from '../../helpers/translate-helper';
+import { LoginModalService } from '../../services/login-modal/login-modal-service';
 
 /**
  * Componente de la página de detalle de una carta.
@@ -53,6 +54,7 @@ export class DetailCardPage implements OnInit {
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
     private userService: UserService,
+    public loginModalService: LoginModalService,
   ) {}
 
   /**
@@ -105,7 +107,7 @@ export class DetailCardPage implements OnInit {
    */
   toggleFavorite(): void {
     if (!this.userId || !this.card) {
-      alert('Debes iniciar sesión.');
+      this.loginModalService.open();
       return;
     }
     this.favoritesService.toggle(this.userId, this.card.id);
@@ -118,7 +120,7 @@ export class DetailCardPage implements OnInit {
    */
   addToCart(): void {
     if (!this.userId || !this.card) {
-      alert('Debes iniciar sesión.');
+      this.loginModalService.open();
       return;
     }
     this.cartService.toggle(this.userId, this.card.id);
