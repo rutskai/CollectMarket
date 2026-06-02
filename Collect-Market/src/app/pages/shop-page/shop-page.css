@@ -301,21 +301,9 @@
   gap: 10px;
 }
 
-.sort-select {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 7px 12px;
-  color: var(--text);
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
 
-.sort-select:focus {
-  border-color: var(--border-gold);
-}
+
+
 
 .grid-toggle {
   display: flex;
