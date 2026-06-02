@@ -1,0 +1,188 @@
+.not-found {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f1923 0%, #1a2a3a 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.not-found::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,215,0,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: float 20s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
+}
+
+.not-found-card {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.card-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  100% { left: 100%; }
+}
+
+.card-background {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+}
+
+.card-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 20px,
+    rgba(255,215,0,0.1) 20px,
+    rgba(255,215,0,0.1) 40px
+  );
+}
+
+.not-found-content {
+  position: relative;
+  padding: 48px 32px;
+  text-align: center;
+}
+
+.card-icon {
+  position: relative;
+  width: 120px;
+  height: 160px;
+  margin: 0 auto 32px;
+  perspective: 1000px;
+}
+
+.card-back, .card-front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  background: linear-gradient(135deg, #2a3a4a, #1a2a3a);
+  border-radius: 12px;
+  border: 2px solid #ffd700;
+  backface-visibility: hidden;
+  transition: transform 0.6s;
+}
+
+.card-front {
+  transform: rotateY(180deg);
+}
+
+.card-icon:hover .card-back {
+  transform: rotateY(180deg);
+}
+
+.card-icon:hover .card-front {
+  transform: rotateY(0);
+}
+
+h1 {
+  color: #ffd700;
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 32px;
+}
+
+.suggestions {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.suggestions h3 {
+  color: #ffd700;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.suggestions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.suggestions li {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #ffd700;
+  color: #1a2a3a;
+}
+
+.btn-primary:hover {
+  background: #ffed4a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #ffd700;
+  border: 2px solid #ffd700;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 215, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+  .not-found-content { padding: 32px 20px; }
+  h1 { font-size: 24px; }
+  .actions { flex-direction: column; }
+}
