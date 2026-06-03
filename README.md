@@ -239,8 +239,11 @@ En `Backend/appsettings.json`:
   }
 }
 ```
+El proyecto incluye credenciales de Cloudinary funcionales para facilitar 
+la evaluación. Son de una cuenta creada específicamente para este TFG. En caso de querer crearse una cuenta las credenciales de Cloudinary se obtienen en [cloudinary.com/console](https://cloudinary.com/console) tras registrarse gratuitamente.
 
-Las credenciales de Cloudinary se obtienen en [cloudinary.com/console](https://cloudinary.com/console) tras registrarse gratuitamente.
+Si la base de datos no conecta, ajusta el usuario y contraseña 
+de MySQL en la connection string según tu configuración local
 
 ---
 
@@ -361,7 +364,7 @@ dotnet ef database update
 
 ---
 
-## Autor
+## Autora
 
 Ruth Collado García
 
