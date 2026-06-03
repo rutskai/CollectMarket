@@ -99,7 +99,7 @@ CollectMarket/
 - Guards de rutas para páginas protegidas
 
 ### Catálogo de cartas
-- Más de 128 cartas importadas automáticamente desde la API TCGdex
+- 228 cartas importadas automáticamente desde la API TCGdex
 - Importación de expansiones: Base Set, Jungle y Fossil
 - Precios y stock generados automáticamente según rareza
 - Paginación de 14 cartas por página
