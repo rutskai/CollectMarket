@@ -244,6 +244,7 @@ export class ShopPage implements OnInit, OnDestroy {
         this.allCards = cards;
         this.applySearchFilter(this.allCards);  
         this.resetPageAndUpdate();
+         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al filtrar:', err)
     });

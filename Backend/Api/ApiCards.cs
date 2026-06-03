@@ -150,6 +150,20 @@ namespace Api
             app.MapGet("/api/cards/expansions", async (AppDb db) =>
                 Results.Ok(await db.Cards.Select(c => c.SetName).Distinct().ToListAsync()));
 
+            
+            /**
+            * Endpoint para obtener el precio máximo de todas las cartas.
+            *
+            * @param db Contexto de base de datos.
+            *
+            * @return Precio máximo como número decimal.
+            */
+            app.MapGet("/api/cards/max-price", async (AppDb db) =>
+            {
+                var maxPrice = await db.Cards.MaxAsync(c => c.Price);
+                return Results.Ok(maxPrice);
+            });
+
             /**
             * Crea una nueva carta.
             *
@@ -228,18 +242,6 @@ namespace Api
                 return Results.Ok(new { message = "Carta eliminada correctamente" });
             });
 
-            /**
-            * Endpoint para obtener el precio máximo de todas las cartas.
-            *
-            * @param db Contexto de base de datos.
-            *
-            * @return Precio máximo como número decimal.
-            */
-            app.MapGet("/api/cards/max-price", async (AppDb db) =>
-            {
-                var maxPrice = await db.Cards.MaxAsync(c => c.Price);
-                return Results.Ok(maxPrice);
-            });
         }
     }
 }
