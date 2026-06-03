@@ -364,7 +364,7 @@ dotnet ef database update
 
 ---
 
-## Autor
+## Autora
 
 Ruth Collado García
 
