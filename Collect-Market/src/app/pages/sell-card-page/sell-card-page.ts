@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CardsService } from '../../services/cards/cards-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth/auth-service';
 
 /**
  * Componente de la página para vender cartas.
- * 
+ *
  * Permite a los usuarios autenticados publicar nuevas cartas
  * para la venta en el mercado.
  */
@@ -18,10 +18,9 @@ import { AuthService } from '../../services/auth/auth-service';
   styleUrl: './sell-card-page.css',
 })
 export class SellCardPage {
-
   /**
    * Formulario reactivo para la publicación de una carta.
-   * 
+   *
    * Campos:
    * - name: nombre de la carta (necesario)
    * - setName: nombre del set o colección
@@ -47,16 +46,20 @@ export class SellCardPage {
   success = '';
   error = '';
 
-  rarities = ['Common', 'Rare', 'Ultra Rare', 'Secret'];
+  rarities = ['Common', 'Rare', 'Uncommon'];
   types = ['Electric', 'Fire', 'Water', 'Grass', 'Psychic', 'Dark'];
 
   /**
    * Constructor del componente SellCardPage.
-   * 
+   *
    * @param cardsService - Servicio de gestión de cartas
    * @param authService - Servicio de autenticación
    */
-  constructor(private cardsService: CardsService, private authService: AuthService) {
+  constructor(
+    private cardsService: CardsService,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+  ) {
     const user = this.authService.getCurrentUser();
     this.userId = user?.id ?? null;
   }
@@ -66,7 +69,7 @@ export class SellCardPage {
 
   /**
    * Gestiona el envío del formulario para publicar una carta.
-   * 
+   *
    * Valida el formulario, crea el objeto de carta con los datos
    * y lo envía al servidor.
    */
@@ -97,17 +100,32 @@ export class SellCardPage {
         this.loading = false;
         this.success = `Carta "${res.name}" publicada correctamente!`;
         this.sellForm.reset();
+        setTimeout(() => {
+          this.success = '';
+          this.cdr.detectChanges();
+        }, 3000);
       },
-      error: () => {
+      error: (err) => {
         this.loading = false;
-        this.error = 'Error al publicar la carta. Inténtalo de nuevo.';
-      }
+        // Mensaje de error por carta existente
+        if (err.status === 400 && err.error?.message) {
+          this.error = err.error.message;
+        } else {
+          this.error = 'Error al publicar la carta. Inténtalo de nuevo.';
+        }
+
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.error = '';
+          this.cdr.detectChanges();
+        }, 3000);
+      },
     });
   }
 
   /**
    * Comprueba si un campo del formulario es inválido y ha sido tocado.
-   * 
+   *
    * @param field - Nombre del campo
    * @returns true si el campo es inválido y ha sido tocado
    */
@@ -115,5 +133,4 @@ export class SellCardPage {
     const control = this.sellForm.get(field);
     return !!(control?.invalid && control?.touched);
   }
-
 }
