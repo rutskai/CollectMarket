@@ -28,6 +28,8 @@ export class SupportPage {
   activeTab: SupportTab = 'faq';
   openFAQ: number | null = null;
   selectedCategory = 'Todos';
+  showSuccessMessage = false;
+  successMessage = '';
 
   /**
    * Formulario reactivo de contacto.
@@ -55,14 +57,14 @@ export class SupportPage {
   ];
 
   faqs: FAQ[] = [
-    { id: 1, category: 'Cuenta y perfil', question: '¿Cómo creo una cuenta en CollectMarket?', answer: 'Para crear una cuenta, haz clic en "Registrarse" en la esquina superior derecha. Completa tus datos básicos y verifica tu correo electrónico para activar tu cuenta.', link: true },
-    { id: 2, category: 'Cuenta y perfil', question: '¿Cómo recupero mi contraseña?', answer: 'En la página de inicio de sesión, haz clic en "¿Olvidaste tu contraseña?". Recibirás un enlace para restablecerla en tu correo electrónico registrado.' },
+    { id: 1, category: 'Cuenta y perfil', question: '¿Cómo creo una cuenta en CollectMarket?', answer: 'Para crear una cuenta, haz clic en "Registrarse" en la esquina superior derecha y completa tus datos básicos.', link: true },
+    { id: 2, category: 'Cuenta y perfil', question: '¿Cómo recupero mi contraseña?', answer: 'En la página de inicio de sesión, haz clic en "¿Olvidaste tu contraseña?". Recibirás un código para restablecerla en tu correo electrónico registrado.' },
     { id: 3, category: 'Pedidos y envíos', question: '¿Cuánto tarda el envío de mis cartas?', answer: 'Los envíos nacionales tardan entre 2-5 días laborables. Los internacionales pueden tardar 7-14 días laborables dependiendo del destino.', link: true },
-    { id: 4, category: 'Pedidos y envíos', question: '¿Puedo rastrear mi pedido?', answer: 'Sí, todos los pedidos incluyen número de seguimiento. Lo encontrarás en tu perfil > "Mis pedidos" y también lo recibirás por email.' },
-    { id: 5, category: 'Pagos y facturación', question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas Visa/Mastercard, PayPal, Bizum y transferencia bancaria. Todos los pagos son seguros y están protegidos.' },
+    { id: 4, category: 'Pedidos y envíos', question: '¿Puedo rastrear mi pedido?', answer: 'Sí, todos los pedidos incluyen número de seguimiento. Lo encontrarás en tu perfil > "Mis pedidos".' },
+    { id: 5, category: 'Pagos y facturación', question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas Visa/Mastercard y PayPal. Todos los pagos son seguros y están protegidos.' },
     { id: 6, category: 'Cartas y colecciones', question: '¿Las cartas son originales?', answer: 'Sí, todas las cartas son 100% originales y verificadas. Trabajamos directamente con distribuidores oficiales y coleccionistas verificados.' },
-    { id: 7, category: 'Vender en Collect', question: '¿Cómo puedo vender mis cartas?', answer: 'En tu perfil, selecciona "Vender carta". Sube fotos, describe el estado y el precio. Nuestro equipo revisará la publicación antes de activarla.' },
-    { id: 8, category: 'Cartas y colecciones', question: '¿Qué garantía tienen las cartas?', answer: 'Todas las cartas pasan por un control de calidad. Si recibes una carta en mal estado, tienes 14 días para solicitar devolución o cambio.' }
+    { id: 7, category: 'Vender en Collect', question: '¿Cómo puedo vender mis cartas?', answer: 'En tu perfil, selecciona "Vender carta". Sube fotos, describe el estado y el precio.' },
+    { id: 8, category: 'Cartas y colecciones', question: '¿Qué garantía tienen las cartas?', answer: 'Todas las cartas pasan por un control de calidad.' }
   ];
 
   /**
@@ -87,6 +89,7 @@ export class SupportPage {
    */
   changeTab(tab: SupportTab): void {
     this.activeTab = tab;
+    this.showSuccessMessage = false;
   }
 
   /**
@@ -124,7 +127,9 @@ export class SupportPage {
   submitContact(): void {
     if (this.contactForm.valid) {
       console.log('Formulario enviado:', this.contactForm.value);
-      alert('¡Mensaje enviado con éxito! Te responderemos en menos de 24 horas.');
+      
+      this.successMessage = '¡Mensaje enviado con éxito! Te responderemos en menos de 24 horas.';
+      this.showSuccessMessage = true;
       
       this.contactForm.reset({
         name: '',
@@ -132,6 +137,10 @@ export class SupportPage {
         subject: '',
         message: ''
       });
+      
+      setTimeout(() => {
+        this.showSuccessMessage = false;
+      }, 5000);
     }
   }
 }

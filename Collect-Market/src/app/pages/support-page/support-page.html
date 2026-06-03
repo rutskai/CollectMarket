@@ -71,38 +71,43 @@
             <div class="form-group">
               <label>Nombre completo</label>
               <input type="text" [formControl]="contactForm.controls.name" placeholder="Tu nombre">
-              <div class="error-message" *ngIf="contactForm.controls.name.invalid && contactForm.controls.name.touched">
-                Nombre requerido (mínimo 2 caracteres)
-              </div>
+              @if (contactForm.controls.name.invalid && contactForm.controls.name.touched) {
+                <div class="error-message">
+                  Nombre requerido (mínimo 2 caracteres)
+                </div>
+              }
             </div>
 
             <div class="form-group">
               <label>Correo electrónico</label>
               <input type="email" [formControl]="contactForm.controls.email" placeholder="tu@email.com">
-              <div class="error-message"
-                *ngIf="contactForm.controls.email.invalid && contactForm.controls.email.touched">
-                Email válido requerido
-              </div>
+              @if (contactForm.controls.email.invalid && contactForm.controls.email.touched) {
+                <div class="error-message">
+                  Email válido requerido
+                </div>
+              }
             </div>
 
             <div class="form-group">
               <label>Asunto</label>
               <input type="text" [formControl]="contactForm.controls.subject"
                 placeholder="¿Sobre qué trata tu consulta?">
-              <div class="error-message"
-                *ngIf="contactForm.controls.subject.invalid && contactForm.controls.subject.touched">
-                Asunto requerido (mínimo 3 caracteres)
-              </div>
+              @if (contactForm.controls.subject.invalid && contactForm.controls.subject.touched) {
+                <div class="error-message">
+                  Asunto requerido (mínimo 3 caracteres)
+                </div>
+              }
             </div>
 
             <div class="form-group">
               <label>Mensaje</label>
               <textarea rows="5" [formControl]="contactForm.controls.message"
                 placeholder="Describe tu problema o consulta..."></textarea>
-              <div class="error-message"
-                *ngIf="contactForm.controls.message.invalid && contactForm.controls.message.touched">
-                Mensaje requerido (mínimo 10 caracteres)
-              </div>
+              @if (contactForm.controls.message.invalid && contactForm.controls.message.touched) {
+                <div class="error-message">
+                  Mensaje requerido (mínimo 10 caracteres)
+                </div>
+              }
             </div>
 
             <button class="submit-btn" (click)="submitContact()" [disabled]="!isFormValid">
@@ -148,6 +153,14 @@
             </div>
           </div>
         </div>
+        
+        <!-- Mensaje de éxito verde - fuera del contact-info-card -->
+        @if (showSuccessMessage) {
+          <div class="success-message">
+            <i class="fa-regular fa-circle-check"></i>
+            <span>{{ successMessage }}</span>
+          </div>
+        }
       </div>
       }
 
