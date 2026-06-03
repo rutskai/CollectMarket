@@ -228,6 +228,7 @@ export class ShopPage implements OnInit, OnDestroy {
     if (!hasActiveFilters) {
       this.allCards = this.allSourceCards;
       this.applySearchFilter(this.allSourceCards); 
+      this.cdr.detectChanges();
       return;
     }
 

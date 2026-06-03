@@ -26,6 +26,7 @@ export const RARITY_TRANSLATION: { [line: string]: string } = {
 
 export const EXPANSION_TRANSLATION: { [line: string]: string } = {
   'Base Set': 'Colección Básica',
+  'Base': 'Colección Básica',
   'Jungle': 'Jungla',
   'Fossil': 'Fósil',
 };
