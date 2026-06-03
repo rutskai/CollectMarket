@@ -161,14 +161,11 @@ namespace Api
             */
             app.MapPost("/api/cards", async (CardPublic body, AppDb db) =>
             {
-                var existing = await db.Cards.FirstOrDefaultAsync(c =>
-                    c.Name == body.Name &&
-                    c.SetName == body.SetName &&
-                    c.Rarity == body.Rarity
-                );
+                if (body.Price <= 0)
+                    return Results.BadRequest(new { message = "El precio debe ser mayor que 0." });
 
-                if (existing != null)
-                    return Results.BadRequest(new { message = "Ya existe una carta con estas características." });
+                if (body.Stock <= 0)
+                    return Results.BadRequest(new { message = "El stock debe ser al menos 1." });
 
                 var card = new Card
                 {
