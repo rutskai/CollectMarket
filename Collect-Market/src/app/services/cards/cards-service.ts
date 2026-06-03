@@ -145,5 +145,14 @@ export class CardsService {
   deleteCard(cardId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/cards/${cardId}`);
   }
+
+ /**
+ * Obtiene el precio máximo de todas las cartas.
+ * 
+ * @returns Observable con el precio máximo
+ */
+getMaxPrice(): Observable<number> {
+  return this.http.get<number>(`${this.apiUrl}/cards/max-price`);
+}
   
 }

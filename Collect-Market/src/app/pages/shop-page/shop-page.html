@@ -51,11 +51,11 @@
         <div class="price-slider-wrap">
           <div class="price-values">
             <span>0€</span>
-            <span class="price-current">€{{ maxPrice }}</span>
-            <span>100€</span>
+            <span class="price-current">{{ selectedPrice }}€</span>
+            <span>{{ maxPriceLimit }}€</span>
           </div>
-          <input class="price-slider" type="range" min="0" max="100" [style.--val]="maxPrice"
-          [(ngModel)]="maxPrice"
+          <input class="price-slider" type="range" min="0" [max]="maxPriceLimit" [style.--val]="selectedPrice"
+          [(ngModel)]="selectedPrice"
           (ngModelChange)="applyFilters()" />
         </div>
       </div>

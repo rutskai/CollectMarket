@@ -29,12 +29,15 @@ export class ShopPage implements OnInit, OnDestroy {
 
   TranslateHelper = TranslateHelper;
 
-  maxPrice = 0;
+
+  selectedPrice = 0;
+  maxPriceLimit = 0;
+  
   allSourceCards: ModelCard[] = [];
   allCards: ModelCard[] = [];
   displayCards: ModelCard[] = [];
 
-  /**  paginación */
+  /** paginación */
   currentPage = 1;
   itemsPerPage = 14;
   totalPages = 1;
@@ -84,6 +87,21 @@ export class ShopPage implements OnInit, OnDestroy {
     });
     
     this.loadFilterOptions();
+    this.loadMaxPriceLimit();  
+  }
+
+  /**
+   * Carga el precio máximo de las cartas desde el servidor.
+   */
+  loadMaxPriceLimit(): void {
+    this.cardsService.getMaxPrice().subscribe({
+      next: (maxPrice) => {
+        this.maxPriceLimit = maxPrice;
+         this.selectedPrice = 0;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error cargando precio máximo:', err)
+    });
   }
 
   /**
@@ -169,6 +187,7 @@ export class ShopPage implements OnInit, OnDestroy {
 
   /** Avanza a la página siguiente. */
   nextPage(): void { this.changePage(this.currentPage + 1); }
+  
   /** Retrocede a la página anterior. */
   prevPage(): void { this.changePage(this.currentPage - 1); }
 
@@ -204,7 +223,7 @@ export class ShopPage implements OnInit, OnDestroy {
       activeRarities.length > 0 ||
       activeTypes.length > 0    ||
       activeSets.length > 0     ||
-      this.maxPrice > 0;
+      this.selectedPrice > 0;
 
     if (!hasActiveFilters) {
       this.allCards = this.allSourceCards;
@@ -216,7 +235,7 @@ export class ShopPage implements OnInit, OnDestroy {
       rarities: activeRarities,
       types: activeTypes,
       setNames: activeSets,
-      maxPrice: this.maxPrice > 0 ? this.maxPrice : undefined,
+      maxPrice: this.selectedPrice > 0 ? this.selectedPrice : undefined,
     };
 
     this.cardsService.getFilteredCards(filters).subscribe({
@@ -227,6 +246,14 @@ export class ShopPage implements OnInit, OnDestroy {
       },
       error: (err) => console.error('Error al filtrar:', err)
     });
+  }
+
+  /**
+   * Resetea el filtro de precio a 0 (sin filtro).
+   */
+  resetPriceFilter(): void {
+    this.selectedPrice = 0;
+    this.applyFilters();
   }
 
   /**

@@ -4,11 +4,11 @@ namespace Api
 {
     public static class Cards
     {
-         /**
-         * Registra todos los endpoints de cartas.
-         *
-         * @param app Aplicación principal ASP.NET.
-         */
+        /**
+        * Registra todos los endpoints de cartas.
+        *
+        * @param app Aplicación principal ASP.NET.
+        */
         public static void CardsEndpoints(this WebApplication app)
         {
 
@@ -53,7 +53,7 @@ namespace Api
                 var cards = await db.Cards.Where(c => c.Rarity == rarity).ToListAsync();
                 return Results.Ok(cards);
             });
-            
+
             /**
              * Busca cartas por nombre o expansión.
              *
@@ -130,13 +130,13 @@ namespace Api
             app.MapGet("/api/cards/types", async (AppDb db) =>
                 Results.Ok(await db.Cards.Select(c => c.Type).Distinct().ToListAsync()));
 
-             /**
-             * Obtiene todas las rarezas disponibles.
-             *
-             * @param db Contexto de base de datos.
-             *
-             * @return 200 OK con la lista de rarezas.
-             */
+            /**
+            * Obtiene todas las rarezas disponibles.
+            *
+            * @param db Contexto de base de datos.
+            *
+            * @return 200 OK con la lista de rarezas.
+            */
             app.MapGet("/api/cards/rarities", async (AppDb db) =>
                 Results.Ok(await db.Cards.Select(c => c.Rarity).Distinct().ToListAsync()));
 
@@ -149,7 +149,7 @@ namespace Api
              */
             app.MapGet("/api/cards/expansions", async (AppDb db) =>
                 Results.Ok(await db.Cards.Select(c => c.SetName).Distinct().ToListAsync()));
-            
+
             /**
             * Crea una nueva carta.
             *
@@ -191,7 +191,7 @@ namespace Api
                 return Results.Ok(new { card.Id, card.Name, message = "Carta creada exitosamente" });
             });
 
-     
+
 
             /**
              * Obtiene las cartas de un usuario específico (las que ha puesto a la venta).
@@ -224,11 +224,24 @@ namespace Api
                 var card = await db.Cards.FirstOrDefaultAsync(c => c.Id == id);
                 if (card == null)
                     return Results.NotFound(new { message = "Carta no encontrada" });
-                
+
                 db.Cards.Remove(card);
                 await db.SaveChangesAsync();
-                
+
                 return Results.Ok(new { message = "Carta eliminada correctamente" });
+            });
+
+            /**
+            * Endpoint para obtener el precio máximo de todas las cartas.
+            *
+            * @param db Contexto de base de datos.
+            *
+            * @return Precio máximo como número decimal.
+            */
+            app.MapGet("/api/cards/max-price", async (AppDb db) =>
+            {
+                var maxPrice = await db.Cards.MaxAsync(c => c.Price);
+                return Results.Ok(maxPrice);
             });
         }
     }
